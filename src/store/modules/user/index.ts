@@ -1,7 +1,5 @@
-import type { LoginReq } from '@/api/user/types';
-import type { providerType, UserState } from './types';
 import { UserApi } from '@/api';
-import { clearToken, setToken } from '@/utils/auth';
+import { clearToken } from '@/utils/auth';
 
 import { defineStore } from 'pinia';
 
@@ -11,7 +9,8 @@ const useUserStore = defineStore('user', {
     userName: '未登录',
     avatar: '',
     token: '',
-    integral:0,//积分
+    integral: 0, // 积分
+    identityType: 1, // 身份类型
   }),
   getters: {
     userInfo(state) {
@@ -20,11 +19,11 @@ const useUserStore = defineStore('user', {
   },
   actions: {
     // 设置用户的信息
-    async setUserId(id:string) {
+    async setUserId(id: string) {
       this.$patch({
-        userId:id
+        userId: id,
       });
-      await this.info()
+      await this.info();
     },
     // 设置用户的信息
     setInfo(partial) {
@@ -39,9 +38,9 @@ const useUserStore = defineStore('user', {
       const result = await UserApi.getUserInfo(this.userId);
       this.setInfo(result);
     },
-    async changeUser(data){
-      const result = await UserApi.setUserInfo(this.userId,data );
-      console.log("修改情况",result,data)
+    async changeUser(data) {
+      const result = await UserApi.setUserInfo(this.userId, data);
+      console.log('修改情况', result, data);
       this.setUserId(this.userId);
     },
     // // 异步登录并存储token

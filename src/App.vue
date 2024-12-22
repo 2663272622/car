@@ -14,6 +14,18 @@ onShow(() => {
 onHide(() => {
   console.log('App Hide');
 });
+
+uni.loadFontFace({
+  family: 'YSZYBBT',
+  global:true,
+  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/YSZYBBT.ttf")',
+  success() {
+	  console.log('success-字体OK')
+  },
+  complete(rrr){
+    console.log("字体结果",rrr)
+  }
+})
 </script>
 
 <style lang="scss">

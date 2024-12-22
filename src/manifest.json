@@ -53,9 +53,11 @@
         "appid" : "wx9c8b4d9db5c84f62",
         "setting" : {
             "urlCheck" : false,
-            "es6" : true
+            "es6" : true,
+            "minified" : true
         },
         "usingComponents" : true,
+        "lazyCodeLoading": "requiredComponents",
         "mergeVirtualHostAttributes" : true
     },
     "mp-alipay" : {

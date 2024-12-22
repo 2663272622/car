@@ -90,6 +90,7 @@ const handlePhoneNumber = (e)=>{
     uni.login({
       provider: 'weixin',
       success: res => {
+    console.log({ encryptedData, iv,code:res.code })
         request({
           url:"/api/v1/wx/auth/wxLogin",
           method:"POST",
@@ -100,13 +101,9 @@ const handlePhoneNumber = (e)=>{
           }
         }).then(async(res)=>{
           let openid = res.openid
-          // res.userId
-          // let userInfo = res[openid]
-
           if(openid ){
             setToken(`Bearer `+ res.token.accessToken);
             await userStore.setUserId(res.userId)
-            console.log("登录返回数据",res)
             handleRedirect()
           }
         }).catch(e=>{
