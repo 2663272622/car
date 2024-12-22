@@ -1,0 +1,17 @@
+page {
+  font-size: $u-font-base;
+  color: $u-main-color;
+  background-color: $u-bg-color;
+}
+
+.custom-head{
+  @apply w-full flex flex-col items-center justify-center overflow-y-auto;
+  font-family: PingFang SC, PingFang SC;
+  background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/5.png');
+  background-repeat: no-repeat;
+  background-size:100% 518rpx;
+}
+
+// YSZYBBT
+
+@import url('../font/stylesheet.css');
