@@ -1,8 +1,8 @@
 <template>
   <view class="custom-tabbar">
     <view class="tab-contaion">
-      <view class="tab-c-item" v-for="(item,index) of tabbarDatas" :key='index' @click="changeTab(item)" >
-        <image style="width: 48.45rpx; height: 48.45rpx;" :src="props.pathName != item.pagePath ? item.iconPath : item.selectedIconPath" mode=""></image>
+      <view class="tab-c-item" :class="props.pathName == item.pagePath ? 'tab-c-item-select' : ''" v-for="(item,index) of tabbarDatas" :key='index' @click="changeTab(item)" >
+        <image style="width: 42rpx; height: 38rpx;" :src="props.pathName != item.pagePath ? item.iconPath : item.selectedIconPath" mode=""></image>
         <text :class="props.pathName == item.pagePath ? 'checkTab' : ''">{{item.text}}</text>
       </view>
     </view>
@@ -25,29 +25,22 @@ import { useClipboard, usePermission } from '@/hooks';
 
   const tabbarDatas = ref([
     {
-      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/home.png?x-oss-process=image/resize,m_fill,h_100,w_100",
-      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/home-c.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/27.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/24.png?x-oss-process=image/resize,m_fill,h_100,w_100",
       pagePath: "home",
       path:"/pages/tab/home/index",
       text: "首页"
     },
     {
-      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/wall.png?x-oss-process=image/resize,m_fill,h_100,w_100",
-      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/wall-c.png?x-oss-process=image/resize,m_fill,h_100,w_100",
-      pagePath: "wall",
-      path:"/pages/tab/schoolwall/index",
-      text: "校园墙"
-    },
-    {
-      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/order.png?x-oss-process=image/resize,m_fill,h_100,w_100",
-      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/order-c.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/25.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/25.png?x-oss-process=image/resize,m_fill,h_100,w_100",
       pagePath: "order",
       path:"/pages/tab/order/index",
-      text: "订单"
+      text: "附近"
     },
     {
-      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/user.png?x-oss-process=image/resize,m_fill,h_100,w_100",
-      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/tabbar/user-c.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/26.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/28.png?x-oss-process=image/resize,m_fill,h_100,w_100",
       pagePath: "user",
       path:"/pages/tab/user/index",
       text: "我的"
@@ -71,22 +64,18 @@ import { useClipboard, usePermission } from '@/hooks';
 
 <style lang="scss" scoped>
   .custom-tabbar{
-    height:127.91rpx;
+    height:160rpx;
     width: 100%;
-    bottom:79.46rpx;
+    bottom:0rpx;
     left: 0;
-    padding: 0 50.39rpx;
+    background: #FFFFFF;
     box-sizing: border-box;
     position: fixed;
     .tab-contaion{
       width: 100%;
-      height:100%;
+      height:112rpx;
       display: flex;
-      background: #FFFFFF;
-      box-shadow: 0rpx 0rpx 70rpx 0rpx rgba(0,119,210,0.16);
-      border-radius: 58rpx 58rpx 58rpx 58rpx;
-      border: 1rpx solid #E7E7E7;
-      padding: 0 52.33rpx;
+      padding: 16rpx;
       box-sizing: border-box;
       display: flex;
       justify-content: space-between;
@@ -96,23 +85,28 @@ import { useClipboard, usePermission } from '@/hooks';
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        width: 229rpx;
+        height: 80rpx;
         text{
           font-family: PingFang SC, PingFang SC;
           font-weight: 400;
-          font-size: 19rpx;
-          color: rgba(0,0,0,0.5);
-          line-height: 31rpx;
+          font-size: 20rpx;
+          color: rgba(0,0,0,0.9);
+          line-height: 32rpx;
           text-align: center;
           font-style: normal;
           text-transform: none;
           margin-top: 1.94rpx;
         }
         text.checkTab{
-          color:#74D42D
+          color:#0052D9;
         }
       }
+      .tab-c-item-select{
+        background: #F2F3FF;
+        border-radius: 48rpx 48rpx 48rpx 48rpx;
+      }
     }
-
   }
 
 </style>

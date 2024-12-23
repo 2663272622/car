@@ -1,35 +1,26 @@
 <template>
   <view class="page-wrap">
-    <view class="mb-20rpx flex justify-between" :style="{ paddingTop: bHeight }">
-      <view class="mx-20rpx mt-100rpx flex">
+    <view class="mb-20rpx ml-30rpx mt-64rpx flex" :style="{ paddingTop: bHeight }">
         <up-image
-          :show-loading="true" width="122rpx" height="122rpx"
+          :show-loading="true" width="120rpx" height="120rpx"
           :src="userStore.avatar" shape="circle" bg-color="#0000" class="mr-24rpx"
         />
-        <view class="mr-10rpx flex flex-col">
+        <view class="flex flex-col">
           <view>
-            <text class="mr-15rpx text-36rpx font-bold">
+            <text class="text-40rpx font-semibold text-opacity-90">
               {{ userStore.userName }}
             </text>
-            <text class="text-24rpx text-black/60 font-bold tracking-widest">
-              编辑资料
-            </text>
           </view>
-          <view v-if="userStore.identityType === 2" class="real-name mt-20rpx h-38rpx w-118rpx rd-100rpx text-center text-24rpx text-#00B551 leading-38rpx tracking-widest">
-            已实名
+          <view class="mt-14rpx h-40rpx w-176rpx text-center text-28rpx text-black text-opacity-60 leading-40rpx">
+            1323****3253
           </view>
         </view>
-      </view>
+    </view>
+    <view class="flex mt-36rpx mx-30rpx">
+      <view class="moveCar mr-30rpx">
 
-      <view class="mt-100rpx h-50rpx flex flex-row items-center rounded-bl-30rpx rounded-tl-30rpx bg-#DEFB7B">
-        <up-image
-          :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/31.png" bg-color="#0000"
-          width="32rpx" height="32rpx" class="ml-20rpx"
-        />
-        <text class="mx-10rpx text-24rpx tracking-widest">
-          我的推荐码
-        </text>
       </view>
+      <view class="shops"></view>
     </view>
     <view class="score">
       <view class="ml-20rpx flex flex-row items-center">
@@ -121,26 +112,15 @@ const bHeight = computed(() => {
 });
 const userStore = useUserStore();
 const loginStatus = ref(false);
-// 复制
-// const toCopy = async () => {
-//   await setClipboardData({ data: '1234567890' });
-//   const data = await getClipboardData();
-//   console.log('[ data ] >', data);
-// };
 
-// 登录鉴权，微信小程序端点击tabbar的底层逻辑不触发uni.switchTab，需要在页面onShow生命周期中校验权限
 // onShow(async () => {
-// const hasPermission = await usePermission();
-// console.log(hasPermission ? '已登录' : '未登录，拦截跳转');
+//   loginStatus.value = await usePermission();
+//   console.log('asdasd', loginStatus.value);
+//   loginStatus.value = isLogin();
+//   console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
+//   const ttt = await getToken();
+//   console.log('打印token', ttt);
 // });
-onShow(async () => {
-  loginStatus.value = await usePermission();
-  console.log('asdasd', loginStatus.value);
-  loginStatus.value = isLogin();
-  console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
-  const ttt = await getToken();
-  console.log('打印token', ttt);
-});
 // 动态获取排行榜的数据
 const rankList = [
   { id: 1, name: '大宝宝', avatar: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/2.png', score: 458 },
@@ -172,16 +152,22 @@ const homeProjects = ref([
 <style lang="scss">
   .page-wrap {
     // font-family: PingFang SC;
-    background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/20.png'),
-                      url('https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/5.png');
-    background-repeat: no-repeat,no-repeat;
-    background-position: right 100rpx,top center;
-    background-size:258rpx 302rpx ,100% 518rpx;
-
-    .real-name{
-      background: linear-gradient( 270deg, #DEFB7B 0%, #BFF281 100%);
+    background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
+    background-repeat: no-repeat;
+    background-size:750rpx 522rpx;
+    .moveCar{
+      width: 330rpx;
+      height: 154rpx;
+      background: linear-gradient( 129deg, #4C6BE1 0%, #7B92FF 100%);
+      border-radius: 20rpx 20rpx 20rpx 20rpx;
     }
+    .shops{
+      width: 330rpx;
+      height: 154rpx;
+      background: linear-gradient( 129deg, #5DA9F8 0%, #8AC2FF 100%);
+      border-radius: 20rpx 20rpx 20rpx 20rpx;
 
+    }
     .score {
       display: flex;
       align-items: center;

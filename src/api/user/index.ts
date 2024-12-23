@@ -20,7 +20,7 @@ export const logout = () => post<CommonRes>('/user/logout');
 
 
 // 获取用户详情
-export const getUserInfo = (id:string) => get<ProfileRes>(`/api/v1/isUsers/${id}/form`);
+export const getUserInfo = (id:string) => get<ProfileRes>(`/api/v1/wxUsers/${id}/form`);
 
 // 获取用户详情
-export const setUserInfo = (id:string,data) => put<ProfileRes>(`/api/v1/isUsers/${id}`,{data});
+export const setUserInfo = (id:string,data) => put<ProfileRes>(`/api/v1/wxUsers/${id}`,{data});

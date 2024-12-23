@@ -86,7 +86,6 @@ const handleRedirect = ()=>{
 const handlePhoneNumber = (e)=>{
   if (e.detail.errMsg === 'getPhoneNumber:ok') {
     const { encryptedData, iv } = e.detail;
-
     uni.login({
       provider: 'weixin',
       success: res => {
@@ -95,8 +94,8 @@ const handlePhoneNumber = (e)=>{
           url:"/api/v1/wx/auth/wxLogin",
           method:"POST",
           data:{
-            ext1:res.code,
-            ext2:encryptedData,
+            code:res.code,
+            encryptedData:encryptedData,
             phoneNumber:iv,
           }
         }).then(async(res)=>{
