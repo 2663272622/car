@@ -19,7 +19,6 @@
             </view>
         </view>
       </view>
-
       <view class="home-carinfo">
         <view class="home-carhint">
           临时停车 请多关照
