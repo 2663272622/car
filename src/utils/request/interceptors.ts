@@ -85,6 +85,7 @@ function requestInterceptors(http: HttpRequestAbstract) {
       if (getToken() && !isToken && config.header) {
         // token设置
         config.header.Authorization = getToken();
+         config.header['ngrok-skip-browser-warning'] = '234567890'
       }
 
       // 是否显示 loading
