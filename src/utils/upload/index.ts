@@ -9,6 +9,7 @@ export const useUpload = async( filePath:string,path?:string  )=>{
   const Authorization = await getToken()
 
   return new Promise((resolve,reject)=>{
+    debugger
     uni.uploadFile({
       url:BASE_URL+`api/v1/wx/auth/uploadAvatar?path=`+path,
       filePath,
@@ -17,7 +18,8 @@ export const useUpload = async( filePath:string,path?:string  )=>{
         user: 'testtest',
       },
       header:{
-        Authorization
+        Authorization,
+        "ngrok-skip-browser-warning":"true"
       },
       success: ({data}) => {
         debugger
