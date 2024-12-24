@@ -26,7 +26,7 @@
             :id="agreePrivacyId"
             class="button button-primary"
             open-type="agreePrivacyAuthorization"
-            @agreeprivacyauthorization="agree"
+            @agreeprivacyAuthorization="agree"
           >
             同意
           </button>

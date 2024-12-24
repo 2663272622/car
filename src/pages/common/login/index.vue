@@ -99,6 +99,7 @@ const handlePhoneNumber = (e)=>{
             iv:iv,
           }
         }).then(async(res)=>{
+          console.log(res)
           let openid = res.openid
           if(openid ){
             setToken(`Bearer `+ res.token.accessToken);

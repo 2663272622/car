@@ -33,7 +33,7 @@ import { useClipboard, usePermission } from '@/hooks';
     },
     {
       iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/25.png?x-oss-process=image/resize,m_fill,h_100,w_100",
-      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/25.png?x-oss-process=image/resize,m_fill,h_100,w_100",
+      selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/29.png?x-oss-process=image/resize,m_fill,h_100,w_100",
       pagePath: "order",
       path:"/pages/tab/order/index",
       text: "附近"

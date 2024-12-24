@@ -15,12 +15,12 @@ export const useUpload = async( filePath:string,path?:string  )=>{
       name: 'multipartFile',
       formData: {
         user: 'testtest',
-
       },
       header:{
         Authorization
       },
       success: ({data}) => {
+        debugger
         let resdata = JSON.parse(data)
         resolve(resdata.data || '')
       },
