@@ -17,85 +17,38 @@
         </view>
     </view>
     <view class="flex mt-36rpx mx-30rpx">
-      <view class="moveCar mr-30rpx">
-
+      <view class="moveCar mr-30rpx flex items-center">
+        <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">挪车码</text>
       </view>
-      <view class="shops"></view>
-    </view>
-    <view class="score">
-      <view class="ml-20rpx flex flex-row items-center">
-        <up-image
-          :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/16.png"
-          width="38rpx" height="38rpx"
-        />
-        <text class="score-name ml-5rpx text-40rpx font-normal">
-          我的积分
-        </text>
-      </view>
-      <view class="mr-56rpx text-50rpx c-#0DD031FF font-bold">
-        {{ userStore.integral }}
+      <view class="shops flex items-center">
+        <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">我的店铺</text>
       </view>
     </view>
-    <view class="integral">
-      <view class="flex items-center text-40rpx text-#FFBE0B">
-        <up-image
-          :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/21.png"
-          width="110rpx" height="104rpx" bg-color="#0000" class="relative bottom-25rpx"
-        />
-        <text class="font-bold; tracking-widest">
-          积分排行榜
-        </text>
-      </view>
-      <view v-for="(item, index) in rankList" :key="index" class="mx-20rpx mb-20rpx flex items-center justify-between">
-        <view class="flex items-center">
-          <up-image
-            v-if="item.id === 1" :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/27.png" bg-color="#0000"
-            width="78rpx" height="50rpx"
-          />
-          <up-image
-            v-else-if="item.id === 2" :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/28.png" bg-color="#0000"
-            width="78rpx" height="50rpx"
-          />
-          <up-image
-            v-else-if="item.id === 3" :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/26.png" bg-color="#0000"
-            width="78rpx" height="50rpx"
-          />
-          <text v-else-if="item.id === 4" class="h-50rpx w-78rpx text-center text-40rpx font-bold">
-            4
-          </text>
-          <text v-else-if="item.id === 5" class="h-50rpx w-78rpx text-center text-40rpx font-bold">
-            5
-          </text>
-          <up-image
-            :show-loading="true" :src="item.avatar" bg-color="#0000"
-            width="76rpx" height="76rpx"
-          />
-          <text class="ml-10rpx text-24rpx font-medium">
-            {{ item.name }}
-          </text>
+    <view class="flex mt-30rpx bg-white h-158rpx mx-30rpx rd-20rpx">
+      <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx ml-20rpx mr-18rpx">
+        <view class="flex ml-48rpx items-center mt-10rpx">
+          <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/19.png"  width="62rpx" height="70rpx" bg-color="#0000"/>
+          <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-22rpx font-medium">油耗计算器</text>
         </view>
-        <view>
-          <text class="text-32rpx font-extrabold">
-            {{ item.score }}
-          </text>
-          <text class="text-28rpx font-medium">
-            积分
-          </text>
+      </view>
+      <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx mr-20rpx">
+        <view class="flex mt-10rpx items-center ml-52rpx">
+        <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/23.png"  width="62rpx" height="70rpx" bg-color="#0000"/>
+        <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-16rpx font-medium">油价</text>
         </view>
       </view>
     </view>
-    <view class="mb-300rpx mt-28rpx h-130rpx flex items-center justify-between rd-20rpx rounded-40rpx bg-white pt-40rpx">
-      <view v-for="(item, index) of homeProjects" :key="index" class="home-projectIttem w-full rounded-20rpx">
-        <up-image
-          :show-loading="true" :src="item.url" width="62rpx" height="76rpx" bg-color="#0000"
-          class="translate-x-70rpx translate-y--22rpx"
-        />
-        <view class="translate-x-10rpx translate-y--15rpx text-center text-28rpx c-#000000E6 font-medium leading-33rpx">
-          {{ item.name }}
-        </view>
+    <view class="flex mt-22rpx rd-20rpx bg-white h-202rpx w-690rpx mx-30rpx">
+      <view class="flex h-126rpx mx-20rpx bg-#EFF7FF rd-20rpx mt-26rpx items-center w-650rpx ">
+          <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/20.png"  width="64rpx" height="64rpx" bg-color="#0000" class="ml-18rpx"/>
+          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx">我的订单</text>
+          <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/21.png"  width="64rpx" height="64rpx" bg-color="#0000"/>
+          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx">编辑通知</text>
+          <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/22.png"  width="64rpx" height="64rpx" bg-color="#0000"/>
+          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-18rpx">联系客服</text>
       </view>
     </view>
-  </view>
+</view>
   <!-- <u-navbar title="" placeholder left-icon="" right-icon="camera-fill" /> -->
 
   <Tabbar path-name="user" />
@@ -121,50 +74,30 @@ const loginStatus = ref(false);
 //   const ttt = await getToken();
 //   console.log('打印token', ttt);
 // });
-// 动态获取排行榜的数据
-const rankList = [
-  { id: 1, name: '大宝宝', avatar: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/2.png', score: 458 },
-  { id: 2, name: '华清', avatar: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/2.png', score: 400 },
-  { id: 3, name: '忘记人', avatar: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/2.png', score: 382 },
-  { id: 4, name: '不干了', avatar: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/2.png', score: 345 },
-  { id: 5, name: 'pk', avatar: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/2.png', score: 321 },
-];
-const homeProjects = ref([
-  {
-    name: '骑手入驻申请',
-    url: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/17.png',
-  },
-  {
-    name: '收益明细',
-    url: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/22.png',
-  },
-  {
-    name: '收货地址',
-    url: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/23.png',
-  },
-  {
-    name: '联系我们',
-    url: 'https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/24.png',
-  },
-]);
 </script>
 
 <style lang="scss">
   .page-wrap {
-    // font-family: PingFang SC;
+    // font-family: PingFang SC, PingFang SC;
     background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
     background-repeat: no-repeat;
     background-size:750rpx 522rpx;
     .moveCar{
       width: 330rpx;
       height: 154rpx;
-      background: linear-gradient( 129deg, #4C6BE1 0%, #7B92FF 100%);
+      background-image:url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/17.png'),linear-gradient( 129deg, #4C6BE1 0%, #7B92FF 100%) ;
+      background-repeat: no-repeat no-repeat;
+      background-position: bottom right,center;
+      background-size: 166rpx 150rpx,100% 100%;
       border-radius: 20rpx 20rpx 20rpx 20rpx;
     }
     .shops{
       width: 330rpx;
       height: 154rpx;
-      background: linear-gradient( 129deg, #5DA9F8 0%, #8AC2FF 100%);
+      background-image:url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/18.png'),linear-gradient( 129deg, #5DA9F8 0%, #8AC2FF 100%) ;
+      background-repeat: no-repeat no-repeat;
+      background-position: bottom right,center;
+      background-size: 166rpx 150rpx,100% 100%;
       border-radius: 20rpx 20rpx 20rpx 20rpx;
 
     }

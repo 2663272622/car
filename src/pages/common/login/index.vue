@@ -96,7 +96,7 @@ const handlePhoneNumber = (e)=>{
           data:{
             code:res.code,
             encryptedData:encryptedData,
-            phoneNumber:iv,
+            iv:iv,
           }
         }).then(async(res)=>{
           let openid = res.openid
