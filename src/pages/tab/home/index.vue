@@ -1,6 +1,6 @@
 <template>
   <view class="home	custom-head">
-    <view class="home-contaion w-full h-100vh " :style="{paddingTop:bHeight}">
+    <view class="home-contaion w-full" :style="{paddingTop:bHeight}">
       <!-- 通知公告 -->
       <view class='home-inform' :style="{'width':`calc(100% - ${menuButtonInfo.width}px - 48rpx)`}">
         <view class="home-inf-c">
@@ -136,7 +136,6 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
 
 <style lang="scss" >
   .home{
-      font-family: PingFang SC, PingFang SC;
       background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/2.png');
       background-repeat: no-repeat;
       background-size:100% 518rpx;
@@ -152,7 +151,6 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
             .home-inf-tc{
               @apply whitespace-nowrap auto-scroll w-full;
               transform: translateX(50%);
-              font-family: PingFang SC, PingFang SC;
               font-weight: 500;
               font-size: 24rpx;
               color: rgba(0,0,0,0.6);
@@ -182,7 +180,6 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
           .home-carP-item{
             @apply w-50rpx h-50rpx bg-#FFFFFF rounded-10rpx flex mr-8rpx items-center justify-center	;
             box-shadow: 0rpx 8rpx 4rpx 0rpx rgba(0,0,0,0.05);
-            font-family: PingFang SC, PingFang SC;
             font-weight: 600;
             font-size: 26rpx;
             color: rgba(0,0,0,0.9);
@@ -219,7 +216,6 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
           .home-car-hc{
             @apply w-full rounded-100rpx py-26rpx flex items-center justify-center;
             .home-hbtn-text{
-              font-family: PingFang SC, PingFang SC;
               font-weight: 600;
               font-size: 26rpx;
               color: #000000;

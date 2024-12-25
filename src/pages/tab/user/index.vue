@@ -78,7 +78,6 @@ const loginStatus = ref(false);
 
 <style lang="scss">
   .page-wrap {
-    // font-family: PingFang SC, PingFang SC;
     background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
     background-repeat: no-repeat;
     background-size:750rpx 522rpx;
@@ -99,34 +98,6 @@ const loginStatus = ref(false);
       background-position: bottom right,center;
       background-size: 166rpx 150rpx,100% 100%;
       border-radius: 20rpx 20rpx 20rpx 20rpx;
-
-    }
-    .score {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 660rpx;
-      height: 128rpx;
-      margin:0 auto;
-      background-image:url('https://img-ischool.oss-cn-beijing.aliyuncs.com/uni/home/30.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: cover;
-
-      .score-name{
-        color:transparent;
-        // font-family: YouSheBiaoTiHei;
-        background:linear-gradient(270deg, #AAFFC3 0%, #37C50B 100%);
-        background-clip: text;
-      }
-
-    }
-
-    .integral{
-      background:linear-gradient(to bottom,#FEE0A0,white 25%);
-      background-color: #fff;
-      border: 1rpx solid #ccc;
-      border-radius: 30rpx;
     }
 }
 </style>

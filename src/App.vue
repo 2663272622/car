@@ -18,7 +18,13 @@ onHide(() => {
 uni.loadFontFace({
   family: 'YSZYBBT',
   global:true,
-  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/YSZYBBT.ttf")',
+  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/YSZYBBT.ttf")'
+})
+
+uni.loadFontFace({
+  family: 'ZiZhiQuXiMaiTi',
+  global:true,
+  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/ZiZhiQuXiMaiTi-2.ttf")',
   success() {
 	  console.log('success-字体OK')
   },
