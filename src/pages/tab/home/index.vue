@@ -50,8 +50,8 @@
                   :src="item.icon"
                   width="56rpx"
                   height="56rpx"
-                 class="mx-12rpx"
                  bgColor="#0000"
+                 class="ml-206rpx mr-12rpx"
               ></up-image>
               <view class="home-hbtn-text">
                 {{ item.name }}
@@ -214,7 +214,7 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
         }
         .home-car-hbtn{
           .home-car-hc{
-            @apply w-full rounded-100rpx py-26rpx flex items-center justify-center;
+            @apply w-full rounded-100rpx py-26rpx flex items-center ;
             .home-hbtn-text{
               font-weight: 600;
               font-size: 26rpx;

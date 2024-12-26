@@ -24,13 +24,7 @@ uni.loadFontFace({
 uni.loadFontFace({
   family: 'ZiZhiQuXiMaiTi',
   global:true,
-  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/ZiZhiQuXiMaiTi-2.ttf")',
-  success() {
-	  console.log('success-字体OK')
-  },
-  complete(rrr){
-    console.log("字体结果",rrr)
-  }
+  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/ZiZhiQuXiMaiTi-2.ttf")'
 })
 </script>
 

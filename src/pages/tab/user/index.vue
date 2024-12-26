@@ -66,14 +66,20 @@ const bHeight = computed(() => {
 const userStore = useUserStore();
 const loginStatus = ref(false);
 
-// onShow(async () => {
-//   loginStatus.value = await usePermission();
-//   console.log('asdasd', loginStatus.value);
-//   loginStatus.value = isLogin();
-//   console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
-//   const ttt = await getToken();
-//   console.log('打印token', ttt);
-// });
+onShow(async () => {
+  loginStatus.value = await usePermission();
+  console.log('asdasd', loginStatus.value);
+  loginStatus.value = isLogin();
+  console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
+  const ttt = await getToken();
+  console.log('打印token', ttt);
+});
+
+const query:any=ref()
+onLoad((query:any)=>{
+    // scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
+    const scene = decodeURIComponent(query.scene)
+  })
 </script>
 
 <style lang="scss">
