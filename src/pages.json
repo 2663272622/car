@@ -79,6 +79,13 @@
           {
             "navigationBarTitleText" : "修改用户信息"
           }
+        },
+        {
+          "path" : "merchants/index",
+          "style" :
+          {
+            "navigationBarTitleText" : ""
+          }
         }
       ]
     }

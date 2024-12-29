@@ -66,14 +66,14 @@
         <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
           <view v-for="(item,index) in list" :key="index">
             <view
-              class="flex items-center justify-center  text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx">
+              class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx">
               {{item.name}}
             </view>
           </view>
         </view>
         <view class="">
           <view v-for="(item,index) in merchants" :index="index">
-            <view class="h-266rpx bg-white rd-20rpx mx-30rpx mt-30rpx mb-20rpx flex whitespace-nowrap overflow-hidden">
+            <view class="bg-white rd-20rpx mx-30rpx mt-30rpx mb-20rpx flex whitespace-nowrap overflow-hidden" @click="navigator">
               <view class="mt-30rpx ml-20rpx mr-12rpx">
                 <up-image :show-loading="true" :src="item.img" width="160rpx" height="160rpx" bg-color="#0000" />
               </view>
@@ -98,21 +98,6 @@
                   <view class="flex">
                     <up-icon name="map"></up-icon>
                     <text class="leading-52rpx">1.2km</text>
-                  </view>
-                </view>
-                <view class="flex items-baseline">
-                  <view class="flex items-center">
-                    <text
-                      class="flex items-center justify-center preferential-bg text-20rpx font-medium text-#F25730 leading-20rpx rd-4rpx">惠</text>
-                    <view class="flex items-baseline text-#F25830 font-bold leading-52rpx">
-                      <text class="text-20rpx">￥</text>
-                      <text class="text-28rpx">{{item.new_price_1}}</text>
-                    </view>
-                    <text
-                      class="font-medium text-black text-opacity-30 text-20rpx leading-24rpx line-through mr-30rpx">￥{{item.old_price_1}}</text>
-                  </view>
-                  <view class=" text-20rpx font-medium text-black text-opacity-70 leading-24rpx overflow-hidden">
-                    {{item.product_1}}
                   </view>
                 </view>
               </view>
@@ -173,6 +158,12 @@
       type: "2",//1为营业中，2为未营业
     }
   ])
+
+function navigator(){
+  uni.navigateTo({
+    url:'/pages/common/merchants/index'
+  })
+}
 </script>
 <style scoped lang="scss">
   .page-wrap {
