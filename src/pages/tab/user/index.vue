@@ -20,7 +20,7 @@
       <view class="moveCar mr-30rpx flex items-center">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">挪车码</text>
       </view>
-      <view class="shops flex items-center">
+      <view class="shops flex items-center" @click="handleLocation">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">我的店铺</text>
       </view>
     </view>
@@ -80,6 +80,30 @@ onLoad((query:any)=>{
     // scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     const scene = decodeURIComponent(query.scene)
   })
+// 获取当前经纬度
+  const handleLocation = ()=>{
+    console.log("获取位置")
+    wx.getFuzzyLocation({
+      type:"wgs84",
+      success(res){
+        console.log(res)
+        toNav(res)
+      }
+    })
+  }
+  // 传入经纬度 调用导航
+  const toNav = (res)=>{
+        const latitude = res.latitude;
+        const longitude = res.longitude;
+        uni.openLocation({
+          latitude: latitude,
+          longitude: longitude,
+          success: function () {
+            console.log('success');
+          }
+        });
+
+  }
 </script>
 
 <style lang="scss">
