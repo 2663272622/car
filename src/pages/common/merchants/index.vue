@@ -1,29 +1,29 @@
 <template>
   <view class="c-#F1F1F1">
-    <view class="h-428rpx">
-      <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/30.png"
+    <view class="h-428rpx ">
+      <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/2.png"
         width="750rpx" height="428rpx" bg-color="#0000" />
     </view>
     <view class="bg-white relative z-1 top--64rpx rounded-tl-40rpx">
       <view class="pt-52rpx ml-30rpx text-black text-opacity-90 leading-32rpx font-semibold text-36rpx">
-        {{merchants.name}}
+        {{merchants.merchantName}}
       </view>
-      <view class="mt-24rpx flex ml-30rpx">
+<!--      <view class="mt-24rpx flex ml-30rpx">
         <up-rate v-model="merchants.star" readonly allowHalf="true" active-color="#F25730" gutter="2rpx"></up-rate>
         <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchants.star}}</text>
-      </view>
+      </view> -->
       <view class="mt-16rpx ml-30rpx flex whitespace-nowrap overflow-x-auto">
-        <view v-for="(item,index) in merchants.img.split(',')" :key="index" class="mr-20rpx">
+        <view v-for="(item,index) in merchants.storeLogoUrl.split(',')" :key="index" class="mr-20rpx">
           <up-image :show-loading="true" :src="item" width="216rpx" height="150rpx" bg-color="#0000"/>
         </view>
       </view>
       <view class="flex justify-between items-center mt-32rpx">
         <view>
           <view class="flex font-semibold text-26rpx leading-40rpx items-center ml-30rpx">
-            <view>
-              <view v-if="merchants.type==='1'" class="text-#0B86FA">营业中</view>
-              <view v-else-if="merchants.type==='2'" class="text-black text-opacity-60">休息中</view>
-            </view>
+<!--            <view>
+              <view v-if='Time' class="text-#0B86FA">营业中</view>
+              <view v-else class="text-black text-opacity-60">休息中</view>
+            </view> -->
             <view class="text-black text-opacity-90 mx-12rpx">{{merchants.day}}</view>
             <view class="text-black text-opacity-90">{{merchants.time}}</view>
             <up-icon name="arrow-right" size="26rpx" color="black" class="ml-18rpx"></up-icon>
@@ -59,23 +59,36 @@
   </view>
 </template>
 
-<script setup>
-  import {
-    reactive
-  } from "vue"
-  const merchants = reactive({
-    name: "龙膜七工匠授权店玻璃膜·隐形车衣",
-    star: '5.0',
-    address: "美容洗车 中粮大悦城",
-    img: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png,https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png,https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png,https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png,https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png,https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png",
-    old_price_1: "32.00",
-    new_price_1: "12.00",
-    product_1: "【龙膜】玻璃贴膜【前挡智选】123124124123",
-    type: "1", //1为营业中，2为未营业
-    day: "周一至周日",
-    time: "14:00-23:00",
-    tag:"洗车,出行,养护,养护,养护,养护,养护"
-  })
+<script setup lang="ts">
+import {reactive} from "vue"
+import carMerchantsAPI from "@/api/carMerchants";
+// import getTime from "@/utils/time/index"
+// const queryParams = reactive({
+//   pageNum :1,
+//   pageSize :10,
+// });
+// const loading = ref(false);
+// const merchants:any=ref([])
+// function handleQuery() {
+//   loading.value = true;
+//   let params = {
+//     pageNum: queryParams.pageNum,
+//     pageSize: queryParams.pageSize
+//   }
+//   carMerchantsAPI.getPage(params).then((data:any) => {
+//     data.list.map((item:any) => {
+//       item.businessScope = item.businessScope.split(",")
+//     })
+//     merchants.value = data.list;
+//     console.log(merchants)
+//     // total.value = data.total;
+//     loading.value = false;
+//   });
+// }
+// // const Time=getTime(merchants.value.openTime,merchants.value.closeTime)
+// onMounted(()=>{
+//     handleQuery()
+// })
 </script>
 
 <style lang="scss" scoped>

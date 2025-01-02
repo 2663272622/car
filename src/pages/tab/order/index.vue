@@ -79,21 +79,21 @@
               </view>
               <view class="mt-30rpx pr-20rpx w-478rpx">
                 <view class="text-28rpx font-semibold text-black text-opacity-90 leading-40rpx overflow-hidden">
-                  {{item.name}}</view>
+                  {{item.merchantName}}</view>
                 <view class="flex justify-between mt-6rpx">
-                  <view class="flex items-center">
+                 <view class="flex items-center">
                     <up-rate v-model="item.star" readonly allowHalf="true" active-color="#F25730"
                       gutter="2rpx"></up-rate>
-                    <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{item.star}}</text>
+                    <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{5}}</text>
                   </view>
-                  <view class=" font-normal text-24rpx leading-52rpx">
-                    <view v-if="item.type==='1'" class="text-#1764FF">营业中</view>
-                    <view v-else-if="item.type==='2'">休息中</view>
+                 <view class=" font-normal text-24rpx leading-52rpx">
+                    <view v-if="item.time" class="text-#1764FF">营业中</view>
+                    <view v-else>休息中</view>
                   </view>
                 </view>
                 <view class="flex mt-16rpx justify-between text-black text-opacity-60 items-center">
                   <view class="text-24rpx font-normal leading-40rpx">
-                    {{item.address}}
+                    {{item.storeAddress}}
                   </view>
                   <view class="flex">
                     <up-icon name="map"></up-icon>
@@ -111,11 +111,43 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, reactive } from "vue";
-  import { barHeight } from '@/utils';
-  const bHeight = computed(() => {
-    return barHeight();
-  });
+import { ref, reactive } from "vue";
+import { barHeight } from '@/utils';
+import carMerchantsAPI from "@/api/carMerchants";
+// import getTime from "@/utils/time/index"
+
+const bHeight = computed(() => {
+  return barHeight();
+});
+
+const queryParams = reactive({
+  pageNum :1,
+  pageSize :10,
+});
+const loading = ref(false);
+// const merchants:any=ref([])
+// function handleQuery() {
+//   loading.value = true;
+//   let params = {
+//     pageNum: 1,
+//     pageSize:10
+//   }
+//   carMerchantsAPI.getPage(params).then((data:any) => {
+//     data.list.map((item:any) => {
+//       item.businessScope = item.businessScope.split(",")
+//     })
+//     merchants.value = data.list;
+//     console.log(merchants)
+//     loading.value = false;
+//   });
+// }
+// onMounted(()=>{
+//     handleQuery()
+// })
+
+// let Time=getTime(merchants.value.openTime,merchants.value.closeTime)
+
+
   const list = reactive([
     {
       name: "附近"
@@ -138,24 +170,14 @@
   ])
   const merchants = reactive([
     {
-      name: "龙膜七工匠授权店玻璃膜·隐形车衣212412341231",
+      merchantName: "龙膜七工匠授权店玻璃膜·隐形车衣212412341231",
       star: '5.0',
-      address: "美容洗车 中粮大悦城",
+      storeAddress: "美容洗车 中粮大悦城",
       img: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png",
       old_price_1: "32.00",
       new_price_1: "12.00",
       product_1: "【龙膜】玻璃贴膜【前挡智选】123124124123",
-      type: "1",//1为营业中，2为未营业
-    },
-    {
-      name: "龙膜七工匠授权店玻璃膜·隐形车衣",
-      star: '4.0',
-      address: "美容洗车 中粮大悦城",
-      img: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png",
-      old_price_1: "32.00",
-      new_price_1: "12.00",
-      product_1: "【龙膜】玻璃贴膜【前挡智选】123124124123",
-      type: "2",//1为营业中，2为未营业
+      time:true,//1为营业中，2为未营业
     }
   ])
 

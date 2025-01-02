@@ -75,6 +75,7 @@ import { isLogin,getToken } from '@/utils/auth';
 import { LOGIN_PATH } from "@/router";
 import { currentRoute } from '@/router';
 import { useUserStore } from "@/store";
+import NoticeAPI from "@/api/notice"
 uni.hideTabBar()
 
 const userStore = useUserStore()
@@ -130,6 +131,22 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
 //     });
 // }
 
+const queryParams=ref({
+  pageNum: 1,
+  pageSize: 10,
+})
+const pageData=ref([])
+// 查询通知公告
+function handleQuery() {
+  NoticeAPI.getPage(queryParams)
+    .then((data) => {
+      pageData.value = data.list
+      console.log(pageData.value )
+    })
+  }
+onMounted(()=>{
+  handleQuery()
+})
 
 </script>
 
