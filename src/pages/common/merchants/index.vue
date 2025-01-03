@@ -12,8 +12,8 @@
         <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchants.score}}</text>
       </view>
       <view class="mt-16rpx ml-30rpx flex whitespace-nowrap overflow-x-auto">
-        <view v-for="(item,index) in img.split(',')" :key="index" class="mr-20rpx">
-          <up-image :show-loading="true" :src="item" width="216rpx" height="150rpx" bg-color="#0000"/>
+        <view v-for="(item,index) in img" :key="index" class="mr-20rpx">
+          <up-image :show-loading="true" :src="item.url" width="216rpx" height="150rpx" bg-color="#0000"/>
         </view>
       </view>
       <view class="flex justify-between items-center mt-32rpx">
@@ -25,7 +25,7 @@
             </view>
             <!-- <view class="text-black text-opacity-90 mx-12rpx">{{merchants.day}}</view> -->
             <view class="text-black text-opacity-90">{{merchants.openTime}}-{{merchants.closeTime}}</view>
-            <up-icon name="arrow-right" size="26rpx" color="black" class="ml-18rpx"></up-icon>
+            <up-icon name="arrow-right" size="26rpx" color="black" class="ml-28rpx"></up-icon>
           </view>
           <view class="flex u-flex-wrap">
 <!--            <view v-for="(item,index) in merchants.tag.split(',')" :key="index" class=" mt-16rpx ml-16rpx whitespace-nowrap">
@@ -33,7 +33,7 @@
             </view> -->
           </view>
         </view>
-        <view class="mr-38rpx ml-30rpx">
+        <view class="mr-38rpx ml-30rpx" @click="call">
           <up-icon name="phone" size="40rpx"></up-icon>
           <text class="text-black text-opacity-60 text-20rpx leading-52rpx font-medium">电话</text>
         </view>
@@ -62,9 +62,9 @@
 import {ref} from "vue"
 import carMerchantsAPI from "@/api/carMerchants";
 import {getTime,handleUrl} from "@/utils"
-
 const merchants:any=ref({})
 const img=ref()
+let phone=''
 const id1=ref()
 //接收传入id值
 onLoad((id)=>{
@@ -75,8 +75,8 @@ function getFormData(){
     data.openTime = formatTimeFromArray(data.openTime)
     data.closeTime = formatTimeFromArray(data.closeTime)
     merchants.value=data
-    console.log(merchants.value)
     img.value=handleUrl(data.storeLogoUrl)
+    phone=data.contactPhone
   })
 }
 getFormData()
@@ -92,6 +92,13 @@ function formatTimeFromArray(timeArray:any) {
   let [hours, minutes] = timeArray.map(num => String(num).padStart(2, '0'));
   return `${hours}:${minutes}`;
   }
+}
+
+//拨打电话功能
+function call(){
+    uni.makePhoneCall({
+    	phoneNumber: phone
+    });
 }
 </script>
 

@@ -113,7 +113,6 @@ function getBusiness() {
     .then((data) => {
       business.value = data.list
       business.value.map((item:any)=>item.image=handleUrl(item.image)[0].url)
-      console.log(business.value,"我是000")
     })
   }
 getBusiness()
@@ -130,7 +129,6 @@ function getMerchants() {
     .then((data) => {
       merchants.value = data.list
       merchants.value.map((item:any)=>item.storeLogoUrl=handleUrl(item.storeLogoUrl)[0].url)
-      console.log(merchants.value,'我是111')
     })
   }
 getMerchants()
