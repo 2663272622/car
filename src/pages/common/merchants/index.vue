@@ -1,37 +1,36 @@
 <template>
   <view class="c-#F1F1F1">
     <view class="h-428rpx ">
-      <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/2.png"
-        width="750rpx" height="428rpx" bg-color="#0000" />
+      <up-swiper :list="img" indicator indicatorMode="line" circular height="428rpx" bg-color="#000"></up-swiper>
     </view>
     <view class="bg-white relative z-1 top--64rpx rounded-tl-40rpx">
       <view class="pt-52rpx ml-30rpx text-black text-opacity-90 leading-32rpx font-semibold text-36rpx">
         {{merchants.merchantName}}
       </view>
-<!--      <view class="mt-24rpx flex ml-30rpx">
-        <up-rate v-model="merchants.star" readonly allowHalf="true" active-color="#F25730" gutter="2rpx"></up-rate>
-        <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchants.star}}</text>
-      </view> -->
+     <view class="mt-24rpx flex ml-30rpx">
+        <up-rate v-model="merchants.score" readonly allowHalf="true" active-color="#F25730" gutter="2rpx"></up-rate>
+        <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchants.score}}</text>
+      </view>
       <view class="mt-16rpx ml-30rpx flex whitespace-nowrap overflow-x-auto">
-        <view v-for="(item,index) in merchants.storeLogoUrl.split(',')" :key="index" class="mr-20rpx">
+        <view v-for="(item,index) in img.split(',')" :key="index" class="mr-20rpx">
           <up-image :show-loading="true" :src="item" width="216rpx" height="150rpx" bg-color="#0000"/>
         </view>
       </view>
       <view class="flex justify-between items-center mt-32rpx">
         <view>
           <view class="flex font-semibold text-26rpx leading-40rpx items-center ml-30rpx">
-<!--            <view>
-              <view v-if='Time' class="text-#0B86FA">营业中</view>
+           <view>
+              <view  v-if="getTime(merchants.openTime,merchants.closeTime)" class="text-#0B86FA">营业中</view>
               <view v-else class="text-black text-opacity-60">休息中</view>
-            </view> -->
-            <view class="text-black text-opacity-90 mx-12rpx">{{merchants.day}}</view>
-            <view class="text-black text-opacity-90">{{merchants.time}}</view>
+            </view>
+            <!-- <view class="text-black text-opacity-90 mx-12rpx">{{merchants.day}}</view> -->
+            <view class="text-black text-opacity-90">{{merchants.openTime}}-{{merchants.closeTime}}</view>
             <up-icon name="arrow-right" size="26rpx" color="black" class="ml-18rpx"></up-icon>
           </view>
           <view class="flex u-flex-wrap">
-            <view v-for="(item,index) in merchants.tag.split(',')" :key="index" class=" mt-16rpx ml-16rpx whitespace-nowrap">
+<!--            <view v-for="(item,index) in merchants.tag.split(',')" :key="index" class=" mt-16rpx ml-16rpx whitespace-nowrap">
               <up-tag type="info"  :text="item" color="rgba(0,0,0,0.6)" bgColor="#F0F0F0"></up-tag>
-            </view>
+            </view> -->
           </view>
         </view>
         <view class="mr-38rpx ml-30rpx">
@@ -42,7 +41,7 @@
       <view class="flex mt-48rpx justify-between items-center">
         <view>
           <view class="flex items-center ml-30rpx">
-            <text class="font-semibold text-26rpx text-black text-opacity-90 leading-40rpx">{{merchants.address}}</text>
+            <text class="font-semibold text-26rpx text-black text-opacity-90 leading-40rpx">{{merchants.storeAddress}}</text>
             <up-icon name="arrow-right" size="26rpx" class="ml-18rpx"></up-icon>
           </view>
           <view class="flex mt-16rpx ml-32rpx items-center mb-22rpx">
@@ -60,35 +59,40 @@
 </template>
 
 <script setup lang="ts">
-import {reactive} from "vue"
+import {ref} from "vue"
 import carMerchantsAPI from "@/api/carMerchants";
-// import getTime from "@/utils/time/index"
-// const queryParams = reactive({
-//   pageNum :1,
-//   pageSize :10,
-// });
-// const loading = ref(false);
-// const merchants:any=ref([])
-// function handleQuery() {
-//   loading.value = true;
-//   let params = {
-//     pageNum: queryParams.pageNum,
-//     pageSize: queryParams.pageSize
-//   }
-//   carMerchantsAPI.getPage(params).then((data:any) => {
-//     data.list.map((item:any) => {
-//       item.businessScope = item.businessScope.split(",")
-//     })
-//     merchants.value = data.list;
-//     console.log(merchants)
-//     // total.value = data.total;
-//     loading.value = false;
-//   });
-// }
-// // const Time=getTime(merchants.value.openTime,merchants.value.closeTime)
-// onMounted(()=>{
-//     handleQuery()
-// })
+import {getTime,handleUrl} from "@/utils"
+
+const merchants:any=ref({})
+const img=ref()
+const id1=ref()
+//接收传入id值
+onLoad((id)=>{
+  id1.value=id
+})
+function getFormData(){
+  carMerchantsAPI.getFormData(7).then((data:any)=>{
+    data.openTime = formatTimeFromArray(data.openTime)
+    data.closeTime = formatTimeFromArray(data.closeTime)
+    merchants.value=data
+    console.log(merchants.value)
+    img.value=handleUrl(data.storeLogoUrl)
+  })
+}
+getFormData()
+//修改时间格式
+function formatTimeFromArray(timeArray:any) {
+  if (!timeArray) {
+    return "";
+  }
+  else{
+    while (timeArray.length < 2) {
+    timeArray.push(0);
+  }
+  let [hours, minutes] = timeArray.map(num => String(num).padStart(2, '0'));
+  return `${hours}:${minutes}`;
+  }
+}
 </script>
 
 <style lang="scss" scoped>

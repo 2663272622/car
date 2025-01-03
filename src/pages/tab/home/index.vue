@@ -14,7 +14,7 @@
             ></up-image>
             <view class="home-inf-text">
               <view class="home-inf-tc">
-                {{noticeText}}
+                {{notice}}
               </view>
             </view>
         </view>
@@ -44,6 +44,7 @@
             :style="{
               background:item.bg
             }"
+            @click="callNotice(index)"
           >
               <up-image
                   :show-loading="true"
@@ -76,17 +77,15 @@ import { LOGIN_PATH } from "@/router";
 import { currentRoute } from '@/router';
 import { useUserStore } from "@/store";
 import NoticeAPI from "@/api/notice"
+import carMoveCodesAPI from "@/api/carMoveCodes"
+
 uni.hideTabBar()
 
 const userStore = useUserStore()
 const loginStatus = ref(false)
 const menuButtonInfo = ref(uni.getMenuButtonBoundingClientRect())
 
-const carInfo = ref("京A11111")
 
-const carInfoArr = computed(()=>{
-  return carInfo.value.split("")
-})
 
 const value2 = ref("您可以通过匿名电话通知车主进行挪车给您带来的不便，敬请谅解。您的主叫号码不会暴露给车主。")
 
@@ -123,7 +122,6 @@ const bHeight = computed(()=>{
 })
 
 
-const noticeText = ref("这是公告内容这是公告内容这是这是公告内容这是公告")
 // 跳转去登录
 // const handleLogin = ()=>{
 //     uni.redirectTo({
@@ -131,22 +129,47 @@ const noticeText = ref("这是公告内容这是公告内容这是这是公告�
 //     });
 // }
 
-const queryParams=ref({
+const queryParams={
   pageNum: 1,
   pageSize: 10,
-})
-const pageData=ref([])
+  type:22,
+  publishStatus:1
+}
+let pageData:any=[]
+const notice=ref()
 // 查询通知公告
 function handleQuery() {
   NoticeAPI.getPage(queryParams)
     .then((data) => {
-      pageData.value = data.list
-      console.log(pageData.value )
+      pageData = data.list
+      notice.value=pageData[0].content.slice(3,pageData[0].content.length-4)
+      console.log(notice.value)
     })
   }
-onMounted(()=>{
-  handleQuery()
+handleQuery()
+
+//获取车主的车牌号信息
+const carInfo=ref('')
+function getCarMoveCodes(){
+  carMoveCodesAPI.getFormData(3201)
+  .then((data)=>{
+    carInfo.value=data.carNumber
+  })
+}
+getCarMoveCodes()
+//通过计算属性将数据展示
+const carInfoArr = computed(()=>{
+  return carInfo.value.split("")
 })
+
+//拨打电话功能
+function callNotice(index:number){
+  if(index===0){
+    uni.makePhoneCall({
+    	phoneNumber: carInfo.value
+    });
+  }
+}
 
 </script>
 

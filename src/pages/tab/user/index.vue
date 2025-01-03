@@ -12,7 +12,7 @@
             </text>
           </view>
           <view class="mt-14rpx h-40rpx w-176rpx text-center text-28rpx text-black text-opacity-60 leading-40rpx">
-            1323****3253
+            {{userStore.phoneNumber.slice(0,4)}}****{{userStore.phoneNumber.slice(-4)}}
           </view>
         </view>
     </view>
@@ -72,7 +72,6 @@ onShow(async () => {
   loginStatus.value = isLogin();
   console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
   const ttt = await getToken();
-  console.log('打印token', ttt);
 });
 
 const query:any=ref()
@@ -80,6 +79,9 @@ onLoad((query:any)=>{
     // scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     const scene = decodeURIComponent(query.scene)
   })
+
+//登录后获取用户昵称和手机号
+
 // 获取当前经纬度
   const handleLocation = ()=>{
     console.log("获取位置")

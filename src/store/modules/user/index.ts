@@ -11,6 +11,7 @@ const useUserStore = defineStore('user', {
     token: '',
     integral: 0, // 积分
     identityType: 1, // 身份类型
+    phoneNumber:''
   }),
   getters: {
     userInfo(state) {

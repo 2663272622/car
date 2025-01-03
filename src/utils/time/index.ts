@@ -1,5 +1,5 @@
 //判断当前时间是否在营业时间中
-export default function(openTime, closeTime) {
+export function getTime(openTime:number[], closeTime:number[]) {
     const currentDate = new Date();
     const currentHours = currentDate.getHours();
     const currentMinutes = currentDate.getMinutes();

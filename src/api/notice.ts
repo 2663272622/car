@@ -5,19 +5,19 @@ const NOTICE_BASE_URL = "/api/v1/notices";
 
 const NoticeAPI = {
   /** 获取通知公告分页数据 */
-  getPage(queryParams:any) {
-    return get(`${NOTICE_BASE_URL}/page`,queryParams);
+  getPage(queryPrams:any) {
+    return get(`${NOTICE_BASE_URL}/page`,{data:queryPrams});
   },
 
-  /**
-   * 获取通知公告表单数据
-   *
-   * @param id NoticeID
-   * @returns Notice表单数据
-   */
-  getFormData(id: number) {
-    return get(`${NOTICE_BASE_URL}/${id}/form`);
-  },
+  // /**
+  //  * 获取通知公告表单数据
+  //  *
+  //  * @param id NoticeID
+  //  * @returns Notice表单数据
+  //  */
+  // getFormData(id: number) {
+  //   return get(`${NOTICE_BASE_URL}/${id}/form`);
+  // },
 
   // /**
   //  * 更新通知公告

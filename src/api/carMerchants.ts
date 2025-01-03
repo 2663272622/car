@@ -5,8 +5,8 @@ const carMerchants_BASE_URL = "/api/v1/carMerchants";
 
 const carMerchantsAPI = {
   /** 获取用户分页数据 */
-  getPage(queryParams:any) {
-    return get(`${carMerchants_BASE_URL}/page`,queryParams,);
+  getPage(data:any) {
+    return get(`${carMerchants_BASE_URL}/page`,{data});
   },
 
   /**
@@ -19,34 +19,16 @@ const carMerchantsAPI = {
     return get(`${carMerchants_BASE_URL}/${id}/form`);
     },
 
-  /**
-   * 新增用户表
-   */
-  add(data : any) {
-    return post(`${carMerchants_BASE_URL}`, data,);
-  },
-
-  /**
-   * 修改用户表
-   *
-   * @param id
-   * @param data
-   */
-  update(id : number, data:any) {
-    return put(`${carMerchants_BASE_URL}/${id}`,data,);
-  },
 
   // /**
-  //  * 批量删除用户表，多个以英文逗号(,)分割
+  //  * 修改用户表
   //  *
-  //  * @param ids 通知公告ID字符串，多个以英文逗号(,)分割
+  //  * @param id
+  //  * @param data
   //  */
-  // deleteByIds(ids : string) {
-  //   return request({
-  //     url: `${carMerchants_BASE_URL}/${ids}`,
-  //     method: "delete",
-  //   });
-  // }
+  // update(id : number, data:any) {
+  //   return put(`${carMerchants_BASE_URL}/${id}`,data,);
+  // },
 };
 
 export default carMerchantsAPI;
