@@ -34,7 +34,7 @@
       <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx mr-20rpx" @click="handleToGasoline">
         <view class="flex mt-10rpx items-center ml-52rpx">
         <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/23.png"  width="62rpx" height="70rpx" bg-color="#0000"/>
-        <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-16rpx font-medium">油价</text>
+        <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-16rpx font-medium">今日油价</text>
         </view>
       </view>
     </view>
