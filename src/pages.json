@@ -30,7 +30,8 @@
       "path": "pages/tab/order/index",
       "style": {
         "navigationBarTitleText": "",
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
       },
       "needLogin": true
     },

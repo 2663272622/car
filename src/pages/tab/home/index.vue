@@ -78,13 +78,11 @@ import { currentRoute } from '@/router';
 import { useUserStore } from "@/store";
 import NoticeAPI from "@/api/notice"
 import carMoveCodesAPI from "@/api/carMoveCodes"
-
 uni.hideTabBar()
 
 const userStore = useUserStore()
 const loginStatus = ref(false)
 const menuButtonInfo = ref(uni.getMenuButtonBoundingClientRect())
-
 
 
 const value2 = ref("您可以通过匿名电话通知车主进行挪车给您带来的不便，敬请谅解。您的主叫号码不会暴露给车主。")
@@ -106,16 +104,6 @@ const btnData = ref([
     bg:"#AEB7FFFF",
   },
 ])
-
-onShow(async () => {
-  loginStatus.value = await usePermission();
-  console.log("asdasd",loginStatus.value)
-  loginStatus.value = isLogin()
-  console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
-  const ttt = await getToken()
-  console.log("打印token",ttt)
-});
-
 
 const bHeight = computed(()=>{
   return barHeight()
@@ -170,6 +158,15 @@ function callNotice(index:number){
     });
   }
 }
+//微信通知车主
+// async function WxNotice(index:number){
+//   if(index===1){
+//     if(loginStatus.value){
+//       loginStatus.value = await usePermission();
+//     }
+
+//   }
+// }
 
 </script>
 

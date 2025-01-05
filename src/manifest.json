@@ -58,7 +58,13 @@
         },
         "usingComponents" : true,
         "lazyCodeLoading" : "requiredComponents",
-        "mergeVirtualHostAttributes" : true
+        "mergeVirtualHostAttributes" : true,
+        "requiredPrivateInfos" : [ "getFuzzyLocation", "choosePoi", "chooseAddress" ],
+        "permission" : {
+            "scope.userFuzzyLocation" : {
+                "desc" : "请求获取位置获取距离商家距离"
+            }
+        }
     },
     "mp-alipay" : {
         "usingComponents" : true

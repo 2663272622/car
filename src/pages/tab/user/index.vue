@@ -79,33 +79,6 @@ onLoad((query:any)=>{
     // scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     const scene = decodeURIComponent(query.scene)
   })
-
-//登录后获取用户昵称和手机号
-
-// 获取当前经纬度
-  const handleLocation = ()=>{
-    console.log("获取位置")
-    wx.getFuzzyLocation({
-      type:"wgs84",
-      success(res){
-        console.log(res)
-        toNav(res)
-      }
-    })
-  }
-  // 传入经纬度 调用导航
-  const toNav = (res)=>{
-        const latitude = res.latitude;
-        const longitude = res.longitude;
-        uni.openLocation({
-          latitude: latitude,
-          longitude: longitude,
-          success: function () {
-            console.log('success');
-          }
-        });
-
-  }
 </script>
 
 <style lang="scss">
