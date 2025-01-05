@@ -130,7 +130,7 @@ function handleQuery() {
   NoticeAPI.getPage(queryParams)
     .then((data) => {
       pageData = data.list
-      notice.value=pageData[0].content.slice(3,pageData[0].content.length-4)
+      notice.value=pageData[0].content
       console.log(notice.value)
     })
   }

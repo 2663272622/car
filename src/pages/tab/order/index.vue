@@ -10,7 +10,7 @@
       <view class="bg-white w-full h-18rpx absolute top-464rpx"></view>
       <view class="bg-white pt-50rpx grid grid-cols-5 grid-rows-2 ">
         <view v-for="item in business" :key="item.id">
-          <view class="mx-30rpx flex items-center flex-col">
+          <view class="flex items-center flex-col mx-auto">
             <up-image :show-loading="true" :src="item.image" width="64rpx" height="50rpx" bg-color="#0000" />
             <text class="font-medium text-24rpx leading-40rpx text-black text-opacity-90 mt-8rpx">{{item.label}}</text>
           </view>
@@ -27,9 +27,9 @@
         </view>
         <view>
           <view v-for="(item,index) in merchants" :index="index">
-            <view class="bg-white rd-20rpx mx-30rpx mt-30rpx mb-20rpx flex whitespace-nowrap overflow-hidden"
+            <view class="bg-white rd-20rpx mx-30rpx my-30rpx flex whitespace-nowrap overflow-hidden"
               @click="navigator(item.id)">
-              <view class="mt-30rpx ml-20rpx mr-12rpx">
+              <view class="my-30rpx ml-20rpx mr-12rpx">
                 <up-image :show-loading="true" :src="item.storeLogoUrl" width="160rpx" height="160rpx"
                   bg-color="#0000" />
               </view>
@@ -62,7 +62,7 @@
           </view>
         </view>
         <view v-if="merchants.length || noData ">
-          <uni-load-more :status="noData?'noMore':'loading'"></uni-load-more>
+          <up-loadmore :status="noData?'nomore':'loading'" />
         </view>
       </view>
     </view>
@@ -79,6 +79,7 @@
   import { handleUrl, getTime } from "@/utils";
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
+import list from "@/uni_modules/uview-plus/components/u-list/list";
   //获取高度
   const bHeight = computed(() => {
     return barHeight();
@@ -131,20 +132,19 @@
   //查询商家
   let merchants_params = {
     pageNum: 1,
-    pageSize: 4,
+    pageSize: 6,
     active: true
   }
   const merchants : any = ref([])
+  const image=ref()
   function getMerchants() {
     carMerchantsAPI.getPage(merchants_params)
       .then((data) => {
-        if (data.list.storeLogoUrl !== null) {
-          data.list.map((item : any) => item.storeLogoUrl = handleUrl(item.storeLogoUrl)[0].url)
-        }
-        merchants.value = [...merchants.value, ...data.list];
-        if (merchants_params.pageSize > data.list.length) noData.value = true;
-        storage.set('merchants', merchants.value)
-        uni.stopPullDownRefresh()
+      // data.list.map((item : any) => item.storeLogoUrl = handleUrl(item.storeLogoUrl)[0].url)
+      merchants.value = [...merchants.value, ...data.list];
+      if (merchants_params.pageSize > data.list.length) noData.value = true;
+      storage.set('merchants', merchants.value)
+      uni.stopPullDownRefresh()
       })
   }
   getMerchants()
