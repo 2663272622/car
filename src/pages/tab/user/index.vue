@@ -25,16 +25,16 @@
       </view>
     </view>
     <view class="flex mt-30rpx bg-white h-158rpx mx-30rpx rd-20rpx">
-      <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx ml-20rpx mr-18rpx">
+      <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx ml-20rpx mr-18rpx" @click='handleToOilwear'>
         <view class="flex ml-48rpx items-center mt-10rpx">
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/19.png"  width="62rpx" height="70rpx" bg-color="#0000"/>
           <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-22rpx font-medium">油耗计算器</text>
         </view>
       </view>
-      <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx mr-20rpx">
+      <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx mr-20rpx" @click="handleToGasoline">
         <view class="flex mt-10rpx items-center ml-52rpx">
         <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/23.png"  width="62rpx" height="70rpx" bg-color="#0000"/>
-        <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-16rpx font-medium">油价</text>
+        <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-16rpx font-medium">今日油价</text>
         </view>
       </view>
     </view>
@@ -79,6 +79,41 @@ onLoad((query:any)=>{
     // scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     const scene = decodeURIComponent(query.scene)
   })
+
+// 跳转查看油价
+const handleToGasoline = ()=>{
+  uni.navigateTo({url:`/pages/common/asoline/index`})
+}
+// 跳转查看油价
+const handleToOilwear = ()=>{
+  uni.navigateTo({url:`/pages/common/oilwear/index`})
+}
+//登录后获取用户昵称和手机号
+
+// 获取当前经纬度
+  const handleLocation = ()=>{
+    console.log("获取位置")
+    wx.getFuzzyLocation({
+      type:"wgs84",
+      success(res){
+        console.log(res)
+        toNav(res)
+      }
+    })
+  }
+  // 传入经纬度 调用导航
+  const toNav = (res)=>{
+        const latitude = res.latitude;
+        const longitude = res.longitude;
+        uni.openLocation({
+          latitude: latitude,
+          longitude: longitude,
+          success: function () {
+            console.log('success');
+          }
+        });
+
+  }
 </script>
 
 <style lang="scss">

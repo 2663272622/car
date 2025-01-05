@@ -55,6 +55,21 @@
           }
         },
         {
+          "path" : "asoline/index",
+          "style" :
+          {
+            "navigationBarTitleText" : "油价"
+          }
+        },
+        {
+          "path" : "oilwear/index",
+          "style" :
+          {
+            "navigationBarTitleText" : "油耗计算"
+          }
+        },
+
+        {
           "path": "webview/index",
           "style": {
             "navigationBarTitleText": "网页"
