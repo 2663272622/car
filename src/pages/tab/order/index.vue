@@ -137,7 +137,7 @@
   function getMerchants() {
     carMerchantsAPI.getPage(merchants_params)
       .then((data) => {
-        data.list.map((item : any) => item.storeLogoUrl = handleUrl(item.storeLogoUrl)[0].url)
+        data.list.map((item : any) => item.storeLogoUrl = item.storeLogoUrl ? handleUrl(item.storeLogoUrl)[0].url : '')
         merchants.value = [...merchants.value, ...data.list];
         if (merchants_params.pageSize > data.list.length) noData.value = true;
         storage.set('merchants', merchants.value)

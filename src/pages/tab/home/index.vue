@@ -78,6 +78,8 @@ import { currentRoute } from '@/router';
 import { useUserStore } from "@/store";
 import NoticeAPI from "@/api/notice"
 import carMoveCodesAPI from "@/api/carMoveCodes"
+import carMsgAPI from "@/api/carMsg"
+
 uni.hideTabBar()
 
 const userStore = useUserStore()
@@ -85,11 +87,11 @@ const loginStatus = ref(false)
 const menuButtonInfo = ref(uni.getMenuButtonBoundingClientRect())
 
 
-const value2 = ref("您可以通过匿名电话通知车主进行挪车给您带来的不便，敬请谅解。您的主叫号码不会暴露给车主。")
+const value2 = ref("您好，打扰一下，不知道是否能方便把车挪一下？非常感谢！")
 
 const btnData = ref([
   {
-    name:"匿名电话通知",
+    name:"电话通知",
     icon:"https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/4.png",
     bg:"#FFDCC6FF",
   },
@@ -99,7 +101,7 @@ const btnData = ref([
     bg:"#C8FB6FFF",
   },
   {
-    name:"短信通知车主",
+    name:"短信通知",
     icon:"https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/6.png",
     bg:"#AEB7FFFF",
   },
@@ -131,17 +133,18 @@ function handleQuery() {
     .then((data) => {
       pageData = data.list
       notice.value=pageData[0].content.slice(3,pageData[0].content.length-4)
-      console.log(notice.value)
     })
   }
 handleQuery()
 
 //获取车主的车牌号信息
 const carInfo=ref('')
+const scanInfo=ref({})
 function getCarMoveCodes(){
   carMoveCodesAPI.getFormData(3201)
   .then((data)=>{
     carInfo.value=data.carNumber
+    scanInfo.value = data
   })
 }
 getCarMoveCodes()
@@ -149,13 +152,32 @@ getCarMoveCodes()
 const carInfoArr = computed(()=>{
   return carInfo.value.split("")
 })
-
+// phoneNumber
 //拨打电话功能
 function callNotice(index:number){
-  if(index===0){
-    uni.makePhoneCall({
-    	phoneNumber: carInfo.value
-    });
+  switch(index){
+    case 0:
+      uni.makePhoneCall({
+        phoneNumber: scanInfo.value?.phoneNumber
+      });
+    break;
+    case 1:
+      carMsgAPI.sendWxMsgApi(
+        scanInfo.value.id,
+      ).then(res=>{
+        uni.$u.toast("发送成功");
+      })
+    break;
+    case 2:
+      carMsgAPI.sendMsgApi(
+        scanInfo.value.phoneNumber,
+        {"carNameber":scanInfo.value.carNumber}
+      ).then(res=>{
+        uni.$u.toast("发送成功");
+      })
+    break;
+
+
   }
 }
 //微信通知车主
