@@ -41,7 +41,7 @@
     <view class="flex mt-22rpx rd-20rpx bg-white h-202rpx w-690rpx mx-30rpx">
       <view class="flex h-126rpx mx-20rpx bg-#EFF7FF rd-20rpx mt-26rpx items-center w-650rpx ">
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/20.png"  width="64rpx" height="64rpx" bg-color="#0000" class="ml-18rpx"/>
-          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx">我的订单</text>
+          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx" @click='handleWechatMsg'>开启通知</text>
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/21.png"  width="64rpx" height="64rpx" bg-color="#0000"/>
           <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx">编辑通知</text>
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/22.png"  width="64rpx" height="64rpx" bg-color="#0000"/>
@@ -79,6 +79,19 @@ onLoad((query:any)=>{
     // scene 需要使用 decodeURIComponent 才能获取到生成二维码时传入的 scene
     const scene = decodeURIComponent(query.scene)
   })
+
+const handleWechatMsg = ()=>{
+  wx.requestSubscribeMessage({
+    tmplIds:["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+    success(...res){
+        uni.$u.toast("已开启微信通知");
+    },
+    fail(){
+        uni.$u.toast("已取消");
+    }
+  })
+
+}
 
 // 跳转查看油价
 const handleToGasoline = ()=>{
