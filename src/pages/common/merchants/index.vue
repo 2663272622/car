@@ -118,26 +118,47 @@ function goBack(){
 }
 
 // 获取当前经纬度
-function getLocation() {
-  uni.getFuzzyLocation({
-    type: "wgs84",
-    success(res) {
-      console.log(res)
-      toNav(merchants.value)
-    },
-    fail: (res) => {
-      uni.showModal({
-        title: "提示",
-        content: "需要授权获取位置信息",
-        success: (res) => {
-          if (res.confirm) {
-            uni.openSetting()
-          }
-        },
-      })
-    },
-  })
-}
+ // 获取当前经纬度
+  function getLocation() {
+    uni.getFuzzyLocation({
+      type: "wgs84",
+      success: (res) => {
+        toNav(merchants.value)
+      },
+      fail: (arr) => {
+        uni.showModal({
+          title: "提示",
+          content: "需要授权获取位置信息",
+          success: (res) => {
+            if (res.confirm) {
+              uni.openSetting({
+                success: (res) => {
+                  console.log(res.authSetting)
+                  if (res.authSetting['scope.userFuzzyLocation']) {
+                    uni.getFuzzyLocation({
+                      type: "wgs84",
+                      fail: (arr) => {
+                        console.log(arr)
+                        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+                          uni.showModal({
+                            title: "未获取到位置信息",
+                            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+                            showCancel: false,
+                            confirmText: "我知道了"
+                          })
+                          return;
+                        }
+                      }
+                    })
+                  }
+                },
+              })
+            }
+          },
+        })
+      },
+    })
+  }
 
 // 传入经纬度 调用导航
 const toNav = (res:any)=>{

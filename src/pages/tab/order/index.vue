@@ -121,6 +121,7 @@
       .then((data) => {
         business.value = data.list
         business.value.map((item : any) => item.image = handleUrl(item.image)[0].url)
+
       })
   }
   getBusiness()
@@ -130,14 +131,16 @@
   //查询商家
   let merchants_params = {
     pageNum: 1,
-    pageSize: 10,
+    pageSize: 4,
     active: true
   }
   const merchants : any = ref([])
   function getMerchants() {
     carMerchantsAPI.getPage(merchants_params)
       .then((data) => {
-        data.list.map((item : any) => item.storeLogoUrl = handleUrl(item.storeLogoUrl)[0].url)
+        if (data.list.storeLogoUrl !== null) {
+          data.list.map((item : any) => item.storeLogoUrl = handleUrl(item.storeLogoUrl)[0].url)
+        }
         merchants.value = [...merchants.value, ...data.list];
         if (merchants_params.pageSize > data.list.length) noData.value = true;
         storage.set('merchants', merchants.value)
@@ -172,32 +175,39 @@
   function getLocation() {
     uni.getFuzzyLocation({
       type: "wgs84",
-      success(res) {
-        // toNav(res)
-      },
-      fail: (res) => {
-        uni.showModal({
-          title: "提示",
-          content: "需要授权获取位置信息",
-          success: (res) => {
-            if (res.confirm) {
-              uni.openSetting()
-            }
-          },
-        })
+      success: (res) => {},
+      fail: (arr) => {
+        console.log(arr)
+        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
+          uni.showToast({
+            title: "获取定位授权失败",
+            icon: "none"
+          })
+          return;
+        }
+        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+          uni.showModal({
+            title: "未获取到位置信息",
+            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+            showCancel: false,
+            confirmText: "我知道了"
+          })
+          return;
+        }
       },
     })
   }
   getLocation()
-  // // 传入经纬度 调用导航
+
+  // 传入经纬度 调用导航
   // const toNav = (res:any)=>{
   //       const latitude = res.latitude;
   //       const longitude = res.longitude;
   //       uni.openLocation({
   //         latitude: latitude,
   //         longitude: longitude,
-  //         success: function () {
-  //           console.log('success');
+  //         success: function (res) {
+  //           console.log("123",res);
   //         }
   //       });
   // }
