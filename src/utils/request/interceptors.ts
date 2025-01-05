@@ -5,9 +5,10 @@ import type {
   HttpResponse,
 } from 'uview-plus/libs/luch-request/index';
 import { useUserStore } from '@/store';
-import { getToken } from '@/utils/auth';
+import { getToken,clearToken } from '@/utils/auth';
 import storage from '@/utils/storage';
 import { showMessage } from './status';
+import { usePermission } from '@/hooks';
 
 // 重试队列，每一项将是一个待执行的函数形式
 let requestQueue: (() => void)[] = [];
@@ -84,7 +85,7 @@ function requestInterceptors(http: HttpRequestAbstract) {
       const isToken = custom?.auth === false;
       if (getToken() && !isToken && config.header) {
         // token设置
-        config.header.Authorization = getToken();
+        config.header.Authorization =  getToken();
          config.header['ngrok-skip-browser-warning'] = "true"
       }
 
@@ -114,6 +115,7 @@ function responseInterceptors(http: HttpRequestAbstract) {
    */
   http.interceptors.response.use(
     async (response: HttpResponse) => {
+
       /* 对响应成功做点什么 可使用async await 做异步操作 */
       const data = response.data;
       // 配置参数
@@ -146,6 +148,13 @@ function responseInterceptors(http: HttpRequestAbstract) {
       return Promise.reject(data);
     },
     (response: HttpError) => {
+      console.log("失败回调",response)
+      if(response.statusCode == 401){
+          uni.$u.toast('登录状态失效 重新登陆');
+          clearToken();
+          usePermission();
+          return;
+      }
       // 自定义参数
       const custom = response.config?.custom;
 
