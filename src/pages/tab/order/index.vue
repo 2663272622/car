@@ -20,7 +20,8 @@
         <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx">推荐商家</view>
         <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
           <view v-for="item in business" :key="item.id">
-            <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx">
+            <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
+              :class="{select:isSelect}" @click="selectBusiness(item)">
               {{item.label}}
             </view>
           </view>
@@ -49,12 +50,12 @@
                   </view>
                 </view>
                 <view class="flex mt-16rpx justify-between text-black text-opacity-60 items-center">
-                  <view class="text-24rpx font-normal leading-40rpx">
+                  <view class="text-24rpx font-normal leading-40rpx overflow-hidden mr-12rpx">
                     {{item.storeAddress}}
                   </view>
-                  <view class="flex">
+                  <view v-if="item.distance" class="flex">
                     <up-icon name="map"></up-icon>
-                    <text class="leading-52rpx">1.2km</text>
+                    <text class="leading-52rpx">{{item.distance}}km</text>
                   </view>
                 </view>
               </view>
@@ -79,7 +80,44 @@
   import { handleUrl, getTime } from "@/utils";
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
-import list from "@/uni_modules/uview-plus/components/u-list/list";
+  import list from "@/uni_modules/uview-plus/components/u-list/list";
+
+  // 获取当前经纬度
+  const Mylatitude = ref()
+  const Mylongitude = ref()
+  function getLocation() {
+    uni.getFuzzyLocation({
+      type: "wgs84",
+      success: (res) => {
+        Mylatitude.value = res.latitude
+        Mylongitude.value = res.longitude
+      },
+      fail: (arr) => {
+        console.log(arr)
+        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
+          uni.showToast({
+            title: "获取定位授权失败",
+            icon: "none"
+          })
+          return;
+        }
+        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+          uni.showModal({
+            title: "未获取到位置信息",
+            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+            showCancel: false,
+            confirmText: "我知道了"
+          })
+          return;
+        }
+      },
+      complete: () => {
+        getMerchants()
+      }
+    })
+  }
+  getLocation()
+
   //获取高度
   const bHeight = computed(() => {
     return barHeight();
@@ -96,7 +134,7 @@ import list from "@/uni_modules/uview-plus/components/u-list/list";
     pageNum: 1,
     pageSize: 10,
     type: 23,
-    publishStatus: 1
+    publishStatus: 1,
   }
   let pageData : any = []
   const swiperImg = ref()
@@ -110,7 +148,7 @@ import list from "@/uni_modules/uview-plus/components/u-list/list";
   }
   handleQuery()
 
-  // 查询商家业务
+  // 查询业务类型
   const params = {
     pageNum: 1,
     pageSize: 10,
@@ -121,33 +159,46 @@ import list from "@/uni_modules/uview-plus/components/u-list/list";
     BusinessAPI.getPage(params)
       .then((data) => {
         business.value = data.list
-        business.value.map((item : any) => item.image = handleUrl(item.image)[0].url)
-
+        business.value.map((item : any) => {
+          return item.image = item.image ? handleUrl(item.image)[0].url : ""
+        })
+        business.value.map((item : any) => ({ ...item, isSelect: false }))
       })
   }
   getBusiness()
 
+//选择具体商家
+function selectBusiness(item:any){
+  item.isSelect=!item.isSelect
+}
   //建立一个布尔值，判断是否进行下拉刷新
   const noData = ref(false)
   //查询商家
   let merchants_params = {
     pageNum: 1,
     pageSize: 6,
-    active: true
+    active: true,
   }
   const merchants : any = ref([])
-  const image=ref()
-  function getMerchants() {
-    carMerchantsAPI.getPage(merchants_params)
-      .then((data) => {
-      // data.list.map((item : any) => item.storeLogoUrl = handleUrl(item.storeLogoUrl)[0].url)
-      merchants.value = [...merchants.value, ...data.list];
-      if (merchants_params.pageSize > data.list.length) noData.value = true;
-      storage.set('merchants', merchants.value)
-      uni.stopPullDownRefresh()
-      })
+  const image = ref()
+  const getMerchants = async () => {
+    let data
+    if (Mylatitude.value) {
+      data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylongitude.value, longitude: Mylatitude.value })
+    }
+    else {
+      data = await carMerchantsAPI.getNoPage(merchants_params)
+    }
+    data.list.map((item : any) => {
+      return item.storeLogoUrl = item.storeLogoUrl ? handleUrl(item.storeLogoUrl)[0].url : ''
+    })
+    merchants.value = [...merchants.value, ...data.list];
+    if (merchants_params.pageSize > data.list.length) noData.value = true;
+    storage.set('merchants', merchants.value)
+    uni.stopPullDownRefresh()
+
   }
-  getMerchants()
+
 
   //触底加载
   onReachBottom(() => {
@@ -170,47 +221,6 @@ import list from "@/uni_modules/uview-plus/components/u-list/list";
   onUnload(() => {
     storage.remove('merchants')
   })
-
-  // 获取当前经纬度
-  function getLocation() {
-    uni.getFuzzyLocation({
-      type: "wgs84",
-      success: (res) => {},
-      fail: (arr) => {
-        console.log(arr)
-        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
-          uni.showToast({
-            title: "获取定位授权失败",
-            icon: "none"
-          })
-          return;
-        }
-        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-          uni.showModal({
-            title: "未获取到位置信息",
-            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-            showCancel: false,
-            confirmText: "我知道了"
-          })
-          return;
-        }
-      },
-    })
-  }
-  getLocation()
-
-  // 传入经纬度 调用导航
-  // const toNav = (res:any)=>{
-  //       const latitude = res.latitude;
-  //       const longitude = res.longitude;
-  //       uni.openLocation({
-  //         latitude: latitude,
-  //         longitude: longitude,
-  //         success: function (res) {
-  //           console.log("123",res);
-  //         }
-  //       });
-  // }
 </script>
 <style scoped lang="scss">
   .page-wrap {
@@ -231,10 +241,8 @@ import list from "@/uni_modules/uview-plus/components/u-list/list";
         background-size: 145.41rpx 36.28rpx;
       }
 
-      .preferential-bg {
-        background-color: rgba(242, 87, 48, 0.2);
-        width: 28rpx;
-        height: 28rpx;
+      .select {
+        background-color: #E0E5E3;
       }
     }
   }

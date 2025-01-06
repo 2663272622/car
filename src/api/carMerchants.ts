@@ -4,8 +4,13 @@ import { get, post,put } from '@/utils/request';
 const carMerchants_BASE_URL = "/api/v1/carMerchants";
 
 const carMerchantsAPI = {
-  /** 获取用户分页数据 */
+  /** 获取用户分页数据(给定位权限) */
   getPage(data:any) {
+    return get(`${carMerchants_BASE_URL}/wxPage`,{data});
+  },
+
+  /** 获取用户分页数据(不给定位权限) */
+  getNoPage(data:any) {
     return get(`${carMerchants_BASE_URL}/page`,{data});
   },
 
@@ -18,6 +23,8 @@ const carMerchantsAPI = {
   getFormData(id : number) {
     return get(`${carMerchants_BASE_URL}/${id}/form`);
     },
+
+
 
 
   // /**

@@ -27,7 +27,7 @@
               <view v-else class="text-black text-opacity-60">休息中</view>
             </view>
             <!-- <view class="text-black text-opacity-90 mx-12rpx">{{merchants.day}}</view> -->
-            <view class="text-black text-opacity-90">&nbsp;&nbsp;{{merchants.openTime}}-{{merchants.closeTime}}</view>
+            <view class="text-black text-opacity-90">&nbsp;&nbsp;{{openTime}}-{{closeTime}}</view>
             <up-icon name="arrow-right" size="26rpx" color="black" class="ml-28rpx"></up-icon>
           </view>
           <view class="flex u-flex-wrap">
@@ -52,7 +52,7 @@
             <text class="font-medium text-24rpx text-black text-opacity-60 leading-40rpx">距您 20.0公里 驾车 50分钟 公交 56分钟</text>
           </view>
         </view>
-        <view class="mr-38rpx" @click="getLocation()">
+        <view class="mr-38rpx" @click="toNav(merchants)">
           <up-icon name="map" size="40rpx"></up-icon>
           <text class="text-black text-opacity-60 text-20rpx leading-52rpx font-medium">导航</text>
         </view>
@@ -70,6 +70,8 @@ const merchants:any=ref({})
 const img=ref()
 let phone=''
 const id=ref()
+let openTime:string
+let closeTime:string
 //接收传入id值
 // 使用onLoad生命周期函数接收传输值id或者是type
 onLoad((e:any)=>{
@@ -78,8 +80,8 @@ onLoad((e:any)=>{
 })
 function getFormData(){
   carMerchantsAPI.getFormData(id.value).then((data:any)=>{
-    data.openTime = formatTimeFromArray(data.openTime)
-    data.closeTime = formatTimeFromArray(data.closeTime)
+    openTime = formatTimeFromArray(data.openTime)
+    closeTime = formatTimeFromArray(data.closeTime)
     merchants.value=data
     img.value=handleUrl(data.storeLogoUrl)
     phone=data.contactPhone
@@ -123,7 +125,6 @@ function goBack(){
     uni.getFuzzyLocation({
       type: "wgs84",
       success: (res) => {
-        toNav(merchants.value)
       },
       fail: (arr) => {
         uni.showModal({
@@ -159,7 +160,7 @@ function goBack(){
       },
     })
   }
-
+getLocation()
 // 传入经纬度 调用导航
 const toNav = (res:any)=>{
       console.log(res)

@@ -40,7 +40,7 @@
           <view
             v-for="(item,index) of btnData"
             :key='index'
-            class='home-car-hc mb-60rpx'
+            class='home-car-hc mb-60rpx flex items-center justify-center'
             :style="{
               background:item.bg
             }"
@@ -52,7 +52,7 @@
                   width="56rpx"
                   height="56rpx"
                  bgColor="#0000"
-                 class="ml-206rpx mr-12rpx"
+                 class="mr-12rpx"
               ></up-image>
               <view class="home-hbtn-text">
                 {{ item.name }}
