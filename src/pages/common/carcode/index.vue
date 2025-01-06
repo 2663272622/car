@@ -54,7 +54,7 @@
                  borderBottom
                  ref="item1"
              >
-               <up-input v-model="carCode" disabled border="none" ></up-input>
+               <up-input v-model="carCode" border="none" ></up-input>
              </up-form-item>
          </up-form>
          <u-button type="primary" class='my-16rpx' @click="handleActive">提交</u-button>
