@@ -17,13 +17,13 @@
         class='w-full'
       >手机号快速登录</button>
 
-      <view class="hint">
+     <!-- <view class="hint">
         登录代表同意
         <text class="link">
           用户协议、隐私政策，
         </text>
         并授权使用您的账号信息（如昵称、头像、收获地址）以便您统一管理
-      </view>
+      </view> -->
     </view>
 
   </view>

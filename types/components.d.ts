@@ -12,5 +12,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Tabbar: typeof import('./../src/components/tabbar/index.vue')['default']
+    UniPlateInput: typeof import('./../src/components/uni-plate-input/uni-plate-input.vue')['default']
   }
 }
