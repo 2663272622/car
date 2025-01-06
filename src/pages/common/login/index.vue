@@ -3,7 +3,7 @@
     <view class="login-form-wrap absolute top-25% w-full flex flex-col justify-center items-center">
       <up-image
           :show-loading="true"
-          src="https://img-ischool.oss-cn-beijing.aliyuncs.com/base/logo.png"
+          src="https://img-ischool.oss-cn-beijing.aliyuncs.com/base/carlogo.jpg"
           width="180rpx"
           height="180rpx"
          bgColor='#0000'
