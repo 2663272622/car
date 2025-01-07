@@ -3,7 +3,7 @@
     <!--    <view v-if="!merchants.length && !noData">
     	<uni-load-more status="loading"></uni-load-more>
     </view> -->
-    <view class="h-100vh" :style="{ paddingTop: bHeight }">
+    <view  :style="{ paddingTop: bHeight }">
       <view class="mx-30rpx relative z-10 rounded-20rpx">
         <up-swiper :list="swiperImg" indicator indicatorMode="line" circular height="388rpx"></up-swiper>
       </view>
@@ -17,7 +17,7 @@
           </view>
         </view>
       </view>
-      <view class="bottom mt-30rpx overflow-y-auto h-800rpx">
+      <view class="bottom mt-30rpx overflow-y-auto mb-170rpx">
         <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx">推荐商家</view>
         <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
           <view v-for="item in business" :key="item.id">
