@@ -20,7 +20,7 @@
       <view class="moveCar mr-30rpx flex items-center"  @click="handleCarCode">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">挪车码</text>
       </view>
-      <view class="shops flex items-center">
+      <view class="shops flex items-center" @click="handleMyMerchants">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">我的店铺</text>
       </view>
     </view>
@@ -43,7 +43,7 @@
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/20.png"  width="64rpx" height="64rpx" bg-color="#0000" class="ml-18rpx"/>
           <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx" @click='handleWechatMsg'>开启通知</text>
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/21.png"  width="64rpx" height="64rpx" bg-color="#0000"/>
-          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx">编辑通知</text>
+          <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx" @click="handleMyNotice">编辑通知</text>
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/22.png"  width="64rpx" height="64rpx" bg-color="#0000"/>
           <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-18rpx">联系客服</text>
       </view>
@@ -105,7 +105,14 @@ const handleToOilwear = ()=>{
 const handleCarCode = ()=>{
   uni.navigateTo({url:`/pages/common/carcode/index`})
 }
-
+//跳转查看我的店铺
+const handleMyMerchants=()=>{
+  uni.navigateTo({url:`/pages/common/mymerchants/index`})
+}
+//跳转查看我的通知
+const handleMyNotice=()=>{
+  uni.navigateTo({url:`/pages/common/mynotice/index`})
+}
 
 //登录后获取用户昵称和手机号
 
