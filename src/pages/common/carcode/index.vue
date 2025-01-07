@@ -45,6 +45,8 @@
              </up-form-item>
          </up-form>
            <u-button type="primary" class='my-16rpx' @click="handleActive">提交并开启微信通知</u-button>
+           <u-button type="primary" class='my-16rpx' @click="handlePOI">测试按钮</u-button>
+
            <template v-if="plateShow">
               <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
            </template>
@@ -98,6 +100,16 @@ const setPlate = (plate) => {
 const carList = ref([])
 const carInfo = ref({})
 
+const handlePOI = ()=>{
+console.log("***********************")
+  wx.chooseLocation({
+    complete(res){
+
+      console.log(res)
+      debugger
+    }
+  })
+}
 
 
 onLoad(async(query)=>{
