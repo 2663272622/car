@@ -7,22 +7,7 @@
 		    >
 		    </u-navbar>
 
-        <template v-if='carList.length > 0'>
-          <up-list >
-            <up-list-item
-              v-for="(item, index) in carList"
-              :key="index"
-            >
-              <up-cell
-                :title="`${item.carNumber}`"
-                 value="查看"
-              >
-              </up-cell>
-            </up-list-item>
-          </up-list>
-        </template>
-
-        <template v-else>
+        <template v-if='carInfo.id'>
           <up-form
                labelPosition="left"
                ref="form1"
@@ -34,9 +19,11 @@
                  ref="item1"
              >
                <up-input
-                   border="none"
-                   @tap="plateShow = true" v-model="carInfo.carNumber"
-                    placeholder="请点此输入号码" :disabled="true"
+                 border="none"
+                 @tap="plateShow = true"
+                 v-model="carInfo.carNumber"
+                placeholder="请点此输入号码"
+                :disabled="true"
                ></up-input>
              </up-form-item>
              <up-form-item
@@ -54,13 +41,31 @@
                  borderBottom
                  ref="item1"
              >
-               <up-input v-model="carCode" border="none" ></up-input>
+               <up-input v-model="carInfo.id" border="none" ></up-input>
              </up-form-item>
          </up-form>
-         <u-button type="primary" class='my-16rpx' @click="handleActive">提交</u-button>
-         <template v-if="plateShow">
-            <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
-         </template>
+           <u-button type="primary" class='my-16rpx' @click="handleActive">提交</u-button>
+           <template v-if="plateShow">
+              <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
+           </template>
+        </template>
+
+        <template v-else>
+          <up-list  v-if='carList.length > 0'>
+            <up-list-item
+              v-for="(item, index) in carList"
+              :key="index"
+            >
+              <up-cell
+                :title="`${item.carNumber}`"
+                 value="查看"
+              >
+              </up-cell>
+            </up-list-item>
+          </up-list>
+          <div v-else>
+            暂无可用的挪车码
+          </div>
         </template>
   </view>
 </template>
@@ -89,30 +94,27 @@ const setPlate = (plate) => {
   plateShow.value= false;
 }
 
-onShow(async () => {
-  loginStatus.value = await usePermission();
-  loginStatus.value = isLogin();
-  const ttt = await getToken();
-  if(loginStatus.value){
-    getInfo()
-  }
-});
-// pages/common/carcode/index
-
-const carCode = ref(2448);
-const carNumber = ref("渝AT99999")
-
 const carList = ref([])
 const carInfo = ref({})
 
-// 获取用户详情
-const getInfo = async() => {
-  const res = await userStore.info()
-  console.log("用户信息",res)
-  getCarList()
 
-  getCarInfo()
-}
+
+onLoad(async(query)=>{
+
+  loginStatus.value = await usePermission();
+  loginStatus.value = isLogin();
+  const ttt = await getToken();
+  if(!loginStatus.value)return;
+
+
+  if(query.code){// 新增数据
+    carInfo.value.id = query.code
+    getCarInfo()
+  }else{// 查询数据
+    getCarList()
+  }
+})
+
 
 // 查询用户绑定的挪车吗
 const getCarList = ()=>{
@@ -124,9 +126,9 @@ const getCarList = ()=>{
 
 // 根据挪车码查询挪车码详情
 const getCarInfo = ()=>{
-  carMoveCodesAPI.getInfo(carCode.value).then(res=>{
+  carMoveCodesAPI.getInfo(carInfo.value.id).then(res=>{
     if(res.active){
-      console.log(`挪车码${carCode.value}已经激活~`)
+      console.log(`挪车码${carInfo.value.id}已经激活~`)
       return ;
     }
 
@@ -148,9 +150,9 @@ const handleActive = ()=>{
     openId:userStore.openId,
     active:true,
   }
-  carMoveCodesAPI.active(carCode.value,params).then(res=>{
+  carMoveCodesAPI.active(carInfo.value.idparams).then(res=>{
     if(res.active){
-      console.log(`挪车码${carCode.value}已经激活~`)
+      console.log(`挪车码${carInfo.value.id}已经激活~`)
       return ;
     }
 
