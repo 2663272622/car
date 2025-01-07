@@ -29,10 +29,9 @@
       "path": "pages/tab/order/index",
       "style": {
         "navigationBarTitleText": "",
-        "navigationStyle": "custom",
-        "enablePullDownRefresh": true
-      },
-      "needLogin": true
+        "navigationStyle": "custom"
+        // "enablePullDownRefresh": true
+      }
     },
     {
       "path": "pages/tab/user/index",
@@ -155,7 +154,6 @@
     "navigationBarTitleText": "iSchool",
     "navigationBarBackgroundColor": "#f2f2f2",
     "backgroundColor": "#f2f2f2",
-    "navigationStyle": "custom", // 设置为custom可以隐藏原生导航栏
-    "onReachBottomDistance": 100
+    "navigationStyle": "custom" // 设置为custom可以隐藏原生导航栏
   }
 }
