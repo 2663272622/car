@@ -14,7 +14,7 @@
                labelWidth='auto'
            >
              <up-form-item
-                 label="车牌号"
+                 label="车牌号:"
                  borderBottom
                  ref="item1"
              >
@@ -44,7 +44,7 @@
                <up-input v-model="carInfo.id" border="none" ></up-input>
              </up-form-item>
          </up-form>
-           <u-button type="primary" class='my-16rpx' @click="handleActive">提交</u-button>
+           <u-button type="primary" class='my-16rpx' @click="handleActive">提交并开启微信通知</u-button>
            <template v-if="plateShow">
               <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
            </template>
@@ -59,6 +59,7 @@
               <up-cell
                 :title="`${item.carNumber}`"
                  value="查看"
+                 @click='handleChange(item)'
               >
               </up-cell>
             </up-list-item>
@@ -141,23 +142,35 @@ const getCarInfo = ()=>{
   })
 }
 
+const handleChange = (data)=>{
+  console.log(data)
+  carInfo.value = data
+}
+
 
 
 // 激活挪车吗
 const handleActive = ()=>{
-  let params = {
-    ...carInfo.value,
-    openId:userStore.openId,
-    active:true,
-  }
-  carMoveCodesAPI.active(carInfo.value.idparams).then(res=>{
-    if(res.active){
-      console.log(`挪车码${carInfo.value.id}已经激活~`)
-      return ;
+  wx.requestSubscribeMessage({
+    tmplIds:["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+    complete(){
+      let params = {
+        ...carInfo.value,
+        openId:userStore.openId,
+        active:true,
+      }
+      carMoveCodesAPI.active(carInfo.value.id,params).then(res=>{
+        carInfo.value = {};
+        if(!res)return;
+        if(res.active){
+          console.log(`挪车码${carInfo.value.id}已经激活~`)
+          return ;
+        }
+        console.log('resresresres',res)
+      })
     }
-
-    console.log('resresresres',res)
   })
+
 }
 
 
@@ -185,7 +198,7 @@ const handleSaveCar = ()=>{
     };
 </script>
 
-<style scoped>
+<style  lang='scss'>
 
 .main-content {
 	border-top: 1px solid #eee;
@@ -205,4 +218,7 @@ const handleSaveCar = ()=>{
   font-size: 18px;
   color: #2d8cf0;
 }
+  .u-input{
+    background-color: #0000 !important;
+  }
 </style>
