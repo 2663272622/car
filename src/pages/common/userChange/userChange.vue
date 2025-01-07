@@ -73,6 +73,7 @@ const handleSave = async()=>{
     await userStore.changeUser(formData.value)
     console.log("修改完成")
     console.log(formData.value)
+    debugger
     let rurl = isTabBarPath(redirect)
     if(rurl){
       uni.switchTab({url:redirect})

@@ -68,6 +68,15 @@
             "navigationBarTitleText" : "油耗计算"
           }
         },
+        {
+          "path" : "carcode/index",
+            "needLogin":true,
+          "style" :
+          {
+            "navigationBarTitleText" : "我的挪车码",
+            "needLogin":true
+          }
+        },
 
         {
           "path": "webview/index",

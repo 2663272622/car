@@ -17,10 +17,10 @@
         </view>
     </view>
     <view class="flex mt-36rpx mx-30rpx">
-      <view class="moveCar mr-30rpx flex items-center">
+      <view class="moveCar mr-30rpx flex items-center"  @click="handleCarCode">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">挪车码</text>
       </view>
-      <view class="shops flex items-center" @click="handleLocation">
+      <view class="shops flex items-center">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">我的店铺</text>
       </view>
     </view>
@@ -101,6 +101,12 @@ const handleToGasoline = ()=>{
 const handleToOilwear = ()=>{
   uni.navigateTo({url:`/pages/common/oilwear/index`})
 }
+// 跳转查看我的挪车吗
+const handleCarCode = ()=>{
+  uni.navigateTo({url:`/pages/common/carcode/index`})
+}
+
+
 //登录后获取用户昵称和手机号
 
 // 获取当前经纬度

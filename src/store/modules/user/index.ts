@@ -11,7 +11,8 @@ const useUserStore = defineStore('user', {
     token: '',
     integral: 0, // 积分
     identityType: 1, // 身份类型
-    phoneNumber:''
+    phoneNumber:'',
+    openId:""
   }),
   getters: {
     userInfo(state) {
@@ -38,6 +39,7 @@ const useUserStore = defineStore('user', {
     async info() {
       const result = await UserApi.getUserInfo(this.userId);
       this.setInfo(result);
+      return result
     },
     async changeUser(data) {
       const result = await UserApi.setUserInfo(this.userId, data);
