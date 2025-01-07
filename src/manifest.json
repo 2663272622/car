@@ -59,8 +59,12 @@
         "usingComponents" : true,
         "lazyCodeLoading" : "requiredComponents",
         "mergeVirtualHostAttributes" : true,
-        "requiredPrivateInfos" : [ "getFuzzyLocation", "choosePoi", "chooseAddress" ],
+        "requiredPrivateInfos" : [ "getFuzzyLocation", "choosePoi", "chooseAddress","chooseLocation" ],
         "permission" : {
+           "scope.userLocation": {
+                "desc": "请求获取位置获取商家"
+            },
+
             "scope.userFuzzyLocation" : {
                 "desc" : "请求获取位置获取距离商家距离"
             }
