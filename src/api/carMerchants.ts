@@ -15,16 +15,24 @@ const carMerchantsAPI = {
   },
 
   /**
-   * 用户表单数据
+   * 用户表单数据(不给定位)
    *
    * @param id
    * @returns
    */
-  getFormData(id : number) {
+  getNoFormData(id : number) {
     return get(`${carMerchants_BASE_URL}/${id}/form`);
     },
 
-
+  /**
+   * 用户表单数据(不给定位)
+   *
+   * @param id
+   * @returns
+   */
+  getFormData(id : number,data:any) {
+    return get(`${carMerchants_BASE_URL}/${id}/wxForm`,{data});
+    },
 
 
   // /**

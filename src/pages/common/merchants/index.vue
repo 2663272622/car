@@ -47,9 +47,9 @@
             <text class="font-semibold text-26rpx text-black text-opacity-90 leading-40rpx">{{merchants.storeAddress}}</text>
             <up-icon name="arrow-right" size="26rpx" class="ml-18rpx"></up-icon>
           </view>
-          <view class="flex mt-16rpx ml-32rpx items-center mb-22rpx">
+          <view v-if="merchants.distance"  class="flex mt-16rpx ml-32rpx items-center mb-22rpx">
             <up-icon name="map" size="22rpx" class="mr-8rpx"></up-icon>
-            <text class="font-medium text-24rpx text-black text-opacity-60 leading-40rpx">距您 20.0公里 驾车 50分钟 公交 56分钟</text>
+            <text class="font-medium text-24rpx text-black text-opacity-60 leading-40rpx">距您{{merchants.distance.toFixed(1)}}公里</text>
           </view>
         </view>
         <view class="mr-38rpx" @click="toNav(merchants)">
@@ -76,16 +76,20 @@ let closeTime:string
 // 使用onLoad生命周期函数接收传输值id或者是type
 onLoad((e:any)=>{
 	id.value=e.id;
-  getFormData()
 })
-function getFormData(){
-  carMerchantsAPI.getFormData(id.value).then((data:any)=>{
+const getFormData=async()=>{
+  let data
+  if (Mylatitude.value) {
+    data = await carMerchantsAPI.getFormData(id.value,{longitude: Mylongitude.value, latitude: Mylatitude.value})
+  }
+  else {
+    data = await carMerchantsAPI.getNoFormData(id.value)
+  }
     openTime = formatTimeFromArray(data.openTime)
     closeTime = formatTimeFromArray(data.closeTime)
     merchants.value=data
     img.value=handleUrl(data.storeLogoUrl)
     phone=data.contactPhone
-  })
 }
 //修改时间格式
 function formatTimeFromArray(timeArray:any) {
@@ -121,10 +125,14 @@ function goBack(){
 
 // 获取当前经纬度
  // 获取当前经纬度
+ const Mylatitude = ref()
+ const Mylongitude = ref()
   function getLocation() {
     uni.getFuzzyLocation({
       type: "wgs84",
       success: (res) => {
+        Mylatitude.value = res.latitude
+        Mylongitude.value = res.longitude
       },
       fail: (arr) => {
         uni.showModal({
@@ -138,6 +146,10 @@ function goBack(){
                   if (res.authSetting['scope.userFuzzyLocation']) {
                     uni.getFuzzyLocation({
                       type: "wgs84",
+                      success:(res)=>{
+                        Mylatitude.value = res.latitude
+                        Mylongitude.value = res.longitude
+                      },
                       fail: (arr) => {
                         console.log(arr)
                         if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
@@ -149,6 +161,9 @@ function goBack(){
                           })
                           return;
                         }
+                      },
+                      complete:()=>{
+                        getFormData()
                       }
                     })
                   }
@@ -158,14 +173,17 @@ function goBack(){
           },
         })
       },
+      complete:()=>{
+        getFormData()
+      }
     })
   }
-getLocation()
+ getLocation()
 // 传入经纬度 调用导航
 const toNav = (res:any)=>{
       console.log(res)
-      const latitude = res.longitude;
-      const longitude = res.latitude;
+      const latitude = res.latitude;
+      const longitude = res.longitude;
       uni.openLocation({
         latitude: latitude,
         longitude: longitude,

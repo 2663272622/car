@@ -10,9 +10,10 @@
       <view class="bg-white w-full h-18rpx absolute top-464rpx"></view>
       <view class="bg-white pt-50rpx grid grid-cols-5 grid-rows-2 ">
         <view v-for="item in business" :key="item.id">
-          <view class="flex items-center flex-col mx-auto">
+          <view class="flex items-center flex-col mx-auto" @click="selectBusiness(item)">
             <up-image :show-loading="true" :src="item.image" width="64rpx" height="50rpx" bg-color="#0000" />
-            <text class="font-medium text-24rpx leading-40rpx text-black text-opacity-90 mt-8rpx">{{item.label}}</text>
+            <text class="font-medium text-24rpx leading-40rpx text-black text-opacity-90 mt-8rpx"
+              :class="{selectLabel: selectedValue === item.value}">{{item.label}}</text>
           </view>
         </view>
       </view>
@@ -21,7 +22,7 @@
         <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
           <view v-for="item in business" :key="item.id">
             <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
-              :class="{select:isSelect}" @click="selectBusiness(item)">
+              :class="{select: selectedValue === item.value}" @click="selectBusiness(item)">
               {{item.label}}
             </view>
           </view>
@@ -167,10 +168,21 @@
   }
   getBusiness()
 
-//选择具体商家
-function selectBusiness(item:any){
-  item.isSelect=!item.isSelect
-}
+  //商家业务的分页查询
+  const selectedValue = ref(-1);
+  const selectBusiness = (item : any) => {
+    merchants.value=[]
+    merchants_params.pageNum=1
+    if (selectedValue.value === item.value) {
+      selectedValue.value = -1;
+      getMerchants()
+    } else {
+      selectedValue.value = item.value;
+      getMerchants(item.value)
+    }
+
+  };
+
   //建立一个布尔值，判断是否进行下拉刷新
   const noData = ref(false)
   //查询商家
@@ -181,21 +193,32 @@ function selectBusiness(item:any){
   }
   const merchants : any = ref([])
   const image = ref()
-  const getMerchants = async () => {
+  const getMerchants = async (value ?: number) => {
+    noData.value = false;
+    // merchants.value=[]
     let data
     if (Mylatitude.value) {
-      data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylongitude.value, longitude: Mylatitude.value })
+      if (value) {
+        data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
+      } else {
+        data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylatitude.value, longitude: Mylongitude.value })
+      }
+
     }
     else {
-      data = await carMerchantsAPI.getNoPage(merchants_params)
+      if (value) {
+        data = await carMerchantsAPI.getNoPage({ ...merchants_params, businessScope: value })
+      } else {
+        data = await carMerchantsAPI.getNoPage(merchants_params)
+      }
+
     }
     data.list.map((item : any) => {
       return item.storeLogoUrl = item.storeLogoUrl ? handleUrl(item.storeLogoUrl)[0].url : ''
     })
     merchants.value = [...merchants.value, ...data.list];
     if (merchants_params.pageSize > data.list.length) noData.value = true;
-    storage.set('merchants', merchants.value)
-    uni.stopPullDownRefresh()
+    // uni.stopPullDownRefresh()
 
   }
 
@@ -209,18 +232,9 @@ function selectBusiness(item:any){
 
   //下拉刷新
   // onPullDownRefresh(()=>{
-  // 	merchants_params={
-  //     pageNum: 1,
-  //     pageSize: 1,
-  //     active:true
-  //   }
+  //   merchants.value=[]
   // 	getMerchants();
   // })
-
-  //清除内存
-  onUnload(() => {
-    storage.remove('merchants')
-  })
 </script>
 <style scoped lang="scss">
   .page-wrap {
@@ -229,6 +243,10 @@ function selectBusiness(item:any){
     background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
     background-repeat: no-repeat;
     background-size: 750rpx 482rpx;
+
+    .selectLabel {
+      font-weight: bold;
+    }
 
     .bottom {
       background: linear-gradient(180deg, #FFFFFF 0%, #F1F1F1 35%);
