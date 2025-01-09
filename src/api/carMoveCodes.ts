@@ -32,7 +32,7 @@ const carMoveCodesAPI = {
   },
   // 更新
   update(id: number, data) {
-    return put(`${carMoveCodes_BASE_URL}/${id}`,data)
+    return put(`${carMoveCodes_BASE_URL}/${id}`,{data})
   },
 
 
