@@ -218,7 +218,7 @@
 
   //提交数据
   const changeMerchants = () => {
-    console.log('123',formRef.value)
+    console.log('123', formRef.value)
     formRef.value.validate().then((valid : any) => {
       if (valid) {
         //请求前对数据的操作
@@ -252,14 +252,25 @@
             add.value = false
           })
         }
-        actualBusinessScope.value = []
-        merchantsInfo.value = {}
         nextTick(() => {
+          resetData()
           getBusinessList()
         })
 
       }
     })
+  }
+  const resetData = () => {
+    actualBusinessScope.value = []
+    merchantsInfo.value = {
+      storeLogoUrl: '',
+      merchantName: '',
+      businessScope: '',
+      contactPhone: '',
+      openTime: '',
+      closeTime: '',
+      storeAddress: '',
+    }
   }
 </script>
 
