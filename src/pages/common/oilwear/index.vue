@@ -43,6 +43,7 @@
                   border="none"
               ></up-input>
             </up-form-item>
+
           </up-form>
 
           <!-- 计算按钮 -->
@@ -59,6 +60,9 @@
 
 <script setup>
 import { ref } from 'vue';
+
+
+
     // 响应式数据
     const distance = ref('');   // 行驶距离
     const fuel = ref('');       // 油量

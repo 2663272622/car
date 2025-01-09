@@ -32,4 +32,15 @@ uni.loadFontFace({
 /* 每个页面公共css */
 @import 'uview-plus/index.scss';
 @import '@/static/styles/common.scss';
+.u-upload__button .u-icon{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+.u-upload__deletable__icon{
+      top: -15px !important;
+      right: -25px !important;
+}
 </style>

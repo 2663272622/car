@@ -4,14 +4,30 @@
     </u-navbar>
     <template v-if='merchantsInfo.id||add'>
       <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules">
-        <up-form-item label="店铺图片" borderBottom>
-          <up-input border="none" v-model="merchantsInfo.storeLogoUrl" placeholder="请点此传入图片"></up-input>
+      <!--  <up-form-item label="店铺图片" borderBottom>
+          <up-input border="none" v-model="merchantsInfo.storeLogoUrl" placeholder="请点此传入图片"></up-input> -->
           <!-- <template v-for="(item,index) in image" :key="index" > -->
           <!--          <button @click="onChooseImage">
             <up-image :show-loading="true" :src="merchantsInfo.image ? merchantsInfo.image : '' " width="180rpx"
               height="180rpx" bgColor='#0000' radius='20rpx'></up-image>
           </button> -->
           <!-- </template> -->
+        <!-- </up-form-item> -->
+
+        <up-form-item
+            label="店铺图片"
+            borderBottom
+            ref="item1"
+        >
+          <up-upload
+            :fileList="fileList5"
+            @afterRead="afterRead"
+            @delete="deletePic"
+            name="5"
+            multiple
+            sizeType='compressed'
+            :maxCount="9"
+          ></up-upload>
         </up-form-item>
         <up-form-item label="商店名称:" borderBottom prop="merchantName">
           <up-input border="none" v-model="merchantsInfo.merchantName" placeholder="请点此输入商店名称"></up-input>
@@ -70,6 +86,7 @@
   import BusinessAPI from "@/api/business"
   import carMerchantsAPI from "@/api/carMerchants";
   import { useUserStore } from '@/store';
+  import { useUpload } from "@/utils"
   import {
     ref
   } from "vue"
@@ -89,6 +106,25 @@
     getBusinessList()
   })
 
+
+  const fileList5 = ref([])
+  const afterRead = ({file})=>{
+    uni.showLoading({
+      title: '正在上传。。。'
+    });
+    let arr = file.map(item=>{
+      return useUpload(item.url,'uni/unishop/')
+    })
+    Promise.all(arr).then(res=>{
+      console.log('返回结果',res)
+      res.filter(i=>i).map(url=>fileList5.value.push({url}))
+      uni.hideLoading()
+      formatUrl()
+    })
+  }
+  const deletePic = ({index})=>{ fileList5.value.splice(index,1);formatUrl() }
+  const formatUrl = ()=>{ merchantsInfo.value.storeLogoUrl = fileList5.value.map(i=>i.url).join(',') }
+
   //获取点击后的具体商家信息
   const actualBusinessScope : any = ref([])
   const handleChange = (data : any) => {
@@ -103,6 +139,9 @@
     data.openTime = data.openTime.join(":")
     data.closeTime = data.closeTime.join(":")
     merchantsInfo.value = data
+    if(data.storeLogoUrl){
+      fileList5.value = data.storeLogoUrl.split(',').map(url=>{return {url}})
+    }
   }
 
   // 查询业务类型

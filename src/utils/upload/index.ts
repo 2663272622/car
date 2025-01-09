@@ -6,8 +6,8 @@ import { getToken } from '@/utils/auth';
 */
 export const useUpload = async( filePath:string,path?:string  )=>{
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const Authorization = await getToken()
 
+    const Authorization = await getToken()
   return new Promise((resolve,reject)=>{
     uni.uploadFile({
       url:BASE_URL+`api/v1/wx/auth/uploadAvatar?path=`+path,
@@ -20,9 +20,14 @@ export const useUpload = async( filePath:string,path?:string  )=>{
         Authorization,
         "ngrok-skip-browser-warning":"true"
       },
-      success: ({data}) => {
-        let resdata = JSON.parse(data)
-        resolve(resdata.data || '')
+      success: (res) => {
+        if(res.data){
+          let resdata = JSON.parse(res.data)
+          resolve(resdata.data || '')
+        }else{
+          reject('')
+        }
+
       },
       fail: (err) => {
        reject(err)
