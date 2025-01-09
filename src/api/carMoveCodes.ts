@@ -31,13 +31,9 @@ const carMoveCodesAPI = {
     });
   },
   // 更新
-  // update(id: number, data) {
-  //   return request({
-  //     url: `${carMoveCodes_BASE_URL}/${id}`,
-  //     method: "put",
-  //     data: data,
-  //   });
-  // },
+  update(id: number, data) {
+    return put(`${carMoveCodes_BASE_URL}/${id}`,data)
+  },
 
 
   // 更新

@@ -3,11 +3,11 @@
     <!--    <view v-if="!merchants.length && !noData">
     	<uni-load-more status="loading"></uni-load-more>
     </view> -->
-    <view  :style="{ paddingTop: bHeight }">
+    <view :style="{ paddingTop: bHeight }">
       <view class="mx-30rpx relative z-10 rounded-20rpx">
         <up-swiper :list="swiperImg" indicator indicatorMode="line" circular height="388rpx"></up-swiper>
       </view>
-      <view class="bg-white w-full h-18rpx absolute top-464rpx"></view>
+      <!-- <view class="bg-white w-full h-18rpx absolute top-464rpx"></view> -->
       <view class="bg-white pt-50rpx grid grid-cols-5 grid-rows-2 ">
         <view v-for="item in business" :key="item.id">
           <view class="flex items-center flex-col mx-auto" @click="selectBusiness(item)">
@@ -17,8 +17,8 @@
           </view>
         </view>
       </view>
-      <view class="bottom mt-30rpx overflow-y-auto mb-170rpx">
-        <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx">推荐商家</view>
+      <view class="bottom mt-30rpx mb-170rpx">
+        <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx sticky" :style="{ top: bHeight}">推荐商家</view>
         <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
           <view v-for="item in business" :key="item.id">
             <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
