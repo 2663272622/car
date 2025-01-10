@@ -18,6 +18,7 @@
             label="店铺图片"
             borderBottom
             ref="item1"
+            prop="storeLogoUrl"
         >
           <up-upload
             :fileList="fileList5"
@@ -32,7 +33,7 @@
         <up-form-item label="商店名称:" borderBottom prop="merchantName">
           <up-input border="none" v-model="merchantsInfo.merchantName" placeholder="请点此输入商店名称"></up-input>
         </up-form-item>
-        <up-form-item label="经营业务" borderBottom>
+        <up-form-item label="经营业务" borderBottom prop="businessScope">
           <up-checkbox-group v-model="actualBusinessScope">
             <up-checkbox v-for="item in business" :key="item.id" :label="item.label" :name="item.label"
               class="mr-10rpx"></up-checkbox>
@@ -41,15 +42,15 @@
         <up-form-item label="联系电话:" borderBottom prop="contactPhone">
           <up-input border="none" v-model="merchantsInfo.contactPhone" type="number" placeholder="请点此输入联系电话"></up-input>
         </up-form-item>
-        <up-form-item label="开门时间:">
+        <up-form-item label="开门时间:" prop="openTime">
           <up-datetime-picker hasInput :show="show" mode="time" v-model="merchantsInfo.openTime"
             @click="show = true"></up-datetime-picker>
         </up-form-item>
-        <up-form-item label="关门时间:">
+        <up-form-item label="关门时间:" prop="closeTime">
           <up-datetime-picker hasInput :show="show" mode="time" v-model="merchantsInfo.closeTime"
             @click="show = true"></up-datetime-picker>
         </up-form-item>
-        <up-form-item label="地址:" borderBottom>
+        <up-form-item label="地址:" borderBottom  prop="storeAddress">
           <up-input border="none" v-model="merchantsInfo.storeAddress" placeholder="请点击右侧选择地址"></up-input>
           <template #right>
             <u-button type="small" class='my-16rpx' @click="handlePOI">选择位置</u-button>
@@ -90,14 +91,22 @@
   import {
     ref
   } from "vue"
-  const merchantsInfo : any = ref({})
+  const merchantsInfo : any = ref({
+    storeLogoUrl: '',
+    merchantName: '',
+    businessScope: '',
+    contactPhone: '',
+    openTime: '',
+    closeTime: '',
+    storeAddress: '',
+  })
   const userStore = useUserStore();
   const show = ref(false);
   const add = ref(false)
   const openTime = ref();
   const closeTime = ref()
   const loginStatus = ref(false);
-  const formRef = ref();
+  const formRef:any = ref();
   onLoad(async (query) => {
     loginStatus.value = await usePermission();
     loginStatus.value = isLogin();
@@ -218,7 +227,7 @@
 
   //提交数据
   const changeMerchants = () => {
-    console.log('123', formRef.value)
+    console.log('123',formRef.value)
     formRef.value.validate().then((valid : any) => {
       if (valid) {
         //请求前对数据的操作
@@ -240,6 +249,10 @@
               title: '修改成功',
               showCancel: false
             })
+            nextTick(() => {
+              resetData()
+              getBusinessList()
+            })
           })
 
         } else {
@@ -251,11 +264,12 @@
             })
             add.value = false
           })
+          nextTick(() => {
+            resetData()
+            getBusinessList()
+          })
         }
-        nextTick(() => {
-          resetData()
-          getBusinessList()
-        })
+
 
       }
     })
