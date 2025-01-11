@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-  import { barHeight } from "@/utils"
+  import { barHeight,handleUrl } from "@/utils"
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
   import { LOGIN_PATH } from "@/router";
@@ -94,6 +94,17 @@
     return barHeight()
   })
 
+  onLoad(async(options)=>{
+    loginStatus.value = await usePermission();
+    loginStatus.value = isLogin();
+    const ttt = await getToken();
+    if(!loginStatus.value )return;
+
+    let url = options.q
+    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
+    scanInfo.value.id = handleUrl(url || '','move')
+    getCarMoveCodes()
+})
 
 //弹出获取通知弹窗，用户点击获取
   uni.showModal({
@@ -130,23 +141,40 @@
         console.log(notice.value)
       })
   }
-  handleQuery()
 
   //获取车主的车牌号信息(目前车牌写死)
   const carInfo = ref('')
   const scanInfo : any = ref({})
-  function getCarMoveCodes() {
-    carMoveCodesAPI.getFormData(3201)
-      .then((data) => {
-        carInfo.value = data.carNumber
-        scanInfo.value = data
-      })
+  // function getCarMoveCodes() {
+  //   carMoveCodesAPI.getFormData(3201)
+  //     .then((data) => {
+  //       carInfo.value = data.carNumber
+  //       scanInfo.value = data
+  //     })
+  // }
+  // getCarMoveCodes()
+
+async function getCarMoveCodes(){
+  if(!scanInfo.value.id)return console.log("不是通过扫码进入");
+
+  const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
+  if(!isActive){
+    console.log("未注册的挪车吗信息",scanInfo.value.id)
+    uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
+    return;
   }
-  getCarMoveCodes()
-  //通过计算属性将数据展示
-  const carInfoArr = computed(() => {
-    return carInfo.value.split("")
+  carMoveCodesAPI.getFormData(scanInfo.value.id)
+  .then((data)=>{
+    handleQuery()
+
+    carInfo.value=data.carNumber
+    scanInfo.value = data
   })
+}
+  //通过计算属性将数据展示
+const carInfoArr = computed(()=>{
+  return carInfo.value ? carInfo.value.split("") : ''
+})
 
 
   //定义当前点击时间
