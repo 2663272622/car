@@ -95,24 +95,23 @@
   })
 
 
-//获取通知
-  const handleWechatMsg = () => {
-    wx.requestSubscribeMessage({
-      tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-      success(...res) {
-        uni.$u.toast("已开启微信通知");
-      },
-      fail(e) {
-        console.log(e)
-        uni.$u.toast("已取消");
-      }
-    })
-
-  }
 //弹出获取通知弹窗，用户点击获取
-  // uni.showModal({
-  //   title:请求h
-  // })
+  uni.showModal({
+    title:'请求获取通知',
+    content:'点击此按钮申请获取挪车码通知信息',
+    success:()=>{
+      wx.requestSubscribeMessage({
+        tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+        success(...res) {
+          uni.$u.toast("已开启微信通知");
+        },
+        fail(e) {
+          console.log(e)
+          uni.$u.toast("已取消");
+        }
+      })
+    }
+  })
 
   const queryParams = {
     pageNum: 1,
