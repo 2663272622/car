@@ -96,8 +96,6 @@
     merchantName: '',
     businessScope: '',
     contactPhone: '',
-    openTime: '',
-    closeTime: '',
     storeAddress: '',
   })
   const userStore = useUserStore();
