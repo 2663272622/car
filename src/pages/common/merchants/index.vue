@@ -67,7 +67,7 @@
 <script setup lang="ts">
   import { ref } from "vue"
   import carMerchantsAPI from "@/api/carMerchants";
-  import { handleUrl } from "@/utils"
+  import { handlePic } from "@/utils"
   import { onLoad } from "@dcloudio/uni-app";
   const merchants : any = ref({})
   const img = ref()
@@ -91,7 +91,7 @@
     openTime = formatTimeFromArray(data.openTime)
     closeTime = formatTimeFromArray(data.closeTime)
     merchants.value = data
-    img.value = handleUrl(data.storeLogoUrl)
+    img.value = handlePic(data.storeLogoUrl)
     phone = data.contactPhone
   }
   //修改时间格式

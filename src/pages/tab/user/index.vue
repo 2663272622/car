@@ -92,7 +92,8 @@
   const handleWechatMsg = () => {
     wx.requestSubscribeMessage({
       tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-      success(...res) {
+      success(res) {
+        console.log(res)
         uni.$u.toast("已开启微信通知");
       },
       fail() {

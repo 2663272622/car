@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh">
+  <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="200">
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
@@ -19,8 +19,8 @@
             <view v-if="stickyState" class="bg-white" :style="{height:bHeight}" id="stickyDom"></view>
             <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx ">推荐商家</view>
             <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
-              <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
-                :class="{select: selectedValue === -1}">附近</view>
+             <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
+                :class="{select: selectedValue === -1}" @click="selectBusiness(defaultData)">附近</view>
               <view v-for="item in business" :key="item.id">
                 <view
                   class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
@@ -30,11 +30,10 @@
               </view>
             </view>
           </up-sticky>
-          <!-- <up-list :scrollable="false"> -->
-          <view v-for="(item,index) in merchants" :index="index">
+          <view v-for="(item,index) in merchants" :key="index">
             <view class="bg-white rd-20rpx mx-30rpx mt-30rpx flex whitespace-nowrap overflow-hidden"
               @click="navigator(item.id)">
-              <view class="my-30rpx ml-20rpx mr-12rpx">
+             <view class="my-30rpx ml-20rpx mr-12rpx">
                 <up-image :show-loading="true" :src="item.storeLogoUrl" width="160rpx" height="160rpx"
                   bg-color="#0000" />
               </view>
@@ -44,7 +43,7 @@
                 </view>
                 <view class="flex justify-between mt-6rpx">
                   <view class="flex items-center">
-                    <up-rate v-model="item.score" readonly allowHalf="true" active-color="#F25730"
+                    <up-rate v-model="item.score" readonly :allowHalf='true' active-color="#F25730"
                       gutter="2rpx"></up-rate>
                     <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{item.score}}</text>
                   </view>
@@ -65,9 +64,8 @@
               </view>
             </view>
           </view>
-          <!-- </up-list> -->
         </view>
-        <view class="pb-160rpx">
+       <view class="pb-160rpx">
           <up-loadmore :status="noData?'nomore':'loading'" />
         </view>
       </view>
@@ -82,7 +80,7 @@
   import carMerchantsAPI from "@/api/carMerchants";
   import NoticeAPI from "@/api/notice"
   import BusinessAPI from "@/api/business"
-  import { handleUrl } from "@/utils";
+  import { handlePic } from "@/utils";
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
   import list from "@/uni_modules/uview-plus/components/u-list/list";
@@ -159,7 +157,7 @@
     NoticeAPI.getPage(queryParams)
       .then((data) => {
         pageData = data.list
-        swiperImg.value = handleUrl(pageData[0].content)
+        swiperImg.value = handlePic(pageData[0].content)
       })
   }
   handleQuery()
@@ -176,20 +174,24 @@
       .then((data) => {
         business.value = data.list
         business.value.map((item : any) => {
-          return item.image = item.image ? handleUrl(item.image)[0].url : ""
+          return item.image = item.image ? handlePic(item.image)[0].url : ""
         })
         business.value.map((item : any) => ({ ...item, isSelect: false }))
       })
   }
   getBusiness()
+
+  //设计一个数据为附近初始数据
+  const defaultData={
+    value:-1
+  }
   //商家业务的分页查询
   const scrollTop=ref(0)
   const selectedValue = ref(-1);
   const selectBusiness = (item : any) => {
     merchants.value = []
     merchants_params.pageNum = 1
-    scrollTop.value=360
-    console.log(scrollTop.value)
+    // scroll()
     if (selectedValue.value === item.value) {
       selectedValue.value = -1;
       getMerchants()
@@ -198,6 +200,14 @@
       getMerchants(item.value)
     }
   };
+
+  //页面滚动（未生效）
+  const scroll=()=>{
+    uni.pageScrollTo({
+      scrollTop:150,
+      duration:300
+    })
+  }
 
 
   //建立一个布尔值，判断是否进行下拉刷新
@@ -230,7 +240,7 @@
 
     }
     data.list.map((item : any) => {
-      return item.storeLogoUrl = item.storeLogoUrl ? handleUrl(item.storeLogoUrl)[0].url : ''
+      return item.storeLogoUrl = item.storeLogoUrl ? handlePic(item.storeLogoUrl)[0].url : ''
     })
     merchants.value = [...merchants.value, ...data.list];
     if (merchants_params.pageSize > data.list.length) noData.value = true;
@@ -239,11 +249,11 @@
 
 
   //触底加载
-  onReachBottom(() => {
+ const ToBottom=()=>{
     if (noData.value) return;
     merchants_params.pageNum++;
     getMerchants();
-  })
+  }
 
 
   const locationErr = () => {
@@ -284,6 +294,7 @@
       },
     })
   }
+
 </script>
 <style scoped lang="scss">
   .page-wrap {
