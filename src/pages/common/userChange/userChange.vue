@@ -62,7 +62,7 @@ const formData = ref({
 
 const onChooseAvatar =async(e) =>{
 
-  useUpload(e.detail.avatarUrl,'uni/usertest/').then(res=>{
+  useUpload(e.detail.avatarUrl,'uni/avatar/').then(res=>{
     console.log("上传结果",res)
     formData.value.avatar = res as string
   })

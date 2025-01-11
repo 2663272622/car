@@ -7,10 +7,12 @@ import { getToken } from '@/utils/auth';
 export const useUpload = async( filePath:string,path?:string  )=>{
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-    const Authorization = await getToken()
+  const Authorization = await getToken()
+  let url = path == 'uni/unishop/' ? 'uploadMerchantImage' : 'uploadAvatar'
+
   return new Promise((resolve,reject)=>{
     uni.uploadFile({
-      url:BASE_URL+`api/v1/wx/auth/uploadAvatar?path=`+path,
+      url:BASE_URL+`api/v1/wx/auth/${url}?path=`+path,
       filePath,
       name: 'multipartFile',
       formData: {
