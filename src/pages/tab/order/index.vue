@@ -201,9 +201,6 @@
   //   merchants_params.pageNum++;
   //   getMerchants();
   // })
-  onLoad(() => {
-    getMerchants();
-  });
 
   // const scrolltolower = () => {
   //   if (noData.value) return;
@@ -226,22 +223,22 @@
     noData.value = false;
     // merchants.value=[]
     let data
-    if (Mylatitude.value) {
       if (value) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
-      } else {
-        data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylatitude.value, longitude: Mylongitude.value })
-      }
+        if(Mylatitude){
+                  data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
+        }
+        else{
+          data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value })
+        }
 
-    }
-    else {
-      if (value) {
-        data = await carMerchantsAPI.getNoPage({ ...merchants_params, businessScope: value })
       } else {
-        data = await carMerchantsAPI.getNoPage(merchants_params)
-      }
+        if(Mylatitude){
+           data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylatitude.value, longitude: Mylongitude.value })
+        }else{
+                     data = await carMerchantsAPI.getPage({ ...merchants_params })
+        }
 
-    }
+      }
     data.list.map((item : any) => {
       return item.storeLogoUrl = item.storeLogoUrl ? handleUrl(item.storeLogoUrl)[0].url : ''
     })
