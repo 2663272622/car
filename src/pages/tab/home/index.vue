@@ -100,8 +100,8 @@
     const ttt = await getToken();
     if(!loginStatus.value )return;
 
-    let url = options.q
-    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
+    // let url = options.q
+    let url = `https://onlinewifi.car.ischool.shop?move=2558`
     scanInfo.value.id = handleUrl(url || '','move')
     getCarMoveCodes()
 })

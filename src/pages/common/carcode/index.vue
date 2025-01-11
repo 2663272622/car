@@ -173,7 +173,7 @@ const handleActive = ()=>{
     tmplIds:["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
     async complete(){
 
-      const isActive = await carMoveCodesAPI.activeState(id)
+      const isActive = await carMoveCodesAPI.activeState(carInfo.value.id)
       if(!isActive){
         await carMoveCodesAPI.isActive(carInfo.value.id)
       }
