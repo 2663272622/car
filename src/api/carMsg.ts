@@ -3,19 +3,19 @@ import { get, post,put,request } from '@/utils/request';
 const carMsg_BASE_URL = "/api/v1/wx/message";
 
 const carMsgAPI = {
-  //获取挪车码信息
-  sendMsgApi(phone:string,data:{}) {
+  //发送短信
+  sendMsgApi(phone:string,id:string,data:{}) {
     return request({
-      url: `${carMsg_BASE_URL}/sendMoveMessage?phoneNumber=${phone}`,
+      url: `${carMsg_BASE_URL}/sendMoveMessage?phoneNumber=${phone}&CarMoveCodeId=${id}`,
       method: "POST",
       data,
     });
     // return get(`${carMsg_BASE_URL}/sendMoveMessage`)
   },
-  //获取挪车码信息
-  sendWxMsgApi(phone:string,data:{}) {
+  //发送微信通知
+  sendWxMsgApi(id:string,data:{}) {
     return request({
-      url: `${carMsg_BASE_URL}/sendMoveWxMessage?CarMoveCodeId=${phone}`,
+      url: `${carMsg_BASE_URL}/sendMoveWxMessage?CarMoveCodeId=${id}`,
       method: "POST",
       data,
     });

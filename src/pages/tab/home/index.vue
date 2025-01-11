@@ -34,7 +34,7 @@
         <view class='home-car-htitle  mb-26rpx'>
           通知车主
         </view>
-        <up-textarea v-model="value2" placeholder="请输入内容" autoHeight  maxlength='150' count ></up-textarea>
+        <up-textarea v-model="scanInfo.messageText" placeholder="请输入内容" autoHeight  maxlength='150' disabled></up-textarea>
 
         <view class='home-car-hbtn mt-26rpx'>
           <view
@@ -79,15 +79,13 @@ import { useUserStore } from "@/store";
 import NoticeAPI from "@/api/notice"
 import carMoveCodesAPI from "@/api/carMoveCodes"
 import carMsgAPI from "@/api/carMsg"
+import value from "@/uni_modules/uview-plus/components/u-text/value";
 
 uni.hideTabBar()
 
 const userStore = useUserStore()
 const loginStatus = ref(false)
 const menuButtonInfo = ref(uni.getMenuButtonBoundingClientRect())
-
-
-const value2 = ref("您好，打扰一下，不知道是否能方便把车挪一下？非常感谢！")
 
 const btnData = ref([
   {
@@ -138,9 +136,9 @@ function handleQuery() {
   }
 handleQuery()
 
-//获取车主的车牌号信息
+//获取车主的车牌号信息(目前车牌写死)
 const carInfo=ref('')
-const scanInfo=ref({})
+const scanInfo:any=ref({})
 function getCarMoveCodes(){
   carMoveCodesAPI.getFormData(3201)
   .then((data)=>{
@@ -153,7 +151,7 @@ getCarMoveCodes()
 const carInfoArr = computed(()=>{
   return carInfo.value.split("")
 })
-// phoneNumber
+
 //拨打电话功能
 function callNotice(index:number){
   switch(index){
@@ -163,24 +161,65 @@ function callNotice(index:number){
       });
     break;
     case 1:
-      carMsgAPI.sendWxMsgApi(
-        scanInfo.value.id,
-      ).then(res=>{
-        uni.$u.toast("发送成功");
-      })
+      getLocation()
+      if(Mylatitude.value){
+        carMsgAPI.sendWxMsgApi(
+          scanInfo.value.id,{latitude:Number(Mylatitude.value),longitude:Number(Mylongitude.value)}
+        ).then(res=>{
+          uni.$u.toast("发送成功");
+        })
+      }
     break;
     case 2:
-      carMsgAPI.sendMsgApi(
-        scanInfo.value.phoneNumber,
-        {"carNameber":scanInfo.value.carNumber}
-      ).then(res=>{
-        uni.$u.toast("发送成功");
-      })
+      getLocation()
+       if(Mylatitude.value){
+         carMsgAPI.sendMsgApi(
+           scanInfo.value.phoneNumber,
+           scanInfo.value.id,
+           // {"carNameber":scanInfo.value.carNumber}
+           {latitude:Number(Mylatitude.value),longitude:Number(Mylongitude.value)}
+         ).then(res=>{
+           uni.$u.toast("发送成功");
+         })
+       }
     break;
 
 
   }
 }
+
+//获取定位
+    // 获取当前经纬度
+    let Mylatitude = ref()
+    let Mylongitude = ref()
+    function getLocation() {
+      uni.getFuzzyLocation({
+        type: "wgs84",
+        success: (res) => {
+          Mylatitude.value = res.latitude
+          Mylongitude.value = res.longitude
+        },
+        fail: (arr) => {
+          console.log(arr)
+          if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
+            uni.showToast({
+              title: "获取定位授权失败",
+              icon: "none"
+            })
+          }
+          if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+            uni.showModal({
+              title: "未获取到位置信息",
+              content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+              showCancel: false,
+              confirmText: "我知道了"
+            })
+            return;
+          }
+          setTimeout(locationErr,2000)
+          },
+      })
+    }
 //微信通知车主
 // async function WxNotice(index:number){
 //   if(index===1){
@@ -191,6 +230,42 @@ function callNotice(index:number){
 //   }
 // }
 
+const locationErr=()=>{
+  uni.showModal({
+    title: "提示",
+    content: "需要授权获取位置信息",
+    success: (res) => {
+      if (res.confirm) {
+        uni.openSetting({
+          success: (res) => {
+            console.log(res.authSetting)
+            if (res.authSetting['scope.userFuzzyLocation']) {
+              uni.getFuzzyLocation({
+                type: "wgs84",
+                success:(res)=>{
+                  Mylatitude.value = res.latitude
+                  Mylongitude.value = res.longitude
+                },
+                fail: (arr) => {
+                  console.log(arr)
+                  if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+                    uni.showModal({
+                      title: "未获取到位置信息",
+                      content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+                      showCancel: false,
+                      confirmText: "我知道了"
+                    })
+                    return;
+                  }
+                },
+              })
+            }
+          },
+        })
+      }
+    },
+  })
+}
 </script>
 
 
