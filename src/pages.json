@@ -54,12 +54,14 @@
       {
         "path": "asoline/index",
         "style": {
+          "navigationStyle": "custom",
           "navigationBarTitleText": "油价"
         }
       },
       {
         "path": "oilwear/index",
         "style": {
+          "navigationStyle": "custom",
           "navigationBarTitleText": "油耗计算"
         }
       },
@@ -67,6 +69,10 @@
         "path": "carcode/index",
         "needLogin": true,
         "style": {
+<<<<<<< HEAD
+=======
+          "navigationStyle": "custom" ,// 隐藏系统导航栏
+>>>>>>> 6a8d459f9632c359d2f2d44f47cd02b1be3ac9fe
           "navigationBarTitleText": "我的挪车码"
         }
       },
@@ -98,12 +104,14 @@
       {
         "path": "merchants/index",
         "style": {
+          "navigationStyle": "custom",
           "navigationBarTitleText": ""
         }
       },
       {
         "path": "mymerchants/index",
         "style": {
+          "navigationStyle": "custom",
           "navigationBarTitleText": ""
         }
       },
