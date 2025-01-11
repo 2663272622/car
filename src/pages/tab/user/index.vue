@@ -80,7 +80,6 @@
     loginStatus.value = await usePermission();
     console.log('asdasd', loginStatus.value);
     loginStatus.value = isLogin();
-    console.log(loginStatus.value ? '已1231登录' : '进入home没有登陆');
     const ttt = await getToken();
   });
 

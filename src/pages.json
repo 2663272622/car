@@ -11,7 +11,8 @@
       "path": "pages/tab/home/index",
       "style": {
         "navigationBarTitleText": ""
-      }
+      },
+      "needLogin": true
     },
     {
       "path": "pages/tab/list/index",

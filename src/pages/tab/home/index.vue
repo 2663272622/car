@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { barHeight } from "@/utils"
+import { barHeight,handleUrl } from "@/utils"
 import { useClipboard, usePermission } from '@/hooks';
 import { isLogin,getToken } from '@/utils/auth';
 import { LOGIN_PATH } from "@/router";
@@ -82,6 +82,18 @@ import carMsgAPI from "@/api/carMsg"
 import value from "@/uni_modules/uview-plus/components/u-text/value";
 
 uni.hideTabBar()
+
+onLoad(async(options)=>{
+    loginStatus.value = await usePermission();
+    loginStatus.value = isLogin();
+    const ttt = await getToken();
+    if(!loginStatus.value )return;
+
+    let url = options.q
+    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
+    scanInfo.value.id = handleUrl(url || '','move')
+    getCarMoveCodes()
+})
 
 const userStore = useUserStore()
 const loginStatus = ref(false)
@@ -110,13 +122,6 @@ const bHeight = computed(()=>{
 })
 
 
-// 跳转去登录
-// const handleLogin = ()=>{
-//     uni.redirectTo({
-//       url: `${LOGIN_PATH}?redirect=${encodeURIComponent(currentRoute())}`,
-//     });
-// }
-
 const queryParams={
   pageNum: 1,
   pageSize: 10,
@@ -134,22 +139,30 @@ function handleQuery() {
       console.log(notice.value)
     })
   }
-handleQuery()
 
 //获取车主的车牌号信息(目前车牌写死)
 const carInfo=ref('')
 const scanInfo:any=ref({})
-function getCarMoveCodes(){
-  carMoveCodesAPI.getFormData(3201)
+async function getCarMoveCodes(){
+  if(!scanInfo.value.id)return console.log("不是通过扫码进入");
+
+  const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
+  if(!isActive){
+    console.log("未注册的挪车吗信息",scanInfo.value.id)
+    uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
+    return;
+  }
+  carMoveCodesAPI.getFormData(scanInfo.value.id)
   .then((data)=>{
+    handleQuery()
+
     carInfo.value=data.carNumber
     scanInfo.value = data
   })
 }
-getCarMoveCodes()
 //通过计算属性将数据展示
 const carInfoArr = computed(()=>{
-  return carInfo.value.split("")
+  return carInfo.value ? carInfo.value.split("") : ''
 })
 
 //拨打电话功能

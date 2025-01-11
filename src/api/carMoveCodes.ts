@@ -30,9 +30,32 @@ const carMoveCodesAPI = {
       data
     });
   },
+
+  activeState(id :string) {
+    return request({
+      url: `${carMoveCodes_BASE_URL}/${id}/isActive`,
+      method: "GET"
+    });
+  },
   // 更新
   update(id: number, data) {
     return put(`${carMoveCodes_BASE_URL}/${id}`,{data})
+  },
+
+  isActive(id: number) {
+    return request({
+      url: `${carMoveCodes_BASE_URL}/activate?id=${id}`,
+      method: "POST",
+      data:{id}
+    });
+  },
+  // 激活
+  updatedata(id :string,data) {
+    return request({
+      url: `${carMoveCodes_BASE_URL}/${id}`,
+      method: "PUT",
+      data
+    });
   },
 
 

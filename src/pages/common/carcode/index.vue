@@ -41,11 +41,11 @@
                  borderBottom
                  ref="item1"
              >
-               <up-input v-model="carInfo.id" border="none" ></up-input>
+               <up-input v-model="carInfo.id" disabled border="none" ></up-input>
              </up-form-item>
          </up-form>
            <u-button type="primary" class='my-16rpx' @click="handleActive">提交并开启微信通知</u-button>
-           <u-button type="primary" class='my-16rpx' @click="handlePOI">测试按钮</u-button>
+           <!-- <u-button type="primary" class='my-16rpx' @click="handlePOI">测试按钮</u-button> -->
 
            <template v-if="plateShow">
               <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
@@ -88,8 +88,9 @@ const loginStatus = ref(false);
 
 const plateShow = ref(false)
 
-const setPlate = (plate) => {
 
+
+const setPlate = (plate) => {
   console.log("回调~",plate)
   if (plate.length >= 7) {
     carInfo.value.carNumber = plate;
@@ -106,11 +107,11 @@ console.log("***********************")
     complete(res){
 
       console.log(res)
-      debugger
     }
   })
 }
 
+const isSign = ref(false)
 
 onLoad(async(query)=>{
 
@@ -121,8 +122,9 @@ onLoad(async(query)=>{
 
 
   if(query.code){// 新增数据
-    carInfo.value.id = query.code
-    getCarInfo()
+  // activeState
+    isSign.value = true
+    getCarInfo(query.code)
   }else{// 查询数据
     getCarList()
   }
@@ -138,20 +140,23 @@ const getCarList = ()=>{
 }
 
 // 根据挪车码查询挪车码详情
-const getCarInfo = ()=>{
-  carMoveCodesAPI.getInfo(carInfo.value.id).then(res=>{
-    if(res.active){
-      console.log(`挪车码${carInfo.value.id}已经激活~`)
-      return ;
-    }
+const getCarInfo = async(id)=>{
 
-    carInfo.value = {
-      ...res,
-      carNumber:res.carNumber ? res.carNumber :"",
-    }
+    const isActive = await carMoveCodesAPI.activeState(id)
 
-    console.log('resresresres',res)
-  })
+     if(!isActive){
+       carInfo.value.phoneNumber = userStore.phoneNumber
+       carInfo.value.id = id
+       return;
+     }
+
+    carMoveCodesAPI.getInfo(id).then(res=>{
+      carInfo.value = {
+        ...res,
+        carNumber:res.carNumber ? res.carNumber :"",
+        id
+      }
+    })
 }
 
 const handleChange = (data)=>{
@@ -161,23 +166,28 @@ const handleChange = (data)=>{
 
 
 
-// 激活挪车吗
+// 修改数据挪车吗
 const handleActive = ()=>{
   wx.requestSubscribeMessage({
     tmplIds:["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-    complete(){
+    async complete(){
+
+      const isActive = await carMoveCodesAPI.activeState(id)
+      if(!isActive){
+        await carMoveCodesAPI.isActive(carInfo.value.id)
+      }
+
       let params = {
         ...carInfo.value,
         openId:userStore.openId,
         active:true,
       }
-      carMoveCodesAPI.active(carInfo.value.id,params).then(res=>{
+
+      carMoveCodesAPI.updatedata(carInfo.value.id,params).then(res=>{
         carInfo.value = {};
+
+        getCarList()
         if(!res)return;
-        if(res.active){
-          console.log(`挪车码${carInfo.value.id}已经激活~`)
-          return ;
-        }
         console.log('resresresres',res)
       })
     }
