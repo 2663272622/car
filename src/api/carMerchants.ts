@@ -4,28 +4,18 @@ import { get, post, put } from '@/utils/request';
 const carMerchants_BASE_URL = "/api/v1/carMerchants";
 
 const carMerchantsAPI = {
-  /** 获取商家分页数据(给定位权限) */
-  getPage(data : any) {
+  /** 获取商家分页数据 */
+  getPage(data? : any) {
     return get(`${carMerchants_BASE_URL}/wxPage`, { data });
   },
 
   /**
-   * 用户表单数据(不给定位)
+   * 商家表单数据
    *
    * @param id
    * @returns
    */
-  getNoFormData(id : number) {
-    return get(`${carMerchants_BASE_URL}/${id}/form`);
-  },
-
-  /**
-   * 用户表单数据(不给定位)
-   *
-   * @param id
-   * @returns
-   */
-  getFormData(id : number, data : any) {
+  getFormData(id : number, data? : any) {
     return get(`${carMerchants_BASE_URL}/${id}/wxForm`, { data });
   },
 
@@ -50,6 +40,15 @@ const carMerchantsAPI = {
      */
     add(data: any) {
       return post(`${carMerchants_BASE_URL}`,{data});
+    },
+
+    //浏览或导航到商家数据
+    navigationData(id:number){
+      return get(`${carMerchants_BASE_URL}/${id}/count`);
+    },
+    //浏览或导航商家数据自增
+    navigationAdd(id:number,type:number){
+      return post(`${carMerchants_BASE_URL}/${id}/increase?type=${type}`);
     },
 };
 

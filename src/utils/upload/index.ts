@@ -4,7 +4,7 @@ import { getToken } from '@/utils/auth';
  * @param { string } filePath 图片的本地临时路径
  * @returns 上传后的图片路径
 */
-export const useUpload = async( filePath:string,path?:string  )=>{
+export const useUpload = async( filePath:string,path?:string,mid?:string  )=>{
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const Authorization = await getToken()
@@ -12,7 +12,7 @@ export const useUpload = async( filePath:string,path?:string  )=>{
 
   return new Promise((resolve,reject)=>{
     uni.uploadFile({
-      url:BASE_URL+`api/v1/wx/auth/${url}?path=`+path,
+      url:BASE_URL+`api/v1/wx/auth/${url}?path=${path}&mid=${mid}`,
       filePath,
       name: 'multipartFile',
       formData: {

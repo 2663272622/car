@@ -19,6 +19,8 @@
             <view v-if="stickyState" class="bg-white" :style="{height:bHeight}" id="stickyDom"></view>
             <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx ">推荐商家</view>
             <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
+              <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
+                :class="{select: selectedValue === -1}">附近</view>
               <view v-for="item in business" :key="item.id">
                 <view
                   class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
@@ -47,7 +49,7 @@
                     <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{item.score}}</text>
                   </view>
                   <view class=" font-normal text-24rpx leading-52rpx">
-                    <view v-if="getTime(item.openTime,item.closeTime)" class="text-#1764FF">营业中</view>
+                    <view v-if="item.ext2==='营业中'" class="text-#1764FF">营业中</view>
                     <view v-else>休息中</view>
                   </view>
                 </view>
@@ -80,7 +82,7 @@
   import carMerchantsAPI from "@/api/carMerchants";
   import NoticeAPI from "@/api/notice"
   import BusinessAPI from "@/api/business"
-  import { handleUrl, getTime } from "@/utils";
+  import { handleUrl } from "@/utils";
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
   import list from "@/uni_modules/uview-plus/components/u-list/list";
@@ -88,8 +90,7 @@
   // 在onReady或者onMounted生命周期中获取元素信息
   const stickyState = ref(false)
   const handlescroll = (e) => {
-    console.log(e.target)
-    if (e.target.scrollTop >= 380) {
+    if (e.target.scrollTop >= 360) {
       stickyState.value = true
     }
     else {
@@ -114,7 +115,6 @@
             title: "获取定位授权失败",
             icon: "none"
           })
-          return;
         }
         if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
           uni.showModal({
@@ -125,6 +125,7 @@
           })
           return;
         }
+        setTimeout(locationErr, 2000)
       },
       complete: () => {
         getMerchants()
@@ -181,12 +182,14 @@
       })
   }
   getBusiness()
-
   //商家业务的分页查询
+  const scrollTop=ref(0)
   const selectedValue = ref(-1);
   const selectBusiness = (item : any) => {
     merchants.value = []
     merchants_params.pageNum = 1
+    scrollTop.value=360
+    console.log(scrollTop.value)
     if (selectedValue.value === item.value) {
       selectedValue.value = -1;
       getMerchants()
@@ -194,19 +197,7 @@
       selectedValue.value = item.value;
       getMerchants(item.value)
     }
-
   };
-  // onReachBottom(() => {
-  //   if (noData.value) return;
-  //   merchants_params.pageNum++;
-  //   getMerchants();
-  // })
-
-  // const scrolltolower = () => {
-  //   if (noData.value) return;
-  //   merchants_params.pageNum++;
-  //   getMerchants();
-  // };
 
 
   //建立一个布尔值，判断是否进行下拉刷新
@@ -221,24 +212,23 @@
   const image = ref()
   const getMerchants = async (value ?: number) => {
     noData.value = false;
-    // merchants.value=[]
     let data
-      if (value) {
-        if(Mylatitude){
-                  data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
-        }
-        else{
-          data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value })
-        }
-
-      } else {
-        if(Mylatitude){
-           data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylatitude.value, longitude: Mylongitude.value })
-        }else{
-                     data = await carMerchantsAPI.getPage({ ...merchants_params })
-        }
-
+    if (value) {
+      if (Mylatitude) {
+        data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
       }
+      else {
+        data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value })
+      }
+
+    } else {
+      if (Mylatitude) {
+        data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylatitude.value, longitude: Mylongitude.value })
+      } else {
+        data = await carMerchantsAPI.getPage({ ...merchants_params })
+      }
+
+    }
     data.list.map((item : any) => {
       return item.storeLogoUrl = item.storeLogoUrl ? handleUrl(item.storeLogoUrl)[0].url : ''
     })
@@ -254,6 +244,46 @@
     merchants_params.pageNum++;
     getMerchants();
   })
+
+
+  const locationErr = () => {
+    uni.showModal({
+      title: "提示",
+      content: "需要授权获取位置信息",
+      success: (res) => {
+        if (res.confirm) {
+          uni.openSetting({
+            success: (res) => {
+              if (res.authSetting['scope.userFuzzyLocation']) {
+                uni.getFuzzyLocation({
+                  type: "wgs84",
+                  success: (res) => {
+                    Mylatitude.value = res.latitude
+                    Mylongitude.value = res.longitude
+                  },
+                  fail: (arr) => {
+                    console.log(arr)
+                    if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+                      uni.showModal({
+                        title: "未获取到位置信息",
+                        content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+                        showCancel: false,
+                        confirmText: "我知道了"
+                      })
+                      return;
+                    }
+                  },
+                  complete: () => {
+                    getMerchants()
+                  }
+                })
+              }
+            },
+          })
+        }
+      },
+    })
+  }
 </script>
 <style scoped lang="scss">
   .page-wrap {
