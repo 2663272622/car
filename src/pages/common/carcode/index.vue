@@ -3,7 +3,8 @@
 		    <u-navbar
 		        title="我的挪车码"
 		        :autoBack="true"
-            :placeholder='true'
+          safeAreaInsetTop
+          :placeholder='true'
 		    >
 		    </u-navbar>
 
