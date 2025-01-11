@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-  import { barHeight,handleUrl } from "@/utils"
+  import { barHeight, handleUrl } from "@/utils"
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
   import { LOGIN_PATH } from "@/router";
@@ -94,36 +94,35 @@
     return barHeight()
   })
 
-  onLoad(async(options)=>{
+  onLoad(async (options) => {
     loginStatus.value = await usePermission();
     loginStatus.value = isLogin();
     const ttt = await getToken();
-    if(!loginStatus.value )return;
+    if (!loginStatus.value) return;
 
     let url = options.q
-    // let url = `https://onlinewifi.car.ischool.shop?move=1234`
-    scanInfo.value.id = handleUrl(url || '','move')
+    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
+    scanInfo.value.id = handleUrl(url || '', 'move')
     getCarMoveCodes()
-})
+  })
 
-//获取通知
-  const handleWechatMsg = () => {
-    wx.requestSubscribeMessage({
-      tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-      success(...res) {
-        uni.$u.toast("已开启微信通知");
-      },
-      fail(e) {
-        console.log(e)
-        uni.$u.toast("已取消");
-      }
-    })
-
-  }
-//弹出获取通知弹窗，用户点击获取
-  // uni.showModal({
-  //   title:请求h
-  // })
+  //弹出获取通知弹窗，用户点击获取
+  uni.showModal({
+    title: '请求获取通知',
+    content: '点击此按钮申请获取挪车码通知信息',
+    success: () => {
+      wx.requestSubscribeMessage({
+        tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+        success(...res) {
+          uni.$u.toast("已开启微信通知");
+        },
+        fail(e) {
+          console.log(e)
+          uni.$u.toast("已取消");
+        }
+      })
+    }
+  })
 
   const queryParams = {
     pageNum: 1,
@@ -155,27 +154,26 @@
   // }
   // getCarMoveCodes()
 
-async function getCarMoveCodes(){
-  if(!scanInfo.value.id)return console.log("不是通过扫码进入");
+  async function getCarMoveCodes() {
+    if (!scanInfo.value.id) return console.log("不是通过扫码进入");
 
-  const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
-  if(!isActive){
-    console.log("未注册的挪车吗信息",scanInfo.value.id)
-    uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
-    return;
+    const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
+    if (!isActive) {
+      console.log("未注册的挪车吗信息", scanInfo.value.id)
+      uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
+      return;
+    }
+    carMoveCodesAPI.getFormData(scanInfo.value.id)
+      .then((data) => {
+        handleQuery()
+        carInfo.value = data.carNumber
+        scanInfo.value = data
+      })
   }
-  carMoveCodesAPI.getFormData(scanInfo.value.id)
-  .then((data)=>{
-    handleQuery()
-
-    carInfo.value=data.carNumber
-    scanInfo.value = data
-  })
-}
   //通过计算属性将数据展示
-const carInfoArr = computed(()=>{
-  return carInfo.value ? carInfo.value.split("") : ''
-})
+  const carInfoArr = computed(() => {
+    return carInfo.value ? carInfo.value.split("") : ''
+  })
 
 
   //定义当前点击时间
@@ -191,35 +189,36 @@ const carInfoArr = computed(()=>{
         break;
       case 1:
         if ((currentTime - clickTime.value) < 300000) {
-          getLocation()
-          if (Mylatitude.value) {
-            carMsgAPI.sendWxMsgApi(
-              scanInfo.value.id, { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
-            ).then(res => {
-              uni.$u.toast("发送成功，请耐心等待车主前来挪车");
-              clickTime.value = new Date().getTime()
-            })
-          }
+        getLocation()
+        if (Mylatitude.value) {
+          carMsgAPI.sendWxMsgApi(
+            scanInfo.value.id, { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
+          ).then(res => {
+            uni.$u.toast("发送成功，请耐心等待车主前来挪车");
+          })
+        }
         }
         else {
           uni.$u.toast("车主正在赶来，稍等一会哦~");
         }
+        clickTime.value = new Date().getTime()
         break;
       case 2:
         if ((currentTime - clickTime.value) < 300000) {
-          getLocation()
-          if (Mylatitude.value) {
-            carMsgAPI.sendMsgApi(
-              scanInfo.value.phoneNumber,
-              scanInfo.value.id,
-              { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
-            ).then(res => {
-              uni.$u.toast("发送成功,请耐心等待车主前来挪车");
-            })
-          }
+        getLocation()
+        if (Mylatitude.value) {
+          carMsgAPI.sendMsgApi(
+            scanInfo.value.phoneNumber,
+            scanInfo.value.id,
+            { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
+          ).then(res => {
+            uni.$u.toast("发送成功,请耐心等待车主前来挪车");
+          })
+        }
         } else {
           uni.$u.toast("车主正在赶来，稍等一会哦~");
         }
+        clickTime.value = new Date().getTime()
         break;
 
 
