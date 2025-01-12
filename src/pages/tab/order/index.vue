@@ -4,7 +4,7 @@
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
-          <up-swiper :list="swiperImg" indicator indicatorMode="line" circular height="388rpx"></up-swiper>
+          <up-swiper :list="swiperImg" indicator indicatorMode="line" imgMode="scaleToFill"  circular height="388rpx"></up-swiper>
         </view>
         <view class="bg-white pt-50rpx grid grid-cols-5 grid-rows-2 ">
           <view v-for="item in business" :key="item.id">
@@ -162,7 +162,7 @@
     NoticeAPI.getPage(queryParams)
       .then((data) => {
         pageData = data.list
-        swiperImg.value = handlePic(pageData[0].content)
+        swiperImg.value = handlePic(pageData[0].content,false)
       })
   }
   handleQuery()
