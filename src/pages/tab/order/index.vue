@@ -1,5 +1,6 @@
 <template>
-  <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="200">
+  <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="200"
+    scroll-with-animation="true">
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
@@ -19,8 +20,10 @@
             <view v-if="stickyState" class="bg-white" :style="{height:bHeight}" id="stickyDom"></view>
             <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx ">推荐商家</view>
             <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
-             <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
-                :class="{select: selectedValue === -1}" @click="selectBusiness(defaultData)">附近</view>
+              <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
+                :class="{select: selectedValue === -1}" @click="selectBusiness(defaultData)">默认</view>
+                <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
+                  :class="{select:merchants_params.isDistance}" @click="selectDistance">附近</view>
               <view v-for="item in business" :key="item.id">
                 <view
                   class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
@@ -33,7 +36,7 @@
           <view v-for="(item,index) in merchants" :key="index">
             <view class="bg-white rd-20rpx mx-30rpx mt-30rpx flex whitespace-nowrap overflow-hidden"
               @click="navigator(item.id)">
-             <view class="my-30rpx ml-20rpx mr-12rpx">
+              <view class="my-30rpx ml-20rpx mr-12rpx">
                 <up-image :show-loading="true" :src="item.storeLogoUrl" width="160rpx" height="160rpx"
                   bg-color="#0000" />
               </view>
@@ -65,7 +68,7 @@
             </view>
           </view>
         </view>
-       <view class="pb-160rpx">
+        <view class="pb-160rpx">
           <up-loadmore :status="noData?'nomore':'loading'" />
         </view>
       </view>
@@ -88,7 +91,7 @@
   // 在onReady或者onMounted生命周期中获取元素信息
   const stickyState = ref(false)
   const handlescroll = (e) => {
-    if (e.target.scrollTop >= 360) {
+    if (e.target.scrollTop >= 345) {
       stickyState.value = true
     }
     else {
@@ -105,13 +108,18 @@
       success: (res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
+        nextTick(()=>{
+          getMerchants()
+        })
       },
       fail: (arr) => {
-        console.log(arr)
         if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
           uni.showToast({
             title: "获取定位授权失败",
             icon: "none"
+          })
+          nextTick(()=>{
+            getMerchants()
           })
         }
         if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
@@ -124,9 +132,6 @@
           return;
         }
         setTimeout(locationErr, 2000)
-      },
-      complete: () => {
-        getMerchants()
       }
     })
   }
@@ -182,76 +187,87 @@
   getBusiness()
 
   //设计一个数据为附近初始数据
-  const defaultData={
-    value:-1
+  const defaultData = {
+    value: -1
   }
   //商家业务的分页查询
-  const scrollTop=ref(0)
+  // const scroll=ref(0)
   const selectedValue = ref(-1);
   const selectBusiness = (item : any) => {
     merchants.value = []
-    merchants_params.pageNum = 1
-    // scroll()
-    if (selectedValue.value === item.value) {
-      selectedValue.value = -1;
+    merchants_params.value.pageNum = 1
+    selectedValue.value = item.value;
+    if (selectedValue.value === -1) {
       getMerchants()
     } else {
-      selectedValue.value = item.value;
       getMerchants(item.value)
     }
   };
+  //选择附近-可复选
+  const selectDistance=()=>{
+    merchants.value=[]
+    merchants_params.value.pageNum = 1
+    getLocation()
+    if(Mylatitude.value){
+      merchants_params.value.isDistance=!merchants_params.value.isDistance
+        if (selectedValue.value === -1) {
+          getMerchants()
+        } else {
+          getMerchants()
+        }
+      }
+    }
 
-  //页面滚动（未生效）
-  const scroll=()=>{
-    uni.pageScrollTo({
-      scrollTop:150,
-      duration:300
-    })
-  }
 
 
   //建立一个布尔值，判断是否进行下拉刷新
   const noData = ref(false)
   //查询商家
-  let merchants_params = {
+  const merchants_params = ref({
     pageNum: 1,
     pageSize: 6,
     active: true,
-  }
+    isDistance:false,
+  })
   const merchants : any = ref([])
   const image = ref()
   const getMerchants = async (value ?: number) => {
     noData.value = false;
     let data
     if (value) {
-      if (Mylatitude) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
+      if (Mylatitude.value) {
+        data = await carMerchantsAPI.getPage({ ...merchants_params.value, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
       }
       else {
-        data = await carMerchantsAPI.getPage({ ...merchants_params, businessScope: value })
+        data = await carMerchantsAPI.getPage({ ...merchants_params.value, businessScope: value })
       }
-
-    } else {
-      if (Mylatitude) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params, latitude: Mylatitude.value, longitude: Mylongitude.value })
+} else {
+      if (Mylatitude.value) {
+        data = await carMerchantsAPI.getPage({ ...merchants_params.value, latitude: Mylatitude.value,longitude: Mylongitude.value })
       } else {
-        data = await carMerchantsAPI.getPage({ ...merchants_params })
+        data = await carMerchantsAPI.getPage({ ...merchants_params.value })
       }
-
     }
     data.list.map((item : any) => {
-      return item.storeLogoUrl = item.storeLogoUrl ? handlePic(item.storeLogoUrl)[0].url : ''
+      if (item.storeLogoUrl) {
+        if (item.storeLogoUrl.includes('http:')) {
+          return item.storeLogoUrl = item.storeLogoUrl.split(',')[0]
+        }
+        else {
+          return item.storeLogoUrl = item.storeLogoUrl ? handlePic(item.storeLogoUrl)[0].url : ''
+        }
+      }
     })
     merchants.value = [...merchants.value, ...data.list];
-    if (merchants_params.pageSize > data.list.length) noData.value = true;
+    if (merchants_params.value.pageSize > data.list.length) noData.value = true;
 
   }
 
 
   //触底加载
- const ToBottom=()=>{
+  const ToBottom = () => {
     if (noData.value) return;
-    merchants_params.pageNum++;
+    merchants_params.value.pageNum++;
     getMerchants();
   }
 
@@ -270,6 +286,7 @@
                   success: (res) => {
                     Mylatitude.value = res.latitude
                     Mylongitude.value = res.longitude
+                    getMerchants()
                   },
                   fail: (arr) => {
                     console.log(arr)
@@ -282,9 +299,6 @@
                       })
                       return;
                     }
-                  },
-                  complete: () => {
-                    getMerchants()
                   }
                 })
               }
@@ -294,7 +308,6 @@
       },
     })
   }
-
 </script>
 <style scoped lang="scss">
   .page-wrap {

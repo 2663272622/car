@@ -45,9 +45,9 @@
                <up-input v-model="carInfo.id" disabled border="none" ></up-input>
              </up-form-item>
          </up-form>
+          <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx' @click="handleBan">禁用挪车码</u-button>
+          <u-button v-else type="primary" class='my-16rpx' @click="handleBan">启用挪车码</u-button>
            <u-button type="primary" class='my-16rpx' @click="handleActive">提交并开启微信通知</u-button>
-           <!-- <u-button type="primary" class='my-16rpx' @click="handlePOI">测试按钮</u-button> -->
-
            <template v-if="plateShow">
               <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
            </template>
@@ -61,9 +61,13 @@
             >
               <up-cell
                 :title="`${item.carNumber}`"
-                 value="查看"
                  @click='handleChange(item)'
               >
+              <template #value>
+                <up-tag  v-if="item.banFlag" text="禁用" type="warning" plain></up-tag>
+                <up-tag  v-else text="启用" type="success" plain></up-tag>
+                <text class="ml-10rpx">查看</text>
+              </template>
               </up-cell>
             </up-list-item>
           </up-list>
@@ -92,7 +96,6 @@ const plateShow = ref(false)
 
 
 const setPlate = (plate) => {
-  console.log("回调~",plate)
   if (plate.length >= 7) {
     carInfo.value.carNumber = plate;
   }
@@ -102,15 +105,6 @@ const setPlate = (plate) => {
 const carList = ref([])
 const carInfo = ref({})
 
-const handlePOI = ()=>{
-console.log("***********************")
-  wx.chooseLocation({
-    complete(res){
-
-      console.log(res)
-    }
-  })
-}
 
 const isSign = ref(false)
 
@@ -166,6 +160,26 @@ const handleChange = (data)=>{
 }
 
 
+//修改禁用挪车码
+const handleBan=()=>{
+  carInfo.value.banFlag=!carInfo.value.banFlag
+  let params = {
+    ...carInfo.value,
+    openId:userStore.openId,
+    active:true,
+  }
+  carMoveCodesAPI.updatedata(carInfo.value.id,params).then(res=>{
+    if(carInfo.value.banFlag){
+      uni.$u.toast("禁用成功");
+    }
+    else{
+      uni.$u.toast("启用成功");
+    }
+    carInfo.value = {};
+    getCarList()
+    if(!res)return;
+  })
+}
 
 // 修改数据挪车吗
 const handleActive = ()=>{
@@ -186,10 +200,8 @@ const handleActive = ()=>{
 
       carMoveCodesAPI.updatedata(carInfo.value.id,params).then(res=>{
         carInfo.value = {};
-
         getCarList()
         if(!res)return;
-        console.log('resresresres',res)
       })
     }
   })

@@ -91,7 +91,13 @@
     openTime = formatTimeFromArray(data.openTime)
     closeTime = formatTimeFromArray(data.closeTime)
     merchants.value = data
-    img.value = handlePic(data.storeLogoUrl)
+    if(data.storeLogoUrl.includes('http:')){
+     img.value=data.storeLogoUrl.split(',').filter((i: any)=>i).map((i:string)=>({url:i,name:''}))
+    }
+    else{
+      img.value =handlePic(data.storeLogoUrl)
+    }
+    console.log(img.value)
     phone = data.contactPhone
   }
   //修改时间格式

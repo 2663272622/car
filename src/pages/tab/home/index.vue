@@ -94,7 +94,7 @@
     return barHeight()
   })
 
-  onLoad(async (options) => {
+  onLoad(async (options:any) => {
     loginStatus.value = await usePermission();
     loginStatus.value = isLogin();
     const ttt = await getToken();
@@ -148,7 +148,7 @@
   }
 
   //获取车主的车牌号信息(目前车牌写死)
-  const carInfo = ref('')
+  const carInfo:any = ref('')
   const scanInfo : any = ref({})
   // function getCarMoveCodes() {
   //   carMoveCodesAPI.getFormData(3201)
@@ -163,7 +163,11 @@
     if (!scanInfo.value.id) return console.log("不是通过扫码进入");
 
     const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
-    if (!isActive) {
+    if(isActive.banFlag){
+      uni.$u.toast("这个挪车码已经禁用啦，看看有什么其他方式可以联系车主吧~");
+      return;
+    }
+    if (!isActive.isActive) {
       console.log("未注册的挪车吗信息", scanInfo.value.id)
       uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
       return;
