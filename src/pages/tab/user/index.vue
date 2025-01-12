@@ -93,16 +93,11 @@
     wx.requestSubscribeMessage({
       tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
       success(res) {
-<<<<<<< HEAD
-        console.log(res)
-        uni.$u.toast("已开启微信通知");
-=======
         if(res['--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc'] == "accept"){
           uni.$u.toast("已开启微信通知");
         }else{
           uni.$u.toast("已关闭微信通知");
         }
->>>>>>> 6a8d459f9632c359d2f2d44f47cd02b1be3ac9fe
       },
       fail() {
         uni.$u.toast("已取消");

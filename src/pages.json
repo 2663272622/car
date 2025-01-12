@@ -69,10 +69,7 @@
         "path": "carcode/index",
         "needLogin": true,
         "style": {
-<<<<<<< HEAD
-=======
           "navigationStyle": "custom" ,// 隐藏系统导航栏
->>>>>>> 6a8d459f9632c359d2f2d44f47cd02b1be3ac9fe
           "navigationBarTitleText": "我的挪车码"
         }
       },
@@ -162,7 +159,7 @@
     "navigationBarTitleText": "iSchool",
     "navigationBarBackgroundColor": "#f2f2f2",
     "backgroundColor": "#f2f2f2",
-    "navigationStyle": "custom" ,// 设置为custom可以隐藏原生导航栏
+    "navigationStyle": "custom" ,
     "onReachBottomDistance": 150
   }
 }

@@ -99,36 +99,35 @@
     loginStatus.value = isLogin();
     const ttt = await getToken();
     if (!loginStatus.value) return;
-
-<<<<<<< HEAD
+    // let url = options.q
+    // // let url = `https://onlinewifi.car.ischool.shop?move=2438`
+    // scanInfo.value.id = handleUrl(url || '', 'move')
+    // // let url = options.q
+    // let url = `https://onlinewifi.car.ischool.shop?move=2558`
+    // scanInfo.value.id = handleUrl(url || '','move')
     let url = options.q
     // let url = `https://onlinewifi.car.ischool.shop?move=2438`
     scanInfo.value.id = handleUrl(url || '', 'move')
-=======
-    // let url = options.q
-    let url = `https://onlinewifi.car.ischool.shop?move=2558`
-    scanInfo.value.id = handleUrl(url || '','move')
->>>>>>> 6a8d459f9632c359d2f2d44f47cd02b1be3ac9fe
     getCarMoveCodes()
   })
 
   //弹出获取通知弹窗，用户点击获取
-  uni.showModal({
-    title: '请求获取通知',
-    content: '点击此按钮申请获取挪车码通知信息',
-    success: () => {
-      wx.requestSubscribeMessage({
-        tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-        success(...res) {
-          uni.$u.toast("已开启微信通知");
-        },
-        fail(e) {
-          console.log(e)
-          uni.$u.toast("已取消");
-        }
-      })
-    }
-  })
+  // uni.showModal({
+  //   title: '请求获取通知',
+  //   content: '点击此按钮申请获取挪车码通知信息',
+  //   success: () => {
+  //     wx.requestSubscribeMessage({
+  //       tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+  //       success(...res) {
+  //         uni.$u.toast("已开启微信通知");
+  //       },
+  //       fail(e) {
+  //         console.log(e)
+  //         uni.$u.toast("已取消");
+  //       }
+  //     })
+  //   }
+  // })
 
   const queryParams = {
     pageNum: 1,
@@ -194,37 +193,38 @@
         });
         break;
       case 1:
-        if ((currentTime - clickTime.value) < 300000) {
-        getLocation()
-        if (Mylatitude.value) {
-          carMsgAPI.sendWxMsgApi(
-            scanInfo.value.id, { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
-          ).then(res => {
-            uni.$u.toast("发送成功，请耐心等待车主前来挪车");
-          })
-        }
+        if ((currentTime - clickTime.value) > 300000 || clickTime.value === 0) {
+          getLocation()
+          if (Mylatitude.value) {
+            carMsgAPI.sendWxMsgApi(
+              scanInfo.value.id, { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
+            ).then(res => {
+              uni.$u.toast("发送成功，请耐心等待车主前来挪车");
+              clickTime.value = new Date().getTime()
+
+            })
+          }
         }
         else {
           uni.$u.toast("车主正在赶来，稍等一会哦~");
         }
-        clickTime.value = new Date().getTime()
         break;
       case 2:
-        if ((currentTime - clickTime.value) < 300000) {
-        getLocation()
-        if (Mylatitude.value) {
-          carMsgAPI.sendMsgApi(
-            scanInfo.value.phoneNumber,
-            scanInfo.value.id,
-            { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
-          ).then(res => {
-            uni.$u.toast("发送成功,请耐心等待车主前来挪车");
-          })
-        }
+        if ((currentTime - clickTime.value) > 300000 || clickTime.value === 0) {
+          getLocation()
+          if (Mylatitude.value) {
+            carMsgAPI.sendMsgApi(
+              scanInfo.value.phoneNumber,
+              scanInfo.value.id,
+              { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
+            ).then(res => {
+              uni.$u.toast("发送成功,请耐心等待车主前来挪车");
+              clickTime.value = new Date().getTime()
+            })
+          }
         } else {
           uni.$u.toast("车主正在赶来，稍等一会哦~");
         }
-        clickTime.value = new Date().getTime()
         break;
 
 
