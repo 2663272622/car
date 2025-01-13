@@ -27,14 +27,14 @@
               <view v-if="merchants.ext2==='营业中'" class="text-#0B86FA">营业中</view>
               <view v-else class="text-black text-opacity-60">休息中</view>
             </view>
-            <!-- <view class="text-black text-opacity-90 mx-12rpx">{{merchants.day}}</view> -->
             <view class="text-black text-opacity-90">&nbsp;&nbsp;{{openTime}}-{{closeTime}}</view>
             <up-icon name="arrow-right" size="26rpx" color="black" class="ml-28rpx"></up-icon>
           </view>
-          <view class="flex u-flex-wrap">
-            <!--            <view v-for="(item,index) in merchants.tag.split(',')" :key="index" class=" mt-16rpx ml-16rpx whitespace-nowrap">
-              <up-tag type="info"  :text="item" color="rgba(0,0,0,0.6)" bgColor="#F0F0F0"></up-tag>
-            </view> -->
+          <view class="flex u-flex-wrap ml-10rpx">
+            <view v-for="(item,index) in tag" :key="index" class=" mt-16rpx ml-16rpx whitespace-nowrap">
+              <!-- <up-tag type="info" plain :text="item" plainFill></up-tag> -->
+              <view class="bg-#F0F0F0 text-24rpx text-black text-opacity-60 px-28rpx py-8rpx rounded-8rpx font-medium leading-40rpx">{{item}}</view>
+            </view>
           </view>
         </view>
         <view class="mr-38rpx ml-30rpx" @click="call">
@@ -67,6 +67,7 @@
 <script setup lang="ts">
   import { ref } from "vue"
   import carMerchantsAPI from "@/api/carMerchants";
+  import BusinessAPI from "@/api/business";
   import { handlePic } from "@/utils"
   import { onLoad } from "@dcloudio/uni-app";
   const merchants : any = ref({})
@@ -75,11 +76,32 @@
   const id = ref()
   let openTime : string
   let closeTime : string
+  const tag=ref()
   //接收传入id值
   // 使用onLoad生命周期函数接收传输值id或者是type
   onLoad((e : any) => {
     id.value = e.id;
   })
+
+  // 查询业务类型
+  const params = {
+    pageNum: 1,
+    pageSize: 10,
+    dictCode: 'businessScope'
+  }
+  const business : any = ref([])
+  function getBusiness() {
+    BusinessAPI.getPage(params)
+      .then((data) => {
+        business.value = data.list
+        tag.value = merchants.value.businessScope.reduce((acc: string | any[], element:number) => {
+          let matchingObjects = business.value.filter((item: { value: number; }) => item.value === element);
+          let properties = matchingObjects.map((item: { label: any; }) => item.label);
+          return acc.concat(properties);
+        }, []);
+      })
+  }
+
   const getFormData = async () => {
     let data
     if (Mylatitude.value) {
@@ -90,12 +112,15 @@
     }
     openTime = formatTimeFromArray(data.openTime)
     closeTime = formatTimeFromArray(data.closeTime)
-    merchants.value = data
-    if(data.storeLogoUrl.includes('http:')){
-     img.value=data.storeLogoUrl.split(',').filter((i: any)=>i).map((i:string)=>({url:i,name:''}))
+    if(data.businessScope){
+      data.businessScope=data.businessScope.split(',')
     }
-    else{
-      img.value =handlePic(data.storeLogoUrl)
+    merchants.value = data
+    if (data.storeLogoUrl.includes('http:')) {
+      img.value = data.storeLogoUrl.split(',').filter((i : any) => i).map((i : string) => ({ url: i, name: '' }))
+    }
+    else {
+      img.value = handlePic(data.storeLogoUrl)
     }
     console.log(img.value)
     phone = data.contactPhone
@@ -113,7 +138,6 @@
       return `${hours}:${minutes}`;
     }
   }
-
   //拨打电话功能
   function call() {
     uni.makePhoneCall({
@@ -179,8 +203,11 @@
         })
       },
       complete: () => {
-        getFormData()
-        navigationAdd(1)
+        getBusiness()
+        nextTick(()=>{
+          getFormData()
+          navigationAdd(1)
+        })
       }
     })
   }
@@ -210,6 +237,8 @@
   const navigationAdd = (type : number) => {
     carMerchantsAPI.navigationAdd(id.value, type)
   }
+
+
 </script>
 
 <style lang="scss" scoped>

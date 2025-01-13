@@ -247,7 +247,7 @@
       }
     } else {
       if (Mylatitude.value) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params.value, latitude: 0, longitude: 0 })
+        data = await carMerchantsAPI.getPage({ ...merchants_params.value, latitude: Mylatitude.value, longitude: Mylongitude.value })
       } else {
         data = await carMerchantsAPI.getPage({ ...merchants_params.value })
       }
