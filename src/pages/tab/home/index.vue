@@ -48,7 +48,7 @@
 
     </view>
 
-    <Tabbar pathName='home'></Tabbar>
+    <Tabbar pathName='home' ref='tabbarRef'></Tabbar>
 
   </view>
 </template>
@@ -95,6 +95,7 @@
   })
 
   onLoad(async (options:any) => {
+    // 判断登录 未登录情况下跳转去登录
     loginStatus.value = await usePermission();
     loginStatus.value = isLogin();
     const ttt = await getToken();
@@ -108,9 +109,47 @@
     let url = options.q
     // let url = `https://onlinewifi.car.ischool.shop?move=2438`
     scanInfo.value.id = handleUrl(url || '', 'move')
-    getCarMoveCodes()
+    console.log("扫码携带来的ID",scanInfo.value.id)
+    // 判断ID
+    if(scanInfo.value.id){
+      console.log("将携带来的ID保存",scanInfo.value.id)
+      uni.setStorage({
+      	key: 'scan_id',
+      	data: scanInfo.value.id,
+      	success: function (res) {
+          console.log("将携带来的ID保存",res)
+          getCarMoveCodes()
+      	}
+      });
+    }else{
+      uni.getStorage({
+        key:"scan_id",
+        success(res){
+
+          if(res.data != ''){
+            console.log("未携带ID 本地有缓存的ID",res)
+            getCarMoveCodes()
+          }else{
+            console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
+            hidHome()
+          }
+        },
+        fail(eee) {
+          hidHome()
+          console.log("2未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
+        }
+      })
+
+    }
+
   })
 
+
+  const tabbarRef = ref()
+  const hidHome = ()=>{
+    tabbarRef.value.changeTab(1)
+    console.log("隐藏首页 并跳转附近")
+  }
   //弹出获取通知弹窗，用户点击获取
   // uni.showModal({
   //   title: '请求获取通知',

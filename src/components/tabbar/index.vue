@@ -1,7 +1,8 @@
 <template>
   <view class="custom-tabbar">
     <view class="tab-contaion">
-      <view class="tab-c-item" :class="props.pathName == item.pagePath ? 'tab-c-item-select' : ''" v-for="(item,index) of tabbarDatas" :key='index' @click="changeTab(item)" >
+      {{tabbatShow.length}}
+      <view class="tab-c-item" :class="props.pathName == item.pagePath ? 'tab-c-item-select' : ''" v-for="(item,index) of tabbatShow"  :key='index' @click="changeTab(item)" >
         <image style="width: 42rpx; height: 38rpx;" :src="props.pathName != item.pagePath ? item.iconPath : item.selectedIconPath" mode=""></image>
         <text :class="props.pathName == item.pagePath ? 'checkTab' : ''">{{item.text}}</text>
       </view>
@@ -29,7 +30,8 @@ import { useClipboard, usePermission } from '@/hooks';
       selectedIconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/24.png?x-oss-process=image/resize,m_fill,h_100,w_100",
       pagePath: "home",
       path:"/pages/tab/home/index",
-      text: "首页"
+      text: "首页",
+      hidden:false
     },
     {
       iconPath: "https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/25.png?x-oss-process=image/resize,m_fill,h_100,w_100",
@@ -47,19 +49,46 @@ import { useClipboard, usePermission } from '@/hooks';
     },
   ])
 
-  const changeTab = async(item)=>{
-    if(item.pagePath != props.pathName){
-      console.log("页面切换",item.path)
+  const tabbatShow = computed(()=>{
+    const dad =  tabbarDatas.value.filter(i=>!i.hidden)
+    console.log("计算属性",dad)
+    return dad
+  })
 
-      const isLogin = await usePermission();
-      // if(isLogin)
-      // if
-      uni.switchTab({
-        url:item.path
-      });
-    }
+  const changeTab = async(item)=>{
+
+    uni.getStorage({
+      key:"scan_id",
+      success(res){
+        tabbarDatas.value[0].hidden = res.data == ''
+      },
+      fail(eee) {
+          tabbarDatas.value[0].hidden = false
+      },
+      async complete() {
+
+        console.log("tabbarDatas.value[0].hidden",tabbarDatas.value[0].hidden)
+            let to = typeof item == 'number' ? tabbarDatas.value[item] : item
+
+            if(to.pagePath != props.pathName){
+              console.log("页面切换",to.path,tabbatShow)
+
+              const isLogin = await usePermission();
+              // if(isLogin)
+              // if
+              uni.switchTab({
+                url:to.path
+              });
+            }
+      }
+    })
+
   }
 
+
+defineExpose({
+  changeTab
+})
 </script>
 
 <style lang="scss" scoped>
