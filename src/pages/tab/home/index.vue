@@ -1,6 +1,6 @@
 <template>
   <view class="home	custom-head">
-    <view class="home-contaion w-full" :style="{paddingTop:bHeight}">
+    <view class="home-contaion w-full" :style="{paddingTop:getTitleBarHeight()}">
       <!-- 通知公告 -->
       <view class='home-inform' :style="{'width':`calc(100% - ${menuButtonInfo.width}px - 48rpx)`}">
         <view class="home-inf-c">
@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-  import { barHeight, handleUrl } from "@/utils"
+  import { barHeight, handleUrl,getTitleBarHeight } from "@/utils"
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
   import { LOGIN_PATH } from "@/router";

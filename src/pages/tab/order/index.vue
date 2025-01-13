@@ -1,29 +1,31 @@
 <template>
-  <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="200"
+  <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="100"
     scroll-with-animation="true">
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
-          <up-swiper :list="swiperImg" indicator indicatorMode="line" imgMode="scaleToFill"  circular height="388rpx"></up-swiper>
+          <up-swiper :list="swiperImg" indicator indicatorMode="line" imgMode="scaleToFill" circular
+            height="388rpx"></up-swiper>
         </view>
-        <view class="bg-white pt-50rpx grid grid-cols-5 grid-rows-2 ">
+        <view class="pt-50rpx grid grid-cols-5 grid-rows-2 ">
           <view v-for="item in business" :key="item.id">
             <view class="flex items-center flex-col mx-auto" @click="selectBusiness(item)">
               <up-image :show-loading="true" :src="item.image" width="64rpx" height="50rpx" bg-color="#0000" />
-              <text class="font-medium text-24rpx leading-40rpx text-black text-opacity-90 mt-8rpx"
+              <text class="font-medium text-24rpx leading-40rpx text-black text-opacity-90 mb-38rpx"
                 :class="{selectLabel: selectedValue === item.value}">{{item.label}}</text>
             </view>
           </view>
         </view>
-        <view class="bottom mt-30rpx">
+        <view class="h-30rpx bg-#F1F1F1"></view>
+        <view class="bottom">
           <up-sticky offsetTop="0" bgColor="white" customNavHeight="0">
             <view v-if="stickyState" class="bg-white" :style="{height:bHeight}" id="stickyDom"></view>
             <view class="recommend-title pt-30rpx ml-30rpx text-40rpx text-black font-normal leading-60rpx ">推荐商家</view>
             <view class="flex whitespace-nowrap overflow-x-auto mt-24rpx">
               <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
                 :class="{select: selectedValue === -1}" @click="selectBusiness(defaultData)">默认</view>
-                <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
-                  :class="{select:merchants_params.isDistance}" @click="selectDistance">附近</view>
+              <view class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
+                :class="{select:merchants_params.isDistance}" @click="selectDistance">附近</view>
               <view v-for="item in business" :key="item.id">
                 <view
                   class="text-24rpx text-black text-opacity-60 font-medium bg-white rd-8rpx ml-20rpx px-28rpx py-8rpx"
@@ -67,9 +69,12 @@
               </view>
             </view>
           </view>
-        </view>
-        <view class="pb-160rpx">
-          <up-loadmore :status="noData?'nomore':'loading'" />
+          <view class="pb-160rpx" v-if="!merchants_params.isDistance">
+            <up-loadmore :status="noData?'nomore':'loading'" nomore-text="已经到底啦~" />
+          </view>
+          <view class="pb-160rpx bg-white" v-else>
+            <up-loadmore class="!mt-0 pt-10rpx" :status="noData?'nomore':'loading'" nomore-text="附近暂无商家信息~" />
+          </view>
         </view>
       </view>
       <Tabbar pathName='order'></Tabbar>
@@ -108,7 +113,7 @@
       success: (res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
-        nextTick(()=>{
+        nextTick(() => {
           getMerchants()
         })
       },
@@ -118,7 +123,7 @@
             title: "获取定位授权失败",
             icon: "none"
           })
-          nextTick(()=>{
+          nextTick(() => {
             getMerchants()
           })
         }
@@ -162,7 +167,7 @@
     NoticeAPI.getPage(queryParams)
       .then((data) => {
         pageData = data.list
-        swiperImg.value = handlePic(pageData[0].content,false)
+        swiperImg.value = handlePic(pageData[0].content, false)
       })
   }
   handleQuery()
@@ -204,20 +209,19 @@
     }
   };
   //选择附近-可复选
-  const selectDistance=()=>{
-    merchants.value=[]
+  const selectDistance = () => {
+    merchants.value = []
     merchants_params.value.pageNum = 1
     getLocation()
-    if(Mylatitude.value){
-      merchants_params.value.isDistance=!merchants_params.value.isDistance
-        if (selectedValue.value === -1) {
-          getMerchants()
-        } else {
-          getMerchants()
-        }
+    if (Mylatitude.value) {
+      merchants_params.value.isDistance = !merchants_params.value.isDistance
+      if (selectedValue.value === -1) {
+        getMerchants()
+      } else {
+        getMerchants()
       }
     }
-
+  }
 
 
   //建立一个布尔值，判断是否进行下拉刷新
@@ -227,7 +231,7 @@
     pageNum: 1,
     pageSize: 6,
     active: true,
-    isDistance:false,
+    isDistance: false,
   })
   const merchants : any = ref([])
   const image = ref()
@@ -241,9 +245,9 @@
       else {
         data = await carMerchantsAPI.getPage({ ...merchants_params.value, businessScope: value })
       }
-} else {
+    } else {
       if (Mylatitude.value) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params.value, latitude: Mylatitude.value,longitude: Mylongitude.value })
+        data = await carMerchantsAPI.getPage({ ...merchants_params.value, latitude: 0, longitude: 0 })
       } else {
         data = await carMerchantsAPI.getPage({ ...merchants_params.value })
       }
@@ -311,10 +315,11 @@
 </script>
 <style scoped lang="scss">
   .page-wrap {
-    background-color: #F1F1F1;
+    height: 100vh;
+    background-color: white;
     background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
     background-repeat: no-repeat;
-    background-size: 750rpx 482rpx;
+    background-size: 750rpx 546rpx;
 
     .selectLabel {
       font-weight: bold;
@@ -332,7 +337,7 @@
       }
 
       .select {
-        background-color: #E0E5E3;
+        background-color: #D1F5FE;
       }
     }
   }

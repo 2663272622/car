@@ -1,6 +1,6 @@
 <template>
   <view class="page-wrap">
-    <view class="mb-20rpx ml-30rpx mt-64rpx flex" :style="{ paddingTop: bHeight }">
+    <view class="mb-20rpx ml-30rpx flex" :style="{ paddingTop: Hheight()}">
       <up-image :show-loading="true" width="120rpx" height="120rpx" :src="userStore.avatar" shape="circle"
         bg-color="#0000" class="mr-24rpx" />
       <view class="flex flex-col">
@@ -67,12 +67,9 @@
 <script setup lang="ts">
   import { usePermission } from '@/hooks';
   import { useUserStore } from '@/store';
-  import { barHeight } from '@/utils';
+  import { Hheight } from '@/utils';
   import { getToken, isLogin } from '@/utils/auth';
   // const { setClipboardData, getClipboardData } = useClipboard();
-  const bHeight = computed(() => {
-    return barHeight();
-  });
   const userStore = useUserStore();
   const loginStatus = ref(false);
 

@@ -1,6 +1,6 @@
 <template>
   <view class="oilcontainer bg-#fff box-border px-12rpx">
-    <u-navbar title="我的挪车码" :autoBack="true" :placeholder='true'>
+    <u-navbar title="首页通知" :autoBack="true" :placeholder='true'>
     </u-navbar>
     <template v-if='carInfo.id'>
       <up-form labelPosition="left" labelWidth='auto'>

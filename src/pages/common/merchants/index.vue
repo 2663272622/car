@@ -12,7 +12,7 @@
         {{merchants.merchantName}}
       </view>
       <view class="mt-24rpx flex ml-30rpx">
-        <up-rate v-model="merchants.score" readonly allowHalf="true" active-color="#F25730" gutter="2rpx"></up-rate>
+        <up-rate v-model="merchants.score" readonly :allowHalf='true' active-color="#F25730" gutter="2rpx"></up-rate>
         <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchants.score}}</text>
       </view>
       <view class="mt-16rpx ml-30rpx flex whitespace-nowrap overflow-x-auto">

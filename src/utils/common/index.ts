@@ -1,3 +1,6 @@
+import avatar from "@/uni_modules/uview-plus/components/u-avatar/avatar";
+import { func } from "@/uni_modules/uview-plus/libs/function/test";
+
 // 小程序更新检测
 export function mpUpdate() {
   const updateManager = uni.getUpdateManager();
@@ -27,10 +30,23 @@ export function mpUpdate() {
   });
 }
 
-// 状态栏高度
+// 状态栏高度(函数)
 export function barHeight() {
   const systemInfo = uni.getSystemInfoSync();
   let h = systemInfo.statusBarHeight + 'px'
   return h;
 }
 
+//获取胶囊按钮距离
+export const getTitleBarHeight=()=>{
+		let{top}=uni.getMenuButtonBoundingClientRect()
+    let h = top + 'px'
+		return h
+}
+
+export function Hheight(){
+  const {statusBarHeight} = uni.getSystemInfoSync();
+  let{top,height}=uni.getMenuButtonBoundingClientRect()
+  let h = statusBarHeight + height +'px'
+  return h
+}

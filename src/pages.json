@@ -10,18 +10,13 @@
   "pages": [{ //首页
       "path": "pages/tab/home/index",
       "style": {
-        "navigationBarTitleText": ""
+        "navigationBarTitleText": "",
+        "navigationStyle": "custom"
       },
       "needLogin": true
     },
     {
       "path": "pages/tab/list/index",
-      "style": {
-        "navigationBarTitleText": "列表"
-      }
-    },
-    { //表白墙
-      "path": "pages/tab/schoolwall/index",
       "style": {
         "navigationBarTitleText": ""
       }
@@ -37,7 +32,8 @@
     {
       "path": "pages/tab/user/index",
       "style": {
-        "navigationStyle": "custom"
+        "navigationStyle": "custom",
+        "navigationBarTitleText": ""
       },
       "needLogin": true
     }
@@ -69,7 +65,7 @@
         "path": "carcode/index",
         "needLogin": true,
         "style": {
-          "navigationStyle": "custom" ,// 隐藏系统导航栏
+          "navigationStyle": "custom", // 隐藏系统导航栏
           "navigationBarTitleText": "我的挪车码"
         }
       },
@@ -113,10 +109,9 @@
         }
       },
       {
-        "path" : "mynotice/index",
-        "style" :
-        {
-          "navigationBarTitleText" : ""
+        "path": "mynotice/index",
+        "style": {
+          "navigationBarTitleText": ""
         }
       }
     ]
@@ -129,7 +124,7 @@
   },
   "tabBar": {
     "color": "#1b233b",
-    "selectedColor": "#21d59d",
+    "selectedColor": "#2067DE",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [{
@@ -140,13 +135,8 @@
     }, {
       "iconPath": "static/images/tabbar/icon_list.png",
       "selectedIconPath": "static/images/tabbar/icon_list_selected.png",
-      "pagePath": "pages/tab/schoolwall/index",
-      "text": "表白墙"
-    }, {
-      "iconPath": "static/images/tabbar/icon_list.png",
-      "selectedIconPath": "static/images/tabbar/icon_list_selected.png",
       "pagePath": "pages/tab/order/index",
-      "text": "订单"
+      "text": "附近"
     }, {
       "iconPath": "static/images/tabbar/icon_me.png",
       "selectedIconPath": "static/images/tabbar/icon_me_selected.png",
@@ -159,7 +149,7 @@
     "navigationBarTitleText": "iSchool",
     "navigationBarBackgroundColor": "#f2f2f2",
     "backgroundColor": "#f2f2f2",
-    "navigationStyle": "custom" ,
+    "navigationStyle": "custom",
     "onReachBottomDistance": 150
   }
 }
