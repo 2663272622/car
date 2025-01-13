@@ -73,7 +73,7 @@
             <up-loadmore :status="noData?'nomore':'loading'" nomore-text="已经到底啦~" />
           </view>
           <view class="pb-160rpx bg-white" v-else>
-            <up-loadmore class="!mt-0 pt-10rpx" :status="noData?'nomore':'loading'" nomore-text="附近暂无商家信息~" />
+            <up-loadmore class="!mt-0 pt-120rpx" :status="noData?'nomore':'loading'" nomore-text="附近暂无商家信息~" />
           </view>
         </view>
       </view>
