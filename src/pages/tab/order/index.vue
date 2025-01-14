@@ -169,9 +169,7 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
   function handleQuery() {
     BusinessAPI.getPage(queryParams)
       .then((data) => {
-        console.log(data)
         pageData.value = data.list
-        // pageData = data.list
         if(pageData.value){
           pageData.value.map((item : any) => {
             return swiperImg.value.push(item.image ? handlePic(item.image)[0].url : "")
@@ -234,20 +232,19 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
 
 //  轮播图点击
 const handleSwiper = (i)=>{
-  // let sdata = 轮播图[i];
-
-  // switch(sdata.label){
-  //   case "a": // 跳转页面
-  //     // 本次需要跳转的页面
-  //     let toPath = sdata.value;
-  //     let rurl = isTabBarPath(toPath)
-  //     if(rurl){
-  //       uni.switchTab({url:toPath})
-  //     }else{
-  //       uni.redirectTo({url:toPath})
-  //     }
-  //   break;
-  // }
+  let sdata =pageData.value[i];
+  switch(sdata.label){
+    case "a": // 跳转页面
+      // 本次需要跳转的页面
+      let toPath = sdata.value;
+      let rurl = isTabBarPath(toPath)
+      if(rurl){
+        uni.switchTab({url:toPath})
+      }else{
+        uni.navigateTo({url:toPath})
+      }
+    break;
+  }
 
 }
 
