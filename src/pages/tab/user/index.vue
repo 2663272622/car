@@ -18,10 +18,10 @@
       <view class="moveCar mr-30rpx flex items-center" @click="handleCarCode">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">挪车码</text>
       </view>
-      <view class="shops flex items-center relative">
+      <view class="shops flex items-center relative"  @click="handleMyMerchants">
 
         <button v-if='userStore.identityType*1 === 1' open-type="contact"  class="absolute top-0 bottom-0 left-0 right-0 opacity-0">申请入驻</button>
-        <text  class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx"  @click="handleMyMerchants">{{userStore.identityType*1 === 1 ? '申请入驻' :'我的店铺'}}</text>
+        <text  class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx" >{{userStore.identityType*1 === 1 ? '申请入驻' :'我的店铺'}}</text>
       </view>
     </view>
     <view class="flex mt-30rpx bg-white h-158rpx mx-30rpx rd-20rpx">

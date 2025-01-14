@@ -21,7 +21,7 @@
           <up-input border="none" v-model="merchantsInfo.contactPhone" type="number" placeholder="请点此输入联系电话"></up-input>
         </up-form-item>
         <up-form-item label="开门时间:" prop="openTime">
-          <up-datetime-picker hasInput :show="show" mode="time" v-model="merchantsInfo.openTime"
+          <up-datetime-picker hasInput :show="show" mode="time" disabled v-model="merchantsInfo.openTime"
             @click="show = true"></up-datetime-picker>
         </up-form-item>
         <up-form-item label="关门时间:" prop="closeTime">
