@@ -160,9 +160,9 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
   //获取顶部轮播图
   const queryParams = {
     pageNum: 1,
-    pageSize: 6,
-    type: 23,
-    publishStatus: 1,
+    pageSize: 10,
+    dictCode: 'carousel',
+    type:23
   }
   let pageData : any = []
   const swiperImg = ref()
