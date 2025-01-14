@@ -1,7 +1,6 @@
 <template>
   <view class="custom-tabbar">
     <view class="tab-contaion">
-      {{tabbatShow.length}}
       <view class="tab-c-item" :class="props.pathName == item.pagePath ? 'tab-c-item-select' : ''" v-for="(item,index) of tabbatShow"  :key='index' @click="changeTab(item)" >
         <image style="width: 42rpx; height: 38rpx;" :src="props.pathName != item.pagePath ? item.iconPath : item.selectedIconPath" mode=""></image>
         <text :class="props.pathName == item.pagePath ? 'checkTab' : ''">{{item.text}}</text>
@@ -13,6 +12,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useClipboard, usePermission } from '@/hooks';
+  import { useUserStore,useAppStore } from "@/store";
 
   const props = defineProps({
     pathName: {
@@ -23,6 +23,7 @@ import { useClipboard, usePermission } from '@/hooks';
   });
   const emit = defineEmits(['change']);
 
+  const appStore = useAppStore()
 
   const tabbarDatas = ref([
     {
@@ -50,39 +51,23 @@ import { useClipboard, usePermission } from '@/hooks';
   ])
 
   const tabbatShow = computed(()=>{
-    const dad =  tabbarDatas.value.filter(i=>!i.hidden)
-    console.log("计算属性",dad)
-    return dad
+    return tabbarDatas.value.filter((i,index)=>{
+      return (index == 0) ? appStore.scanId != '' : true
+    })
   })
+
 
   const changeTab = async(item)=>{
 
-    uni.getStorage({
-      key:"scan_id",
-      success(res){
-        tabbarDatas.value[0].hidden = res.data == ''
-      },
-      fail(eee) {
-          tabbarDatas.value[0].hidden = false
-      },
-      async complete() {
+      let to = typeof item == 'number' ? tabbarDatas.value[item] : item
 
-        console.log("tabbarDatas.value[0].hidden",tabbarDatas.value[0].hidden)
-            let to = typeof item == 'number' ? tabbarDatas.value[item] : item
+      if(to.pagePath != props.pathName){
+        const isLogin = await usePermission();
+        uni.switchTab({
+          url:to.path
+        });
 
-            if(to.pagePath != props.pathName){
-              console.log("页面切换",to.path,tabbatShow)
-
-              const isLogin = await usePermission();
-              // if(isLogin)
-              // if
-              uni.switchTab({
-                url:to.path
-              });
-            }
-      }
-    })
-
+    }
   }
 
 
@@ -107,7 +92,7 @@ defineExpose({
       padding: 16rpx;
       box-sizing: border-box;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       align-items: center;
       .tab-c-item{
         display: flex;

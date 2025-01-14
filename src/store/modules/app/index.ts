@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 const useAppStore = defineStore('app', {
   state: (): AppState => ({
     systemInfo: {} as UniApp.GetSystemInfoResult,
+    scanId:""
   }),
   getters: {
     getSystemInfo(): UniApp.GetSystemInfoResult {
@@ -11,6 +12,9 @@ const useAppStore = defineStore('app', {
     },
   },
   actions: {
+    setScanId(id: string) {
+      this.scanId = id;
+    },
     setSystemInfo(info: UniApp.GetSystemInfoResult) {
       this.systemInfo = info;
     },

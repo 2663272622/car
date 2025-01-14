@@ -59,7 +59,7 @@
   import { isLogin, getToken } from '@/utils/auth';
   import { LOGIN_PATH } from "@/router";
   import { currentRoute } from '@/router';
-  import { useUserStore } from "@/store";
+  import { useUserStore,useAppStore } from "@/store";
   import NoticeAPI from "@/api/notice"
   import carMoveCodesAPI from "@/api/carMoveCodes"
   import carMsgAPI from "@/api/carMsg"
@@ -69,6 +69,7 @@
   uni.hideTabBar()
 
   const userStore = useUserStore()
+  const appStore = useAppStore()
   const loginStatus = ref(false)
   const menuButtonInfo = ref(uni.getMenuButtonBoundingClientRect())
 
@@ -118,6 +119,7 @@
       	data: scanInfo.value.id,
       	success: function (res) {
           console.log("将携带来的ID保存",res)
+          appStore.setScanId(scanInfo.value.id)
           getCarMoveCodes()
       	}
       });
@@ -128,6 +130,7 @@
 
           if(res.data != ''){
             console.log("未携带ID 本地有缓存的ID",res)
+            appStore.setScanId(res.data)
             getCarMoveCodes()
           }else{
             console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
@@ -147,6 +150,7 @@
 
   const tabbarRef = ref()
   const hidHome = ()=>{
+    appStore.setScanId('')
     tabbarRef.value.changeTab(1)
     console.log("隐藏首页 并跳转附近")
   }
