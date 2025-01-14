@@ -96,8 +96,8 @@
 
   const showNum = ref(0)
   onShow(()=>{
-    console.log("homeSHowHowHowHowHowHowHowHow")
     if(showNum.value > 0){
+      scanInfo.value.id = appStore.scanId
       handleInitHome()
     }
     uni.hideTabBar()
@@ -112,9 +112,10 @@
     ++showNum.value;
 
 
-    // let url = `https://onlinewifi.car.ischool.shop?move=2431`
+    // let url = `https://onlinewifi.car.ischool.shop?move=2432`
     let url = options.q
     scanInfo.value.id = handleUrl(url || '', 'move')
+
     console.log("扫码携带来的ID",scanInfo.value.id)
     handleInitHome()
   })
@@ -138,7 +139,6 @@ const handleInitHome = ()=>{
     uni.getStorage({
       key:"scan_id",
       success(res){
-
         if(res.data != ''){
           console.log("未携带ID 本地有缓存的ID",res)
           appStore.setScanId(res.data)
@@ -223,7 +223,7 @@ const handleInitHome = ()=>{
       }
       if (!isActive.isActive) {
         console.log("未注册的挪车吗信息", scanInfo.value.id)
-        uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
+        uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}&new=1` })
         return;
       }
     }catch(e){

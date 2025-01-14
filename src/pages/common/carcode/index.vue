@@ -1,6 +1,6 @@
 <template>
   <view class="oilcontainer bg-#fff box-border px-12rpx">
-    <u-navbar title="我的挪车码" :autoBack="true" safeAreaInsetTop :placeholder='true'>
+    <u-navbar :autoBack='false' @leftClick='handleLeft' title="我的挪车码"  safeAreaInsetTop :placeholder='true'>
     </u-navbar>
 
     <template v-if='carInfo.id'>
@@ -59,9 +59,6 @@
     usePermission
   } from '@/hooks';
   import {
-    useUserStore
-  } from '@/store';
-  import {
     barHeight
   } from '@/utils';
   import {
@@ -71,11 +68,13 @@
 
   import carMoveCodesAPI from "@/api/carMoveCodes"
   import plateInput from '@/components/uni-plate-input/uni-plate-input.vue';
+  import { useUserStore,useAppStore } from "@/store";
   const formRef = ref()
   const userStore = useUserStore();
   const loginStatus = ref(false);
 
   const plateShow = ref(false)
+  const appStore = useAppStore()
 
 
 
@@ -91,6 +90,7 @@
 
 
   const newCode=ref(false)
+
   onLoad(async (query) => {
 
     loginStatus.value = await usePermission();
@@ -107,6 +107,34 @@
       getCarList()
     }
   })
+
+  const handleLeft = ()=>{
+    if(newCode.value){
+      uni.showModal({
+        title:"提示",
+        content:"是否取消注册挪车码？",
+        success:(res)=>{
+          if(res.confirm){
+
+            appStore.setScanId('')
+            uni.setStorage({
+            	key: 'scan_id',
+            	data: '',
+            	success: function (res) {
+                uni.navigateBack({
+                  delta:1,
+                });
+            	}
+            });
+          }
+        }
+      })
+    }else{
+      uni.navigateBack({
+        delta:1,
+      });
+    }
+  }
 
   // 查询用户绑定的挪车吗
   const getCarList = () => {
@@ -193,6 +221,7 @@
             carMoveCodesAPI.updatedata(carInfo.value.id, params).then(res => {
               carInfo.value = {};
               getCarList()
+              newCode.value = false;
               if (!res) return;
             })
           }
