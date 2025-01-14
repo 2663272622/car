@@ -140,18 +140,12 @@
       success: (res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
-        nextTick(() => {
-          getMerchants()
-        })
       },
       fail: (arr) => {
         if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
           uni.showToast({
             title: "获取定位授权失败",
             icon: "none"
-          })
-          nextTick(() => {
-            getMerchants()
           })
         }
         if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
@@ -238,7 +232,7 @@ const changeSwiper=(index:any)=>{
     value: -1
   }
   //商家业务的分页查询
-  // const scroll=ref(0)
+
   const selectedValue = ref(-1);
   const selectBusiness = (item : any) => {
     merchants.value = []
@@ -258,9 +252,11 @@ const changeSwiper=(index:any)=>{
     if (Mylatitude.value) {
       merchants_params.value.isDistance = !merchants_params.value.isDistance
       if (selectedValue.value === -1) {
+        merchants.value=[]
         getMerchants()
       } else {
-        getMerchants()
+        merchants.value=[]
+        getMerchants(selectedValue.value)
       }
     }
   }
@@ -334,7 +330,7 @@ const changeSwiper=(index:any)=>{
     if (merchants_params.value.pageSize > data.list.length) noData.value = true;
 
   }
-
+  getMerchants()
 
   //触底加载
   const ToBottom = () => {
