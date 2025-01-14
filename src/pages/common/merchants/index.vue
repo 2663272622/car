@@ -128,7 +128,7 @@
       img.value = data.storeLogoUrl.split(',').filter((i : any) => i).map((i : string) => ({ url: i, name: '' }))
     }
     else {
-      img.value = handlePic(data.storeLogoUrl)
+      img.value = handlePic(data.storeLogoUrl,false)
     }
     score.value=Math.floor(data.score * 10) / 10;
     console.log(img.value)
