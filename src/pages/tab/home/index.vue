@@ -112,8 +112,8 @@
     ++showNum.value;
 
 
-    let url = `https://onlinewifi.car.ischool.shop?move=2436`
-    // let url = options.q
+    // let url = `https://onlinewifi.car.ischool.shop?move=2436`
+    let url = options.q
     scanInfo.value.id = handleUrl(url || '', 'move')
     console.log("扫码携带来的ID",scanInfo.value.id)
     handleInitHome()
@@ -142,6 +142,7 @@ const handleInitHome = ()=>{
         if(res.data != ''){
           console.log("未携带ID 本地有缓存的ID",res)
           appStore.setScanId(res.data)
+          scanInfo.value.id = res.data
           getCarMoveCodes()
         }else{
           console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
@@ -202,14 +203,14 @@ const handleInitHome = ()=>{
   //获取车主的车牌号信息(目前车牌写死)
   const carInfo:any = ref('')
   const scanInfo : any = ref({})
-  // function getCarMoveCodes() {
+  // function getCarMo veCodes() {
   //   carMoveCodesAPI.getFormData(3201)
   //     .then((data) => {
   //       carInfo.value = data.carNumber
   //       scanInfo.value = data
   //     })
   // }
-  // getCarMoveCodes()
+  // getCarMo veCodes()
 
   async function getCarMoveCodes() {
     if (!scanInfo.value.id) return console.log("不是通过扫码进入");
