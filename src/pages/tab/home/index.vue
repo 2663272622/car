@@ -31,7 +31,7 @@
         <up-textarea v-model="scanInfo.messageText" placeholder="请输入内容" autoHeight maxlength='150'
           disabled></up-textarea>
 
-        <view class='home-car-hbtn mt-26rpx'>
+        <view class='home-car-hbtn mt-26rpx' v-if='scanInfo.id != ""'>
           <view v-for="(item,index) of btnData" :key='index'
             class='home-car-hc mb-60rpx flex items-center justify-center' :style="{
               background:item.bg
@@ -95,58 +95,67 @@
     return barHeight()
   })
 
+  const showNum = ref(0)
+  onShow(()=>{
+    console.log("homeSHowHowHowHowHowHowHowHow")
+    if(showNum.value > 0){
+      handleInitHome()
+    }
+  })
+
   onLoad(async (options:any) => {
     // 判断登录 未登录情况下跳转去登录
     loginStatus.value = await usePermission();
     loginStatus.value = isLogin();
     const ttt = await getToken();
     if (!loginStatus.value) return;
-    // let url = options.q
-    // // let url = `https://onlinewifi.car.ischool.shop?move=2438`
-    // scanInfo.value.id = handleUrl(url || '', 'move')
-    // // let url = options.q
+    ++showNum.value;
+
+
     // let url = `https://onlinewifi.car.ischool.shop?move=2558`
-    // scanInfo.value.id = handleUrl(url || '','move')
     let url = options.q
-    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
     scanInfo.value.id = handleUrl(url || '', 'move')
     console.log("扫码携带来的ID",scanInfo.value.id)
-    // 判断ID
-    if(scanInfo.value.id){
-      console.log("将携带来的ID保存",scanInfo.value.id)
-      uni.setStorage({
-      	key: 'scan_id',
-      	data: scanInfo.value.id,
-      	success: function (res) {
-          console.log("将携带来的ID保存",res)
-          appStore.setScanId(scanInfo.value.id)
-          getCarMoveCodes()
-      	}
-      });
-    }else{
-      uni.getStorage({
-        key:"scan_id",
-        success(res){
-
-          if(res.data != ''){
-            console.log("未携带ID 本地有缓存的ID",res)
-            appStore.setScanId(res.data)
-            getCarMoveCodes()
-          }else{
-            console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
-            hidHome()
-          }
-        },
-        fail(eee) {
-          hidHome()
-          console.log("2未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
-        }
-      })
-
-    }
-
+    handleInitHome()
   })
 
+
+const handleInitHome = ()=>{
+
+  // 判断ID
+  if(scanInfo.value.id){
+    console.log("将携带来的ID保存",scanInfo.value.id)
+    uni.setStorage({
+    	key: 'scan_id',
+    	data: scanInfo.value.id,
+    	success: function (res) {
+        console.log("将携带来的ID保存",res)
+        appStore.setScanId(scanInfo.value.id)
+        getCarMoveCodes()
+    	}
+    });
+  }else{
+    uni.getStorage({
+      key:"scan_id",
+      success(res){
+
+        if(res.data != ''){
+          console.log("未携带ID 本地有缓存的ID",res)
+          appStore.setScanId(res.data)
+          getCarMoveCodes()
+        }else{
+          console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
+          hidHome()
+        }
+      },
+      fail(eee) {
+        hidHome()
+        console.log("2未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
+      }
+    })
+
+  }
+}
 
   const tabbarRef = ref()
   const hidHome = ()=>{

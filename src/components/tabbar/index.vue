@@ -61,6 +61,7 @@ import { useClipboard, usePermission } from '@/hooks';
 
       let to = typeof item == 'number' ? tabbarDatas.value[item] : item
 
+
       if(to.pagePath != props.pathName){
         const isLogin = await usePermission();
         uni.switchTab({
