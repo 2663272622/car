@@ -233,6 +233,8 @@
     formRef.value.validate().then((valid : any) => {
       //请求前对数据的操作
       merchantsInfo.value.userId = userStore.userId
+      merchantsInfo.value.active = true
+
       merchantsInfo.value.openTime = merchantsInfo.value?.openTime?.split(":").map((item : string | number) => parseInt((item)))
       merchantsInfo.value.closeTime = merchantsInfo.value?.closeTime?.split(":").map((item : string | number) => parseInt((item)))
       if (valid) {

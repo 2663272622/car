@@ -112,7 +112,7 @@
     ++showNum.value;
 
 
-    // let url = `https://onlinewifi.car.ischool.shop?move=2436`
+    // let url = `https://onlinewifi.car.ischool.shop?move=2431`
     let url = options.q
     scanInfo.value.id = handleUrl(url || '', 'move')
     console.log("扫码携带来的ID",scanInfo.value.id)
@@ -215,15 +215,19 @@ const handleInitHome = ()=>{
   async function getCarMoveCodes() {
     if (!scanInfo.value.id) return console.log("不是通过扫码进入");
 
-    const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
-    if(isActive.banFlag){
-      uni.$u.toast("这个挪车码已经禁用啦，看看有什么其他方式可以联系车主吧~");
-      return;
-    }
-    if (!isActive.isActive) {
-      console.log("未注册的挪车吗信息", scanInfo.value.id)
-      uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
-      return;
+    try{
+      const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
+      if(isActive.banFlag){
+        uni.$u.toast("这个挪车码已经禁用啦，看看有什么其他方式可以联系车主吧~");
+        return;
+      }
+      if (!isActive.isActive) {
+        console.log("未注册的挪车吗信息", scanInfo.value.id)
+        uni.navigateTo({ url: `/pages/common/carcode/index?code=${scanInfo.value.id}` })
+        return;
+      }
+    }catch(e){
+      return hidHome()
     }
     carMoveCodesAPI.getFormData(scanInfo.value.id)
       .then((data) => {

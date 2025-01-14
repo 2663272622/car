@@ -165,7 +165,7 @@ function responseInterceptors(http: HttpRequestAbstract) {
 
       // 如果没有显式定义custom的toast参数为false的话，默认对报错进行toast弹出提示
       if (custom?.toast !== false) {
-        const message = response.statusCode ? showMessage(response.statusCode) : '网络连接异常,请稍后再试!';
+        const message = response.statusCode ? showMessage(response.statusCode,response) : '网络连接异常,请稍后再试!';
         uni.$u.toast(message);
       }
 

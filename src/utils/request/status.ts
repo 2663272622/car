@@ -3,7 +3,7 @@
  * @param {number|string} status 状态码
  * @returns {string} 错误信息
  */
-export const showMessage = (status: number | string): string => {
+export const showMessage = (status: number | string,ress:any): string => {
   let message = '';
   switch (status) {
     case 400:
@@ -42,6 +42,7 @@ export const showMessage = (status: number | string): string => {
     default:
       message = `连接出错(${status})!`;
   }
+
   // return `${message}，请检查网络或联系管理员！`;
-  return `系统出小差啦，请稍后重试呀~`;
+  return ress.data.msg ? ress.data.msg : `系统出小差啦，请稍后重试呀~`;
 };
