@@ -1,8 +1,8 @@
 <template>
   <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="100"
     scroll-with-animation="true">
-    <view class="absolute top-0 left-0 z-10">
-      <button open-type="contact" size="small" ref='ref2' @click='buttonContact'>联系客服</button>
+    <view v-show='contact' class="absolute left-30rpx z-20 w-690rpx opacity-0" :style="{top:bHeight}">
+      <button open-type="contact" class="h-388rpx">联系客服</button>
     </view>
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
@@ -182,8 +182,13 @@
   }
   handleQuery()
 
-const changeSwiper=(index)=>{
-  console.log('11',index)
+const contact=ref(false)
+const changeSwiper=(index:any)=>{
+  if(index.current===1){
+    contact.value=true
+  }else{
+    contact.value=false
+  }
 }
 
 
@@ -238,8 +243,6 @@ const changeSwiper=(index)=>{
     }
   }
 
-  const ref2 : any = ref()
-
   //  轮播图点击
   const handleSwiper = (i) => {
     let sdata = pageData.value[i];
@@ -256,12 +259,9 @@ const changeSwiper=(index)=>{
       // break;
       case "b":
         console.log('1234')
-        ref2.value.click()
+        // ref2.value.$el.click()
         break;
     }
-  }
-  const buttonContact=()=>{
-    console.log('1234')
   }
   //建立一个布尔值，判断是否进行下拉刷新
   const noData = ref(false)
