@@ -112,8 +112,8 @@
     ++showNum.value;
 
 
-    // let url = `https://onlinewifi.car.ischool.shop?move=2558`
-    let url = options.q
+    let url = `https://onlinewifi.car.ischool.shop?move=2436`
+    // let url = options.q
     scanInfo.value.id = handleUrl(url || '', 'move')
     console.log("扫码携带来的ID",scanInfo.value.id)
     handleInitHome()
@@ -252,12 +252,15 @@ const handleInitHome = ()=>{
         if ((currentTime - clickTime.value) > 300000 || clickTime.value === 0) {
           getLocation()
           if (Mylatitude.value) {
+            uni.showLoading({
+                title: '正在发送挪车消息~'
+            });
             carMsgAPI.sendWxMsgApi(
               scanInfo.value.id, { latitude: Number(Mylatitude.value), longitude: Number(Mylongitude.value) }
             ).then(res => {
               uni.$u.toast("发送成功，请耐心等待车主前来挪车");
               clickTime.value = new Date().getTime()
-
+              uni.hideLoading();
             })
           }
         }
@@ -269,6 +272,9 @@ const handleInitHome = ()=>{
         if ((currentTime - clickTime.value) > 300000 || clickTime.value === 0) {
           getLocation()
           if (Mylatitude.value) {
+            uni.showLoading({
+                title: '正在发送挪车消息~'
+            });
             carMsgAPI.sendMsgApi(
               scanInfo.value.phoneNumber,
               scanInfo.value.id,
@@ -276,6 +282,7 @@ const handleInitHome = ()=>{
             ).then(res => {
               uni.$u.toast("发送成功,请耐心等待车主前来挪车");
               clickTime.value = new Date().getTime()
+              uni.hideLoading();
             })
           }
         } else {

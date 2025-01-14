@@ -6,7 +6,10 @@ const BUSINESS_BASE_URL = "/api/v1/dict-data";
 const BusinessAPI = {
   /** 获取商家业务数据 */
   getPage(queryPrams:any) {
-    return get(`${BUSINESS_BASE_URL}/page`,{data:queryPrams});
+    return get(`${BUSINESS_BASE_URL}/page`,{data:{
+      ...queryPrams,
+      status:1
+    }});
   }
 };
 
