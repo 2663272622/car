@@ -1,14 +1,34 @@
 <template>
   <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="100"
     scroll-with-animation="true">
-    <view v-show='contact' class="absolute left-30rpx z-20 w-690rpx opacity-0" :style="{top:bHeight}">
-      <button open-type="contact" class="h-388rpx">联系客服</button>
-    </view>
+<!--    <view v-show='contact' class="absolute left-30rpx z-20 w-690rpx opacity-0" :style="{top:bHeight}">
+
+    </view> -->
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
-          <up-swiper :list="swiperImg" indicator indicatorMode="line" @click="handleSwiper" imgMode="scaleToFill"
-            circular height="388rpx" @change="changeSwiper"></up-swiper>
+          <up-swiper :list="swiperImg" indicator indicatorMode="line" imgMode="scaleToFill"
+            circular height="388rpx" @change="changeSwiper">
+
+                <template #default="{ item, index }">
+                    <div class="w-full h-full relative">
+                        <image
+                          class="u-swiper__wrapper__item__wrapper__image w-full h-full"
+                          :src="item"
+                           @tap="handleSwiper(index)"
+                          :style="{
+                            height: `388rpx`,
+                          }"
+
+                        ></image>
+                        <!-- B为跳转客服 -->
+                        <button v-if='pageData[index].label == "b"' open-type="contact" class="absolute opacity-0 top-0 left-0 right-0 bottom-0">联系客服</button>
+                    </div>
+                  <template>
+
+                  </template>
+                </template>
+            </up-swiper>
         </view>
         <view class="pt-50rpx grid grid-cols-5 grid-rows-2 ">
           <view v-for="item in business" :key="item.id">
@@ -174,9 +194,11 @@
       .then((data) => {
         pageData.value = data.list
         if (pageData.value) {
+
           pageData.value.map((item : any) => {
-            return swiperImg.value.push(item.image ? handlePic(item.image)[0].url : "")
+            return swiperImg.value.push(item.image ? handlePic(item.image,false)[0].url : "")
           })
+          console.log("asdasdas",pageData.value)
         }
       })
   }
@@ -247,16 +269,16 @@ const changeSwiper=(index:any)=>{
   const handleSwiper = (i) => {
     let sdata = pageData.value[i];
     switch (sdata.label) {
-      // case "a": // 跳转页面
-      //   // 本次需要跳转的页面
-      //   let toPath = sdata.value;
-      //   let rurl = isTabBarPath(toPath)
-      //   if(rurl){
-      //     uni.switchTab({url:toPath})
-      //   }else{
-      //     uni.navigateTo({url:toPath})
-      //   }
-      // break;
+      case "a": // 跳转页面
+        // 本次需要跳转的页面
+        let toPath = sdata.value;
+        let rurl = isTabBarPath(toPath)
+        if(rurl){
+          uni.switchTab({url:toPath})
+        }else{
+          uni.navigateTo({url:toPath})
+        }
+      break;
       case "b":
         console.log('1234')
         // ref2.value.$el.click()
