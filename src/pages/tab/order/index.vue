@@ -162,16 +162,21 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
     pageNum: 1,
     pageSize: 10,
     dictCode: 'carousel',
-    type:23
   }
-  let pageData : any = []
-  const swiperImg = ref()
+  let pageData : any = ref([])
+  const swiperImg:any = ref([])
   // 查询轮播图
   function handleQuery() {
-    NoticeAPI.getPage(queryParams)
+    BusinessAPI.getPage(queryParams)
       .then((data) => {
-        pageData = data.list
-        swiperImg.value = handlePic(pageData[0].content, false)
+        console.log(data)
+        pageData.value = data.list
+        // pageData = data.list
+        if(pageData.value){
+          pageData.value.map((item : any) => {
+            return swiperImg.value.push(item.image ? handlePic(item.image)[0].url : "")
+          })
+        }
       })
   }
   handleQuery()
