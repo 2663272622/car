@@ -20,13 +20,15 @@
         <up-form-item label="联系电话:" borderBottom prop="contactPhone">
           <up-input border="none" v-model="merchantsInfo.contactPhone" type="number" placeholder="请点此输入联系电话"></up-input>
         </up-form-item>
-        <up-form-item label="开门时间:" prop="openTime">
-          <up-datetime-picker hasInput :show="show" mode="time" disabled v-model="merchantsInfo.openTime"
-            @click="show = true"></up-datetime-picker>
+        <up-form-item label="开门时间:" prop="openTime" class="relative">
+          <up-datetime-picker hasInput :show="show1" mode="time"  v-model="merchantsInfo.openTime" @confirm='(e)=>{merchantsInfo.openTime=e.value;show1=false}' @close='()=>show1=false' ></up-datetime-picker>
+          <view class="absolute top-0 bottom-0 right-0 left-0 bg-#0000 z-9" @click="show1 = true"></view>
         </up-form-item>
-        <up-form-item label="关门时间:" prop="closeTime">
-          <up-datetime-picker hasInput :show="show" mode="time" v-model="merchantsInfo.closeTime"
-            @click="show = true"></up-datetime-picker>
+        <up-form-item label="关门时间:" prop="closeTime"  class="relative">
+         <!-- <up-datetime-picker hasInput :show="show2" mode="time" v-model="merchantsInfo.closeTime"
+            @click="show = true"></up-datetime-picker> -->
+          <up-datetime-picker hasInput :show="show2" mode="time"  v-model="merchantsInfo.closeTime" @confirm='(e)=>{merchantsInfo.closeTime=e.value;show2=false}' @close='()=>show2=false' ></up-datetime-picker>
+          <view class="absolute top-0 bottom-0 right-0 left-0 bg-#0000 z-9" @click="show2 = true"></view>
         </up-form-item>
         <up-form-item label="地址:" borderBottom prop="storeAddress">
           <up-input border="none" v-model="merchantsInfo.storeAddress" placeholder="请点击右侧选择地址"></up-input>
@@ -96,6 +98,10 @@
   })
   const userStore = useUserStore();
   const show = ref(false);
+  const show2 = ref(false);
+  const show1 = ref(false);
+
+
   const display = ref(false)
   const openTime = ref();
   const closeTime = ref()
