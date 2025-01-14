@@ -12,8 +12,8 @@
         {{merchants.merchantName}}
       </view>
       <view class="mt-24rpx flex ml-30rpx">
-        <up-rate v-model="merchants.score" readonly :allowHalf='true' active-color="#F25730" gutter="2rpx"></up-rate>
-        <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchants.score}}</text>
+        <up-rate v-model="score" readonly :allowHalf='true' active-color="#F25730" gutter="2rpx"></up-rate>
+        <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{score}}</text>
       </view>
       <view class="mt-16rpx ml-30rpx flex whitespace-nowrap overflow-x-auto">
         <view v-for="(item,index) in img" :key="index" class="mr-20rpx">
@@ -33,7 +33,10 @@
           <view class="flex u-flex-wrap ml-10rpx">
             <view v-for="(item,index) in tag" :key="index" class=" mt-16rpx ml-16rpx whitespace-nowrap">
               <!-- <up-tag type="info" plain :text="item" plainFill></up-tag> -->
-              <view class="bg-#F0F0F0 text-24rpx text-black text-opacity-60 px-28rpx py-8rpx rounded-8rpx font-medium leading-40rpx">{{item}}</view>
+              <view
+                class="bg-#F0F0F0 text-24rpx text-black text-opacity-60 px-28rpx py-8rpx rounded-8rpx font-medium leading-40rpx">
+                {{item}}
+              </view>
             </view>
           </view>
         </view>
@@ -76,7 +79,8 @@
   const id = ref()
   let openTime : string
   let closeTime : string
-  const tag=ref()
+  const score=ref(0)
+  const tag = ref()
   //接收传入id值
   // 使用onLoad生命周期函数接收传输值id或者是type
   onLoad((e : any) => {
@@ -94,14 +98,15 @@
     BusinessAPI.getPage(params)
       .then((data) => {
         business.value = data.list
-        tag.value = merchants.value.businessScope.reduce((acc: string | any[], element:number) => {
-          let matchingObjects = business.value.filter((item: { value: number; }) => item.value === element);
-          let properties = matchingObjects.map((item: { label: any; }) => item.label);
-          return acc.concat(properties);
-        }, []);
+        if (merchants.value.businessScope) {
+          tag.value = merchants.value.businessScope.reduce((acc : string | any[], element : number) => {
+            let matchingObjects = business.value.filter((item : { value : number; }) => item.value === element);
+            let properties = matchingObjects.map((item : { label : any; }) => item.label);
+            return acc.concat(properties);
+          }, []);
+        }
       })
   }
-
   const getFormData = async () => {
     let data
     if (Mylatitude.value) {
@@ -112,9 +117,12 @@
     }
     openTime = formatTimeFromArray(data.openTime)
     closeTime = formatTimeFromArray(data.closeTime)
-    if(data.businessScope){
-      data.businessScope=data.businessScope.split(',')
+    if (data.businessScope) {
+      data.businessScope = data.businessScope.split(',')
     }
+    // if (data.score) {
+    //   return data.score = Math.floor(data.score * 10) / 10;
+    // }
     merchants.value = data
     if (data.storeLogoUrl.includes('http:')) {
       img.value = data.storeLogoUrl.split(',').filter((i : any) => i).map((i : string) => ({ url: i, name: '' }))
@@ -122,6 +130,7 @@
     else {
       img.value = handlePic(data.storeLogoUrl)
     }
+    score.value=Math.floor(data.score * 10) / 10;
     console.log(img.value)
     phone = data.contactPhone
   }
@@ -204,7 +213,7 @@
       },
       complete: () => {
         getBusiness()
-        nextTick(()=>{
+        nextTick(() => {
           getFormData()
           navigationAdd(1)
         })
@@ -237,8 +246,6 @@
   const navigationAdd = (type : number) => {
     carMerchantsAPI.navigationAdd(id.value, type)
   }
-
-
 </script>
 
 <style lang="scss" scoped>

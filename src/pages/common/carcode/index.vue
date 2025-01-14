@@ -20,8 +20,10 @@
                <up-input :disabled="true"  v-model="carInfo.id" disabled border="none" ></up-input>
              </up-form-item> -->
       </up-form>
-      <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx' @click="handleBan">禁用挪车码</u-button>
-      <u-button v-else type="primary" class='my-16rpx' @click="handleBan">启用挪车码</u-button>
+      <template v-if="!newCode">
+        <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx' @click="handleBan">禁用挪车码</u-button>
+        <u-button v-else type="primary" class='my-16rpx' @click="handleBan">启用挪车码</u-button>
+      </template>
       <u-button type="primary" class='my-16rpx' @click="handleActive">提交并开启微信通知</u-button>
       <template v-if="plateShow">
         <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
@@ -30,10 +32,13 @@
     <template v-else>
       <up-list v-if='carList.length > 0'>
         <up-list-item v-for="(item, index) in carList" :key="index">
-          <up-cell :title="`${item.carNumber}`" @click='handleChange(item)'>
+          <up-cell @click='handleChange(item)'>
+            <template #title>
+              <text class="mr-20rpx">{{item.carNumber}}</text>
+              <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
+              <up-tag v-else text="已启用" type="success" shape="circle" plain size="mini"></up-tag>
+            </template>
             <template #value>
-              <up-tag v-if="item.banFlag" text="禁用" type="warning" plain></up-tag>
-              <up-tag v-else text="启用" type="success" plain></up-tag>
               <text class="ml-10rpx">查看</text>
             </template>
           </up-cell>
@@ -66,7 +71,7 @@
 
   import carMoveCodesAPI from "@/api/carMoveCodes"
   import plateInput from '@/components/uni-plate-input/uni-plate-input.vue';
-  const formRef= ref()
+  const formRef = ref()
   const userStore = useUserStore();
   const loginStatus = ref(false);
 
@@ -85,8 +90,7 @@
   const carInfo = ref({})
 
 
-  const isSign = ref(false)
-
+  const newCode=ref(false)
   onLoad(async (query) => {
 
     loginStatus.value = await usePermission();
@@ -96,14 +100,13 @@
 
 
     if (query.code) { // 新增数据
-      // activeState
-      isSign.value = true
+      // 为新码
+      newCode.value=true
       getCarInfo(query.code)
     } else { // 查询数据
       getCarList()
     }
   })
-
 
   // 查询用户绑定的挪车吗
   const getCarList = () => {
@@ -134,7 +137,7 @@
   }
 
   const handleChange = (data) => {
-    console.log(data)
+    newCode.value=false
     carInfo.value = data
   }
 
@@ -142,58 +145,58 @@
   //修改禁用挪车码
   const handleBan = () => {
     formRef.value.validate().then((valid) => {
-      if(valid){
-      carInfo.value.banFlag = !carInfo.value.banFlag
-      let params = {
-        ...carInfo.value,
-        openId: userStore.openId,
-        active: true,
-      }
-      carMoveCodesAPI.updatedata(carInfo.value.id, params).then(res => {
-        if (carInfo.value.banFlag) {
-          uni.$u.toast("禁用成功");
-        } else {
-          uni.$u.toast("启用成功");
+      if (valid) {
+        carInfo.value.banFlag = !carInfo.value.banFlag
+        let params = {
+          ...carInfo.value,
+          openId: userStore.openId,
+          active: true,
         }
-        carInfo.value = {};
-        getCarList()
-        if (!res) return;
-      })
-    }
-  })
-}
+        carMoveCodesAPI.updatedata(carInfo.value.id, params).then(res => {
+          if (carInfo.value.banFlag) {
+            uni.$u.toast("禁用成功");
+          } else {
+            uni.$u.toast("启用成功");
+          }
+          carInfo.value = {};
+          getCarList()
+          if (!res) return;
+        })
+      }
+    })
+  }
   // 修改数据挪车吗
   const handleActive = () => {
     formRef.value.validate().then((valid) => {
-      if(valid){
-      wx.requestSubscribeMessage({
-        tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-        success(res) {
-          if (res['--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc'] == "accept") {
-            uni.$u.toast("已开启微信通知");
-          } else {
-            uni.$u.toast("已关闭微信通知");
-          }
-        },
-        async complete() {
-          const isActive = await carMoveCodesAPI.activeState(carInfo.value.id)
-          if (!isActive) {
-            await carMoveCodesAPI.isActive(carInfo.value.id)
-          }
+      if (valid) {
+        wx.requestSubscribeMessage({
+          tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+          success(res) {
+            if (res['--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc'] == "accept") {
+              uni.$u.toast("已开启微信通知");
+            } else {
+              uni.$u.toast("已关闭微信通知");
+            }
+          },
+          async complete() {
+            const isActive = await carMoveCodesAPI.activeState(carInfo.value.id)
+            if (!isActive) {
+              await carMoveCodesAPI.isActive(carInfo.value.id)
+            }
 
-          let params = {
-            ...carInfo.value,
-            openId: userStore.openId,
-            active: true,
-          }
+            let params = {
+              ...carInfo.value,
+              openId: userStore.openId,
+              active: true,
+            }
 
-          carMoveCodesAPI.updatedata(carInfo.value.id, params).then(res => {
-            carInfo.value = {};
-            getCarList()
-            if (!res) return;
-          })
-        }
-      })
+            carMoveCodesAPI.updatedata(carInfo.value.id, params).then(res => {
+              carInfo.value = {};
+              getCarList()
+              if (!res) return;
+            })
+          }
+        })
       }
     })
   }
@@ -217,9 +220,6 @@
       }
     ],
   });
-
-
-
 
 
 

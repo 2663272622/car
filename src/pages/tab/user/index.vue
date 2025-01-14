@@ -49,12 +49,13 @@
         <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx"
           @click="handleMyNotice">编辑通知</text>
         <view class="flex relative items-center">
-        <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/22.png"
-          width="64rpx" height="64rpx" bg-color="#0000" />
-        <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-18rpx bg-#EFF7FF ">联系客服</text>
-        <view class="absolute top-0 left-0 opacity-0">
-          <button open-type="contact">联系客服</button>
-        </view>
+          <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/22.png"
+            width="64rpx" height="64rpx" bg-color="#0000" />
+          <text
+            class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-18rpx bg-#EFF7FF ">联系客服</text>
+          <view class="absolute top-0 left-0 opacity-0">
+            <button open-type="contact">联系客服</button>
+          </view>
         </view>
       </view>
     </view>
@@ -69,6 +70,7 @@
   import { useUserStore } from '@/store';
   import { Hheight } from '@/utils';
   import { getToken, isLogin } from '@/utils/auth';
+  import carMerchantsAPI from "@/api/carMerchants";
   // const { setClipboardData, getClipboardData } = useClipboard();
   const userStore = useUserStore();
   const loginStatus = ref(false);
@@ -94,9 +96,9 @@
     wx.requestSubscribeMessage({
       tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
       success(res) {
-        if(res['--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc'] == "accept"){
+        if (res['--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc'] == "accept") {
           uni.$u.toast("已开启微信通知");
-        }else{
+        } else {
           uni.$u.toast("已关闭微信通知");
         }
       },
@@ -121,7 +123,13 @@
   }
   //跳转查看我的店铺
   const handleMyMerchants = () => {
-    uni.navigateTo({ url: `/pages/common/mymerchants/index` })
+    carMerchantsAPI.get(userStore.openId).then(cdata => {
+      if (cdata) {
+        uni.navigateTo({ url: `/pages/common/mymerchants/index` })
+      } else {
+        uni.$u.toast("暂无店铺信息，请联系客服开通");
+      }
+    })
   }
   //跳转查看我的通知
   const handleMyNotice = () => {
