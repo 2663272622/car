@@ -1,11 +1,14 @@
 <template>
   <scroll-view scroll-y="true" @scroll="handlescroll" class="h-100vh" @scrolltolower="ToBottom" lower-threshold="100"
     scroll-with-animation="true">
+    <view class="absolute top-0 left-0 z-10">
+      <button open-type="contact" size="small" ref='ref2' @click='buttonContact'>联系客服</button>
+    </view>
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
-          <up-swiper :list="swiperImg" indicator indicatorMode="line" @click="handleSwiper" imgMode="scaleToFill" circular
-            height="388rpx"></up-swiper>
+          <up-swiper :list="swiperImg" indicator indicatorMode="line" @click="handleSwiper" imgMode="scaleToFill"
+            circular height="388rpx" @change="changeSwiper"></up-swiper>
         </view>
         <view class="pt-50rpx grid grid-cols-5 grid-rows-2 ">
           <view v-for="item in business" :key="item.id">
@@ -69,7 +72,7 @@
               </view>
             </view>
           </view>
-          <view class="pb-160rpx" v-if="!merchants_params.isDistance">
+          <view class="pb-160rpx" v-if="merchants.length>'0'">
             <up-loadmore :status="noData?'nomore':'loading'" nomore-text="已经到底啦~" />
           </view>
           <view class="pb-160rpx bg-white" v-else>
@@ -92,9 +95,9 @@
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
   import list from "@/uni_modules/uview-plus/components/u-list/list";
-import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } from '@/router';
+  import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } from '@/router';
 
-  onShow(()=>{
+  onShow(() => {
     uni.hideTabBar()
   })
   // 在onReady或者onMounted生命周期中获取元素信息
@@ -164,13 +167,13 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
     dictCode: 'carousel',
   }
   let pageData : any = ref([])
-  const swiperImg:any = ref([])
+  const swiperImg : any = ref([])
   // 查询轮播图
   function handleQuery() {
     BusinessAPI.getPage(queryParams)
       .then((data) => {
         pageData.value = data.list
-        if(pageData.value){
+        if (pageData.value) {
           pageData.value.map((item : any) => {
             return swiperImg.value.push(item.image ? handlePic(item.image)[0].url : "")
           })
@@ -178,6 +181,11 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
       })
   }
   handleQuery()
+
+const changeSwiper=(index)=>{
+  console.log('11',index)
+}
+
 
   // 查询业务类型
   const params = {
@@ -230,24 +238,31 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
     }
   }
 
-//  轮播图点击
-const handleSwiper = (i)=>{
-  let sdata =pageData.value[i];
-  switch(sdata.label){
-    case "a": // 跳转页面
-      // 本次需要跳转的页面
-      let toPath = sdata.value;
-      let rurl = isTabBarPath(toPath)
-      if(rurl){
-        uni.switchTab({url:toPath})
-      }else{
-        uni.navigateTo({url:toPath})
-      }
-    break;
+  const ref2 : any = ref()
+
+  //  轮播图点击
+  const handleSwiper = (i) => {
+    let sdata = pageData.value[i];
+    switch (sdata.label) {
+      // case "a": // 跳转页面
+      //   // 本次需要跳转的页面
+      //   let toPath = sdata.value;
+      //   let rurl = isTabBarPath(toPath)
+      //   if(rurl){
+      //     uni.switchTab({url:toPath})
+      //   }else{
+      //     uni.navigateTo({url:toPath})
+      //   }
+      // break;
+      case "b":
+        console.log('1234')
+        ref2.value.click()
+        break;
+    }
   }
-
-}
-
+  const buttonContact=()=>{
+    console.log('1234')
+  }
   //建立一个布尔值，判断是否进行下拉刷新
   const noData = ref(false)
   //查询商家
@@ -288,9 +303,9 @@ const handleSwiper = (i)=>{
       }
     })
     //改变分数的保留位数
-    data.list.map((item:any)=>{
-      if(item.score){
-         return item.score=Math.floor(item.score * 10) / 10;
+    data.list.map((item : any) => {
+      if (item.score) {
+        return item.score = Math.floor(item.score * 10) / 10;
       }
     })
     merchants.value = [...merchants.value, ...data.list];
