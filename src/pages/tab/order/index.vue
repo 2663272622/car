@@ -140,6 +140,7 @@
       success: (res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
+
       },
       fail: (arr) => {
         if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
@@ -161,7 +162,37 @@
       }
     })
   }
-  getLocation()
+
+  function getLocation1() {
+    uni.getFuzzyLocation({
+      type: "wgs84",
+      success: (res) => {
+        Mylatitude.value = res.latitude
+        Mylongitude.value = res.longitude
+        getMerchants()
+      },
+      fail: (arr) => {
+        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
+          uni.showToast({
+            title: "获取定位授权失败",
+            icon: "none"
+          })
+          getMerchants()
+        }
+        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
+          uni.showModal({
+            title: "未获取到位置信息",
+            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
+            showCancel: false,
+            confirmText: "我知道了"
+          })
+          return;
+        }
+        setTimeout(locationErr, 2000)
+      }
+    })
+  }
+  getLocation1()
 
   //获取高度
   const bHeight = computed(() => {
@@ -330,7 +361,6 @@ const changeSwiper=(index:any)=>{
     if (merchants_params.value.pageSize > data.list.length) noData.value = true;
 
   }
-  getMerchants()
 
   //触底加载
   const ToBottom = () => {
