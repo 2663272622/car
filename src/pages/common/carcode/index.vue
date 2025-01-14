@@ -32,10 +32,13 @@
     <template v-else>
       <up-list v-if='carList.length > 0'>
         <up-list-item v-for="(item, index) in carList" :key="index">
-          <up-cell :title="`${item.carNumber}`" @click='handleChange(item)'>
+          <up-cell @click='handleChange(item)'>
+            <template #title>
+              <text class="mr-20rpx">{{item.carNumber}}</text>
+              <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
+              <up-tag v-else text="已启用" type="success" shape="circle" plain size="mini"></up-tag>
+            </template>
             <template #value>
-              <up-tag v-if="item.banFlag" text="禁用" type="warning" plain></up-tag>
-              <up-tag v-else text="启用" type="success" plain></up-tag>
               <text class="ml-10rpx">查看</text>
             </template>
           </up-cell>
