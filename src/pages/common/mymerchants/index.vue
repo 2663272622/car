@@ -40,7 +40,7 @@
       <u-button type="primary" class='my-16rpx' @click="changeMerchants()">提交修改</u-button>
     </template>
     <template v-else>
-      <view v-if='merchantsInfo'>
+      <view v-if='merchantsInfo.merchantName'>
           <view class="bg-white rd-20rpx mx-30rpx mt-30rpx flex whitespace-nowrap overflow-hidden"
             @click="handleChange(merchantsInfo)">
             <view class="my-30rpx ml-20rpx mr-12rpx">
@@ -72,7 +72,7 @@
           </view>
       </view>
       <view v-else>
-        <view title="新增商家" @click='addMerchants()'></view>
+        <up-cell title="新增商家" @click='handleChange(merchantsInfo)'></up-cell>
       </view>
     </template>
   </view>
@@ -183,11 +183,6 @@
 
     })
   }
-  //点击新增按钮
-  const addMerchants = () => {
-    display.value = true
-    merchantsInfo.value = {}
-  }
   //上传图片
   const image = ref([])
   const onChooseImage = async () => {
@@ -259,7 +254,6 @@
               getBusinessList()
             })
           })
-
         } else {
           //新增商家
           carMerchantsAPI.add(merchantsInfo.value).then(() => {
