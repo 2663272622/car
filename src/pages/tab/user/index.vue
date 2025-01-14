@@ -74,10 +74,14 @@
   const loginStatus = ref(false);
 
   onShow(async () => {
+    try{
+      uni.hideTabBar()
+    }catch(e){}
     loginStatus.value = await usePermission();
     console.log('asdasd', loginStatus.value);
     loginStatus.value = isLogin();
     const ttt = await getToken();
+
   });
 
   const query : any = ref()

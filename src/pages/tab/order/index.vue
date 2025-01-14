@@ -4,7 +4,7 @@
     <view class="page-wrap">
       <view :style="{ paddingTop: bHeight }">
         <view class="mx-30rpx relative z-10 rounded-20rpx">
-          <up-swiper :list="swiperImg" indicator indicatorMode="line" imgMode="scaleToFill" circular
+          <up-swiper :list="swiperImg" indicator indicatorMode="line" @click="handleSwiper" imgMode="scaleToFill" circular
             height="388rpx"></up-swiper>
         </view>
         <view class="pt-50rpx grid grid-cols-5 grid-rows-2 ">
@@ -92,7 +92,11 @@
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
   import list from "@/uni_modules/uview-plus/components/u-list/list";
+import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } from '@/router';
 
+  onShow(()=>{
+    uni.hideTabBar()
+  })
   // 在onReady或者onMounted生命周期中获取元素信息
   const stickyState = ref(false)
   const handlescroll = (e) => {
@@ -223,6 +227,24 @@
     }
   }
 
+//  轮播图点击
+const handleSwiper = (i)=>{
+  // let sdata = 轮播图[i];
+
+  // switch(sdata.label){
+  //   case "a": // 跳转页面
+  //     // 本次需要跳转的页面
+  //     let toPath = sdata.value;
+  //     let rurl = isTabBarPath(toPath)
+  //     if(rurl){
+  //       uni.switchTab({url:toPath})
+  //     }else{
+  //       uni.redirectTo({url:toPath})
+  //     }
+  //   break;
+  // }
+
+}
 
   //建立一个布尔值，判断是否进行下拉刷新
   const noData = ref(false)

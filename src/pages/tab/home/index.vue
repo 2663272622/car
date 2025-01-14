@@ -66,7 +66,6 @@
   import { onLoad, onShow } from "@dcloudio/uni-app";
   import value from "@/uni_modules/uview-plus/components/u-text/value";
 
-  uni.hideTabBar()
 
   const userStore = useUserStore()
   const appStore = useAppStore()
@@ -101,6 +100,7 @@
     if(showNum.value > 0){
       handleInitHome()
     }
+    uni.hideTabBar()
   })
 
   onLoad(async (options:any) => {
