@@ -252,6 +252,7 @@
         data = await carMerchantsAPI.getPage({ ...merchants_params.value })
       }
     }
+    //改变图片的url地址
     data.list.map((item : any) => {
       if (item.storeLogoUrl) {
         if (item.storeLogoUrl.includes('http:')) {
@@ -260,6 +261,12 @@
         else {
           return item.storeLogoUrl = item.storeLogoUrl ? handlePic(item.storeLogoUrl)[0].url : ''
         }
+      }
+    })
+    //改变分数的保留位数
+    data.list.map((item:any)=>{
+      if(item.score){
+         return item.score=Math.floor(item.score * 10) / 10;
       }
     })
     merchants.value = [...merchants.value, ...data.list];
