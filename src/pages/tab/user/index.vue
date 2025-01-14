@@ -18,8 +18,10 @@
       <view class="moveCar mr-30rpx flex items-center" @click="handleCarCode">
         <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">挪车码</text>
       </view>
-      <view class="shops flex items-center" @click="handleMyMerchants">
-        <text class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx">我的店铺</text>
+      <view class="shops flex items-center relative">
+
+        <button v-if='userStore.identityType*1 === 1' open-type="contact"  class="absolute top-0 bottom-0 left-0 right-0 opacity-0">申请入驻</button>
+        <text  class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx"  @click="handleMyMerchants">{{userStore.identityType*1 === 1 ? '申请入驻' :'我的店铺'}}</text>
       </view>
     </view>
     <view class="flex mt-30rpx bg-white h-158rpx mx-30rpx rd-20rpx">
@@ -83,7 +85,7 @@
     console.log('asdasd', loginStatus.value);
     loginStatus.value = isLogin();
     const ttt = await getToken();
-
+    userStore.info()
   });
 
   const query : any = ref()
@@ -122,7 +124,15 @@
     uni.navigateTo({ url: `/pages/common/carcode/index` })
   }
   //跳转查看我的店铺
-  const handleMyMerchants = () => {
+  const handleMyMerchants = async() => {
+    if(userStore.identityType*1 === 1){
+      return false;
+      // await userStore.info()
+      // await nextTick()
+      // if(userStore.identityType*1 === 1){
+      //   return uni.$u.toast("点击");
+      // }
+    }
     carMerchantsAPI.get(userStore.openId).then(cdata => {
       if (cdata) {
         uni.navigateTo({ url: `/pages/common/mymerchants/index` })
