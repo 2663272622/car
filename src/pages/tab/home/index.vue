@@ -115,13 +115,24 @@
     // let url = `https://onlinewifi.car.ischool.shop?move=2432`
     let url = options.q
     scanInfo.value.id = handleUrl(url || '', 'move')
-
+    scanInfo.value.id = scanInfo.value.id ? scanInfo.value.id : appStore.scanId
     console.log("扫码携带来的ID",scanInfo.value.id)
     handleInitHome()
   })
 
-
 const handleInitHome = ()=>{
+  // 判断ID
+  if(scanInfo.value.id){
+    console.log("将携带来的ID保存",scanInfo.value.id)
+    appStore.setScanId(scanInfo.value.id)
+    getCarMoveCodes()
+  }else{
+    console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
+    hidHome()
+  }
+}
+
+const handleInitHomeold = ()=>{
 
   // 判断ID
   if(scanInfo.value.id){
