@@ -57,6 +57,7 @@
   import { barHeight, handleUrl,getTitleBarHeight } from "@/utils"
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
+  import { getwLocation } from '@/utils/location';
   import { LOGIN_PATH } from "@/router";
   import { currentRoute } from '@/router';
   import { useUserStore,useAppStore } from "@/store";
@@ -229,7 +230,8 @@ const handleInitHomeold = ()=>{
     try{
       const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
       if(isActive.banFlag){
-        uni.$u.toast("这个挪车码已经禁用啦，看看有什么其他方式可以联系车主吧~");
+        hidHome()
+        uni.$u.toast("这是一个失效的挪车码~");
         return;
       }
       if (!isActive.isActive) {
@@ -256,7 +258,7 @@ const handleInitHomeold = ()=>{
   //定义当前点击时间
   const clickTime = ref(0)
   //发送信息功能
-  function callNotice(index : number) {
+  async function callNotice(index : number) {
     const currentTime = new Date().getTime()
     switch (index) {
       case 0:
@@ -266,7 +268,7 @@ const handleInitHomeold = ()=>{
         break;
       case 1:
         if ((currentTime - clickTime.value) > 300000 || clickTime.value === 0) {
-          getLocation()
+          await getLocation()
           if (Mylatitude.value) {
             uni.showLoading({
                 title: '正在发送挪车消息~'
@@ -286,7 +288,7 @@ const handleInitHomeold = ()=>{
         break;
       case 2:
         if ((currentTime - clickTime.value) > 300000 || clickTime.value === 0) {
-          getLocation()
+          await getLocation()
           if (Mylatitude.value) {
             uni.showLoading({
                 title: '正在发送挪车消息~'
@@ -315,79 +317,17 @@ const handleInitHomeold = ()=>{
   let Mylatitude = ref()
   let Mylongitude = ref()
   function getLocation() {
-    uni.getFuzzyLocation({
-      type: "wgs84",
-      success: (res) => {
+    return new Promise((resolve,reject)=>{
+      getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
-      },
-      fail: (arr) => {
-        console.log(arr)
-        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
-          uni.showToast({
-            title: "获取定位授权失败",
-            icon: "none"
-          })
-        }
-        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-          uni.showModal({
-            title: "未获取到位置信息",
-            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-            showCancel: false,
-            confirmText: "我知道了"
-          })
-          return;
-        }
-        setTimeout(locationErr, 2000)
-      },
+        resolve('')
+      },()=>{
+        reject()
+      })
     })
   }
-  //微信通知车主
-  // async function WxNotice(index:number){
-  //   if(index===1){
-  //     if(loginStatus.value){
-  //       loginStatus.value = await usePermission();
-  //     }
 
-  //   }
-  // }
-
-  const locationErr = () => {
-    uni.showModal({
-      title: "提示",
-      content: "需要授权获取位置信息",
-      success: (res) => {
-        if (res.confirm) {
-          uni.openSetting({
-            success: (res) => {
-              console.log(res.authSetting)
-              if (res.authSetting['scope.userFuzzyLocation']) {
-                uni.getFuzzyLocation({
-                  type: "wgs84",
-                  success: (res) => {
-                    Mylatitude.value = res.latitude
-                    Mylongitude.value = res.longitude
-                  },
-                  fail: (arr) => {
-                    console.log(arr)
-                    if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-                      uni.showModal({
-                        title: "未获取到位置信息",
-                        content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-                        showCancel: false,
-                        confirmText: "我知道了"
-                      })
-                      return;
-                    }
-                  },
-                })
-              }
-            },
-          })
-        }
-      },
-    })
-  }
 </script>
 
 

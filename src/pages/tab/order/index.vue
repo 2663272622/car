@@ -116,6 +116,7 @@
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
   import list from "@/uni_modules/uview-plus/components/u-list/list";
   import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } from '@/router';
+import { getwLocation } from "@/utils/location";
 
   onShow(() => {
     uni.hideTabBar()
@@ -134,64 +135,31 @@
   // 获取当前经纬度
   const Mylatitude = ref()
   const Mylongitude = ref()
+
   function getLocation() {
-    uni.getFuzzyLocation({
-      type: "wgs84",
-      success: (res) => {
+    return new Promise((resolve,reject)=>{
+      getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
-
-      },
-      fail: (arr) => {
-        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
-          uni.showToast({
-            title: "获取定位授权失败",
-            icon: "none"
-          })
-        }
-        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-          uni.showModal({
-            title: "未获取到位置信息",
-            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-            showCancel: false,
-            confirmText: "我知道了"
-          })
-          return;
-        }
-        setTimeout(locationErr, 2000)
-      }
+        resolve('')
+      },()=>{
+        reject()
+      })
     })
   }
-
   function getLocation1() {
-    uni.getFuzzyLocation({
-      type: "wgs84",
-      success: (res) => {
+    return new Promise((resolve,reject)=>{
+      getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
         getMerchants()
-      },
-      fail: (arr) => {
-        if (arr.errMsg === "getFuzzyLocation:fail:auth denied" || arr.errMsg === "getFuzzyLocation:fail auth deny") {
-          uni.showToast({
-            title: "获取定位授权失败",
-            icon: "none"
-          })
-          getMerchants()
-        }
-        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-          uni.showModal({
-            title: "未获取到位置信息",
-            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-            showCancel: false,
-            confirmText: "我知道了"
-          })
-          return;
-        }
-        setTimeout(locationErr, 2000)
-      }
+        resolve('')
+      },()=>{
+        reject()
+      })
     })
   }
+
   getLocation1()
 
   //获取高度
@@ -370,42 +338,6 @@ const changeSwiper=(index:any)=>{
   }
 
 
-  const locationErr = () => {
-    uni.showModal({
-      title: "提示",
-      content: "需要授权获取位置信息",
-      success: (res) => {
-        if (res.confirm) {
-          uni.openSetting({
-            success: (res) => {
-              if (res.authSetting['scope.userFuzzyLocation']) {
-                uni.getFuzzyLocation({
-                  type: "wgs84",
-                  success: (res) => {
-                    Mylatitude.value = res.latitude
-                    Mylongitude.value = res.longitude
-                    getMerchants()
-                  },
-                  fail: (arr) => {
-                    console.log(arr)
-                    if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-                      uni.showModal({
-                        title: "未获取到位置信息",
-                        content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-                        showCancel: false,
-                        confirmText: "我知道了"
-                      })
-                      return;
-                    }
-                  }
-                })
-              }
-            },
-          })
-        }
-      },
-    })
-  }
 </script>
 <style scoped lang="scss">
   .page-wrap {

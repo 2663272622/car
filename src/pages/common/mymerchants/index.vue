@@ -36,11 +36,14 @@
           <view class="absolute top-0 bottom-0 right-0 left-0 bg-#0000 z-9" @click="show2 = true"></view>
         </up-form-item>
         <!-- <view class="h-100rpx bg-#F1F1F1"></view> -->
-        <up-form-item label="地址:" borderBottom prop="storeAddress" leftIcon="map">
-          <up-input border="none" v-model="merchantsInfo.storeAddress" placeholder="请点击右侧选择地址"></up-input>
+        <up-form-item label="地址:" borderBottom prop="storeArea" leftIcon="map">
+          <up-input border="none" disabled disabledColor="#0000" v-model="merchantsInfo.storeArea" placeholder="请点击右侧选择地址"></up-input>
           <template #right>
             <u-button type="small" class='my-16rpx' @click="handlePOI">选择位置</u-button>
           </template>
+        </up-form-item>
+        <up-form-item label="详细地址:" borderBottom prop="storeAddress" leftIcon="map">
+          <up-input border="none"  v-model="merchantsInfo.storeAddress" placeholder="请输入详细地址"></up-input>
         </up-form-item>
       </up-form>
       <view class="absolute bottom-0 shadow h-150rpx w-100vw bg-white">
@@ -104,6 +107,7 @@
     businessScope: '',
     contactPhone: '',
     storeAddress: '',
+    storeArea:""
   })
   const userStore = useUserStore();
   const show = ref(false);
@@ -215,7 +219,9 @@
     uni.chooseLocation({
       success(res : any) {
         console.log(res)
-        merchantsInfo.value.storeAddress = res.address
+
+        merchantsInfo.value.storeArea = res.address
+        merchantsInfo.value.storeAddress = res.name
         merchantsInfo.value.latitude = res.latitude
         merchantsInfo.value.longitude = res.longitude
       }
@@ -228,8 +234,13 @@
     storeAddress: [{ required: true, message: "地址不能为空", trigger: "blur" }],
     openTime: [{ required: true, message: "开门时间不能为空", trigger: "change" }],
     closeTime: [{ required: true, message: "关门时间不能为空", trigger: "change" }],
-    contactPhone: [{ pattern: /^1[3456789]\d{9}$/, message: "手机号格式不正确", trigger: "blur" },
-    { required: true, message: "联系电话不能为空", trigger: "blur" }],
+    contactPhone: [
+      { pattern: /^1[3456789]\d{9}$/, message: "手机号格式不正确", trigger: "blur" },
+      { required: true, message: "联系电话不能为空", trigger: "blur" },
+    ],
+
+    storeArea: [{ required: true, message: "请选择地址", trigger: "change" }],
+
   });
 
   //提交数据

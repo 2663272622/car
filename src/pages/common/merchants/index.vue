@@ -73,6 +73,7 @@
   import BusinessAPI from "@/api/business";
   import { handlePic } from "@/utils"
   import { onLoad } from "@dcloudio/uni-app";
+import { getwLocation } from "@/utils/location";
   const merchants : any = ref({})
   const img = ref()
   let phone = ''
@@ -169,55 +170,23 @@
   const Mylatitude = ref()
   const Mylongitude = ref()
   function getLocation() {
-    uni.getFuzzyLocation({
-      type: "wgs84",
-      success: (res) => {
+    return new Promise((resolve,reject)=>{
+      getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
-      },
-      fail: (arr) => {
-        uni.showModal({
-          title: "提示",
-          content: "需要授权获取位置信息",
-          success: (res) => {
-            if (res.confirm) {
-              uni.openSetting({
-                success: (res) => {
-                  console.log(res.authSetting)
-                  if (res.authSetting['scope.userFuzzyLocation']) {
-                    uni.getFuzzyLocation({
-                      type: "wgs84",
-                      success: (res) => {
-                        Mylatitude.value = res.latitude
-                        Mylongitude.value = res.longitude
-                      },
-                      fail: (arr) => {
-                        console.log(arr)
-                        if (arr.errMsg === "getFuzzyLocation:fail:ERROR_NOCELL&WIFI_LOCATIONSWITCHOFF") {
-                          uni.showModal({
-                            title: "未获取到位置信息",
-                            content: "获取定位失败，请手动开启手机系统定位权限重新进入小程序或检查网络情况后重试",
-                            showCancel: false,
-                            confirmText: "我知道了"
-                          })
-                          return;
-                        }
-                      },
-                    })
-                  }
-                },
-              })
-            }
-          },
-        })
-      },
-      complete: () => {
         getBusiness()
         nextTick(() => {
           getFormData()
           navigationAdd(1)
         })
-      }
+        resolve('')
+      },()=>{
+        reject()
+        nextTick(() => {
+          getFormData()
+          navigationAdd(1)
+        })
+      })
     })
   }
   getLocation()
