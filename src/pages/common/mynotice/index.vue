@@ -1,16 +1,15 @@
 <template>
-  <view class="box-border">
-    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+  <view class="commonhead box-border h-100vh">
+<!--    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
       <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
       <view class="text-30rpx">首页通知</view>
       <view></view>
-    </view>
+    </view> -->
 <!--   <view class="navbar">
-      <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#CFF4FE">
-    </u-navbar>
       </view> -->
+      <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#0000"> </u-navbar>
     <template v-if='carInfo.id'>
-      <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative top--40px z-10">
+      <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative  z-10">
         <up-form-item>
           <u--textarea border="surround" v-model="carInfo.messageText" placeholder="请输入通知" height="130"
             clearable count class="rounded-20rpx"></u--textarea>
@@ -23,8 +22,8 @@
       </view>
     </template>
     <template v-else>
-      <up-list v-if='carList.length > 0' class="bg-white relative top--30px z-10">
-        <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx">
+      <up-list v-if='carList.length > 0' class=" relative z-10">
+        <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx bg-white">
           <up-cell :title="`${item.carNumber}`" value="查看" @click='handleChange(item)'>
           </up-cell>
         </up-list-item>
@@ -91,10 +90,5 @@
 </script>
 
 <style lang="scss" scoped>
-.navbar{
-  // background: linear-gradient( 179deg, #4ECCFD 0%, rgba(244,254,207,0) 100%);
-  background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
-  background-repeat: no-repeat;
-  background-size: 750rpx 522rpx;
-}
+
 </style>

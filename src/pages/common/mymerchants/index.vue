@@ -1,14 +1,14 @@
 <template>
-  <view class="box-border">
-        <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+  <view class="commonhead box-border">
+<!--        <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
           <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
           <view class="text-30rpx">我的店铺</view>
           <view></view>
-        </view>
-<!--    <u-navbar title="我的店铺" :autoBack="true" :placeholder='true'>
-    </u-navbar> -->
+        </view> -->
+   <u-navbar title="我的店铺" :autoBack="true" bg-color="#0000" :placeholder='true'> </u-navbar>
+
     <template v-if='display'>
-      <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules" class="m-30rpx relative top--40px z-10 shadow bg-white rounded-20rpx px-5rpx">
+      <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules" class="m-30rpx relative z-10 shadow bg-white rounded-20rpx px-5rpx">
         <up-form-item label="店铺图片" borderBottom ref="item1" prop="storeLogoUrl" leftIcon="photo">
           <up-upload :fileList="fileList5" @afterRead="afterRead" @delete="deletePic" name="5" multiple
             sizeType='compressed' :maxCount="9"></up-upload>
@@ -51,8 +51,8 @@
       </view>
     </template>
     <template v-else>
-      <view v-if='merchantsInfo.merchantName' class="relative top--40px z-10">
-          <view class="bg-white rd-20rpx mx-30rpx mt-30rpx flex whitespace-nowrap overflow-hidden"
+      <view v-if='merchantsInfo.merchantName' class="relative  z-10">
+          <view class="bg-white rd-20rpx mx-30rpx  flex whitespace-nowrap overflow-hidden"
             @click="handleChange(merchantsInfo)">
             <view class="my-30rpx ml-20rpx mr-12rpx">
               <up-image :show-loading="true" :src="merchantsInfo.storeLogoUrl" width="160rpx" height="160rpx" bg-color="#0000" />

@@ -1,15 +1,15 @@
 <template>
-  <view class=" box-border">
-    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+  <view class="commonhead box-border h-100vh">
+<!--    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
       <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
-      <view class="text-30rpx">首页通知</view>
+      <view class="text-30rpx">我的挪车码</view>
       <view></view>
-    </view>
-<!--    <u-navbar :autoBack='false' @leftClick='handleLeft' title="我的挪车码"  bg-color="#CFF4FE" safeAreaInsetTop :placeholder='true'>
-    </u-navbar> -->
+    </view> -->
+  <u-navbar :autoBack='false' @leftClick='handleLeft' title="我的挪车码"  bg-color="#0000" safeAreaInsetTop :placeholder='true'>
+    </u-navbar>
 
     <template v-if='carInfo.id'>
-      <up-form labelPosition="left" labelWidth='auto' ref="formRef" , :rules="rules" :model="carInfo"  class="bg-white m-30rpx relative top--40px z-10 rounded-20rpx">
+      <up-form labelPosition="left" labelWidth='auto' ref="formRef" , :rules="rules" :model="carInfo"  class="bg-white m-30rpx relative  z-10 rounded-20rpx">
         <up-form-item label="车牌号:" borderBottom prop="carNumber" class="ml-15rpx" leftIcon="car">
           <up-input border="none" @tap="plateShow = true" v-model="carInfo.carNumber" placeholder="请点此输入号码"
             :disabled="true"></up-input>
@@ -26,18 +26,18 @@
              </up-form-item> -->
       </up-form>
       <view class="absolute bottom-15rpx w-730rpx">
-      <template v-if="!newCode">
-        <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx mx-15rpx' shape="circle" @click="handleBan">禁用挪车码</u-button>
-        <u-button v-else type="primary" class='my-16rpx mx-15rpx' @click="handleBan" shape="circle">启用挪车码</u-button>
-      </template>
-      <u-button type="primary" class='my-16rpx mx-15rpx' @click="handleActive" color="#D1F5FE" shape="circle"><text class="text-#000000">提交并开启微信通知</text></u-button>
+        <template v-if="!newCode">
+          <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx mx-15rpx' shape="circle" @click="handleBan">禁用挪车码</u-button>
+          <u-button v-else type="primary" class='my-16rpx mx-15rpx' @click="handleBan" shape="circle">启用挪车码</u-button>
+        </template>
+        <u-button type="primary" class='my-16rpx mx-15rpx' @click="handleActive" color="#D1F5FE" shape="circle"><text class="text-#000000">提交并开启微信通知</text></u-button>
       </view>
       <template v-if="plateShow">
         <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
       </template>
     </template>
     <template v-else>
-      <up-list v-if='carList.length > 0'  class="relative top--30px z-10 w-690rpx mx-30rpx">
+      <up-list v-if='carList.length > 0'  class="relative  z-10 w-690rpx mx-30rpx">
         <up-list-item v-for="(item, index) in carList" :key="index">
           <up-cell @click='handleChange(item)' class="bg-white shadow mx-5rpx rounded-20rpx">
             <template #title class="flex">
@@ -276,12 +276,11 @@
 </script>
 
 <style lang='scss' scoped>
-  .navbar{
-  /* // background: linear-gradient( 179deg, #4ECCFD 0%, rgba(244,254,207,0) 100%); */
+  /* .navbar{
   background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
   background-repeat: no-repeat;
   background-size: 750rpx 522rpx;
-}
+} */
   .main-content {
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
