@@ -1,46 +1,54 @@
 <template>
-  <view class="oilcontainer bg-#fff box-border px-12rpx">
-    <u-navbar title="我的店铺" :autoBack="true" :placeholder='true'>
-    </u-navbar>
+  <view class="box-border">
+        <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+          <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
+          <view class="text-30rpx">我的店铺</view>
+          <view></view>
+        </view>
+<!--    <u-navbar title="我的店铺" :autoBack="true" :placeholder='true'>
+    </u-navbar> -->
     <template v-if='display'>
-      <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules">
-        <up-form-item label="店铺图片" borderBottom ref="item1" prop="storeLogoUrl">
+      <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules" class="m-30rpx relative top--40px z-10 shadow bg-white rounded-20rpx px-5rpx">
+        <up-form-item label="店铺图片" borderBottom ref="item1" prop="storeLogoUrl" leftIcon="photo">
           <up-upload :fileList="fileList5" @afterRead="afterRead" @delete="deletePic" name="5" multiple
             sizeType='compressed' :maxCount="9"></up-upload>
         </up-form-item>
-        <up-form-item label="商店名称:" borderBottom prop="merchantName">
+        <up-form-item label="商店名称:" borderBottom prop="merchantName" leftIcon="bag">
           <up-input border="none" v-model="merchantsInfo.merchantName" placeholder="请点此输入商店名称"></up-input>
         </up-form-item>
-        <up-form-item label="经营业务" borderBottom prop="businessScope">
+        <up-form-item label="经营业务" borderBottom prop="businessScope" left-icon="shopping-cart">
           <up-checkbox-group v-model="actualBusinessScope">
             <up-checkbox v-for="item in business" :key="item.id" :label="item.label" :name="item.label"
               class="mr-10rpx"></up-checkbox>
           </up-checkbox-group>
         </up-form-item>
-        <up-form-item label="联系电话:" borderBottom prop="contactPhone">
+        <up-form-item label="联系电话:" borderBottom prop="contactPhone" leftIcon="phone">
           <up-input border="none" v-model="merchantsInfo.contactPhone" type="number" placeholder="请点此输入联系电话"></up-input>
         </up-form-item>
-        <up-form-item label="开门时间:" prop="openTime" class="relative">
+        <up-form-item label="开门时间:" prop="openTime" class="relative" leftIcon="clock">
           <up-datetime-picker hasInput :show="show1" mode="time"  v-model="merchantsInfo.openTime" @confirm='(e)=>{merchantsInfo.openTime=e.value;show1=false}' @close='()=>show1=false' ></up-datetime-picker>
           <view class="absolute top-0 bottom-0 right-0 left-0 bg-#0000 z-9" @click="show1 = true"></view>
         </up-form-item>
-        <up-form-item label="关门时间:" prop="closeTime"  class="relative">
+        <up-form-item label="关门时间:" prop="closeTime"  class="relative" leftIcon="clock">
          <!-- <up-datetime-picker hasInput :show="show2" mode="time" v-model="merchantsInfo.closeTime"
             @click="show = true"></up-datetime-picker> -->
           <up-datetime-picker hasInput :show="show2" mode="time"  v-model="merchantsInfo.closeTime" @confirm='(e)=>{merchantsInfo.closeTime=e.value;show2=false}' @close='()=>show2=false' ></up-datetime-picker>
           <view class="absolute top-0 bottom-0 right-0 left-0 bg-#0000 z-9" @click="show2 = true"></view>
         </up-form-item>
-        <up-form-item label="地址:" borderBottom prop="storeAddress">
+        <!-- <view class="h-100rpx bg-#F1F1F1"></view> -->
+        <up-form-item label="地址:" borderBottom prop="storeAddress" leftIcon="map">
           <up-input border="none" v-model="merchantsInfo.storeAddress" placeholder="请点击右侧选择地址"></up-input>
           <template #right>
             <u-button type="small" class='my-16rpx' @click="handlePOI">选择位置</u-button>
           </template>
         </up-form-item>
       </up-form>
-      <u-button type="primary" class='my-16rpx' @click="changeMerchants()">提交修改</u-button>
+      <view class="absolute bottom-0 shadow h-150rpx w-100vw bg-white">
+      <u-button type="primary" class='my-16rpx' @click="changeMerchants()" color="#D1F5FE" shape="circle"><text class="text-black">提交修改</text></u-button>
+      </view>
     </template>
     <template v-else>
-      <view v-if='merchantsInfo.merchantName'>
+      <view v-if='merchantsInfo.merchantName' class="relative top--40px z-10">
           <view class="bg-white rd-20rpx mx-30rpx mt-30rpx flex whitespace-nowrap overflow-hidden"
             @click="handleChange(merchantsInfo)">
             <view class="my-30rpx ml-20rpx mr-12rpx">
@@ -72,13 +80,14 @@
           </view>
       </view>
       <view v-else>
-        <up-cell title="新增商家" @click='handleChange(merchantsInfo)'></up-cell>
+        <up-cell class="bg-white relative top--30px z-10 shadow mx-15rpx rounded-20rpx" title="添加商家信息" @click='handleChange(merchantsInfo)'></up-cell>
       </view>
     </template>
   </view>
 </template>
 
 <script setup lang="ts">
+  import { Hheight } from '@/utils';
   import { usePermission } from '@/hooks';
   import { getToken, isLogin } from '@/utils/auth';
   import BusinessAPI from "@/api/business"
@@ -293,7 +302,18 @@
       navigationData.value=data
     })
   }
+
+  //返回上一页
+  const goBack=()=>{
+    uni.navigateBack()
+  }
 </script>
 
-<style>
+<style lang="scss" scoped>
+  .navbar{
+    // background: linear-gradient( 179deg, #4ECCFD 0%, rgba(244,254,207,0) 100%);
+    background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
+    background-repeat: no-repeat;
+    background-size: 750rpx 522rpx;
+  }
 </style>

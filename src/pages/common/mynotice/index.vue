@@ -1,18 +1,30 @@
 <template>
-  <view class="oilcontainer bg-#fff box-border px-12rpx">
-    <u-navbar title="首页通知" :autoBack="true" :placeholder='true'>
+  <view class="box-border">
+    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+      <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
+      <view class="text-30rpx">首页通知</view>
+      <view></view>
+    </view>
+<!--   <view class="navbar">
+      <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#CFF4FE">
     </u-navbar>
+      </view> -->
     <template v-if='carInfo.id'>
-      <up-form labelPosition="left" labelWidth='auto'>
+      <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative top--40px z-10">
         <up-form-item>
-          <up-input border="surround" v-model="carInfo.messageText" placeholder="请输入通知" type="textarea" clearable></up-input>
+          <u--textarea border="surround" v-model="carInfo.messageText" placeholder="请输入通知" height="130"
+            clearable count class="rounded-20rpx"></u--textarea>
         </up-form-item>
       </up-form>
-      <u-button type="primary" class='my-16rpx' @click="handleNotice">保存通知</u-button>
+      <view class="absolute bottom-0 shadow h-150rpx w-100vw bg-white">
+      <view class="pb-15rpx mx-15rpx">
+      <u-button class='my-16rpx' @click="handleNotice"  color="#D1F5FE" shape="circle"><text class="text-#000000">保存通知</text></u-button>
+      </view>
+      </view>
     </template>
     <template v-else>
-      <up-list v-if='carList.length > 0'>
-        <up-list-item v-for="(item, index) in carList" :key="index">
+      <up-list v-if='carList.length > 0' class="bg-white relative top--30px z-10">
+        <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx">
           <up-cell :title="`${item.carNumber}`" value="查看" @click='handleChange(item)'>
           </up-cell>
         </up-list-item>
@@ -25,6 +37,7 @@
 </template>
 
 <script setup>
+  import { Hheight } from '@/utils';
   import {
     ref
   } from "vue"
@@ -69,11 +82,19 @@
         title: '保存成功',
         showCancel: false
       })
-      carInfo.value=[]
+      carInfo.value = []
     })
+  }
+  const goBack=()=>{
+    uni.navigateBack()
   }
 </script>
 
 <style lang="scss" scoped>
-
+.navbar{
+  // background: linear-gradient( 179deg, #4ECCFD 0%, rgba(244,254,207,0) 100%);
+  background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
+  background-repeat: no-repeat;
+  background-size: 750rpx 522rpx;
+}
 </style>

@@ -1,15 +1,20 @@
 <template>
-  <view class="oilcontainer bg-#fff box-border px-12rpx">
-    <u-navbar :autoBack='false' @leftClick='handleLeft' title="我的挪车码"  safeAreaInsetTop :placeholder='true'>
-    </u-navbar>
+  <view class=" box-border">
+    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+      <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
+      <view class="text-30rpx">首页通知</view>
+      <view></view>
+    </view>
+<!--    <u-navbar :autoBack='false' @leftClick='handleLeft' title="我的挪车码"  bg-color="#CFF4FE" safeAreaInsetTop :placeholder='true'>
+    </u-navbar> -->
 
     <template v-if='carInfo.id'>
-      <up-form labelPosition="left" labelWidth='auto' ref="formRef" , :rules="rules" :model="carInfo">
-        <up-form-item label="车牌号:" borderBottom prop="carNumber">
+      <up-form labelPosition="left" labelWidth='auto' ref="formRef" , :rules="rules" :model="carInfo"  class="bg-white m-30rpx relative top--40px z-10 rounded-20rpx">
+        <up-form-item label="车牌号:" borderBottom prop="carNumber" class="ml-15rpx" leftIcon="car">
           <up-input border="none" @tap="plateShow = true" v-model="carInfo.carNumber" placeholder="请点此输入号码"
             :disabled="true"></up-input>
         </up-form-item>
-        <up-form-item label="联系电话:" borderBottom prop="phoneNumber">
+        <up-form-item label="联系电话:" borderBottom prop="phoneNumber" class="ml-15rpx" leftIcon="phone">
           <up-input border="none" v-model="carInfo.phoneNumber"></up-input>
         </up-form-item>
         <!--             <up-form-item
@@ -20,19 +25,21 @@
                <up-input :disabled="true"  v-model="carInfo.id" disabled border="none" ></up-input>
              </up-form-item> -->
       </up-form>
+      <view class="absolute bottom-15rpx w-730rpx">
       <template v-if="!newCode">
-        <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx' @click="handleBan">禁用挪车码</u-button>
-        <u-button v-else type="primary" class='my-16rpx' @click="handleBan">启用挪车码</u-button>
+        <u-button v-if="!carInfo.banFlag" type="warning" class='my-16rpx mx-15rpx' shape="circle" @click="handleBan">禁用挪车码</u-button>
+        <u-button v-else type="primary" class='my-16rpx mx-15rpx' @click="handleBan" shape="circle">启用挪车码</u-button>
       </template>
-      <u-button type="primary" class='my-16rpx' @click="handleActive">提交并开启微信通知</u-button>
+      <u-button type="primary" class='my-16rpx mx-15rpx' @click="handleActive" color="#D1F5FE" shape="circle"><text class="text-#000000">提交并开启微信通知</text></u-button>
+      </view>
       <template v-if="plateShow">
         <plate-input :plate="carInfo.carNumber" @export="setPlate" @close="plateShow = false" />
       </template>
     </template>
     <template v-else>
-      <up-list v-if='carList.length > 0'>
+      <up-list v-if='carList.length > 0'  class="relative top--30px z-10 w-690rpx mx-30rpx">
         <up-list-item v-for="(item, index) in carList" :key="index">
-          <up-cell @click='handleChange(item)'>
+          <up-cell @click='handleChange(item)' class="bg-white shadow mx-5rpx rounded-20rpx">
             <template #title class="flex">
               <text class="mr-20rpx flex items-center justify-center w-180rpx">{{item.carNumber}}</text>
               <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
@@ -52,6 +59,7 @@
 </template>
 
 <script setup>
+  import { Hheight } from '@/utils';
   import {
     ref
   } from 'vue';
@@ -253,8 +261,10 @@
 
 
 
-
-
+//返回上一页
+  const goBack=()=>{
+    uni.navigateBack()
+  }
 
 
   // 响应式数据
@@ -265,7 +275,13 @@
   const calculateFuelConsumption = () => {};
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
+  .navbar{
+  /* // background: linear-gradient( 179deg, #4ECCFD 0%, rgba(244,254,207,0) 100%); */
+  background-image: url('https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/7.png');
+  background-repeat: no-repeat;
+  background-size: 750rpx 522rpx;
+}
   .main-content {
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;

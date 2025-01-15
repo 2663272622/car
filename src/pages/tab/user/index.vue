@@ -1,6 +1,6 @@
 <template>
   <view class="page-wrap">
-    <view class="mb-20rpx ml-30rpx flex" :style="{ paddingTop: Hheight()}">
+    <view class="mb-20rpx ml-30rpx flex" :style="{ paddingTop: Hheight()+'px'}">
       <up-image :show-loading="true" width="120rpx" height="120rpx" :src="userStore.avatar" shape="circle"
         bg-color="#0000" class="mr-24rpx" />
       <view class="flex flex-col">
@@ -115,7 +115,7 @@
   const handleToGasoline = () => {
     uni.navigateTo({ url: `/pages/common/asoline/index` })
   }
-  // 跳转查看油价
+  // 跳转查看油价计算机
   const handleToOilwear = () => {
     uni.navigateTo({ url: `/pages/common/oilwear/index` })
   }

@@ -47,6 +47,6 @@ export const getTitleBarHeight=()=>{
 export function Hheight(){
   const {statusBarHeight} = uni.getSystemInfoSync();
   let{top,height}=uni.getMenuButtonBoundingClientRect()
-  let h = statusBarHeight + height +'px'
+  let h = statusBarHeight + height
   return h
 }

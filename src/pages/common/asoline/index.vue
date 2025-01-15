@@ -27,9 +27,9 @@
 							<text>{{item.title}}</text>
 						</view>
 						<view class="item-container" >
-							<view class="thumb-box" v-for="(item1, index1) in item.children" :key="index1">
+							<view class="thumb-box"  :style="{ backgroundColor: `hsl(${index1 * 13}, 85%, 54%)` }" v-for="(item1, index1) in item.children" :key="index1">
 								<!-- <image class="item-menu-image" :src="item1.icon" mode=""></image> -->
-								<view class="item-menu-name  " style="font-size: 38rpx;font-weight: bold;color: #808080;">{{item1.title}}</view>
+								<view class="item-menu-name" style="font-size: 38rpx;font-weight: bold;color: black;">{{item1.title}}</view>
 								<view class="item-menu-name">{{item1.price}}</view>
 							</view>
 						</view>
@@ -322,7 +322,7 @@ const userStore = useUserStore()
 		flex-direction: column;
 		margin-top: 20rpx;
 		margin-right: 5rpx;
-    border-radius:4rpx;
+    border-radius:10rpx;
     // border:1px solid #ccc;
     box-sizing: border-box;
     padding: 12rpx 0;
