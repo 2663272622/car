@@ -121,6 +121,17 @@ import { getwLocation } from "@/utils/location";
   onShow(() => {
     uni.hideTabBar()
   })
+   onShareAppMessage({
+      title: '放心挪',
+      path: '/pages/tab/order/index',
+      promise:new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            title: '放心挪~'
+          })
+        }, 2000)
+      })
+    })
   // 在onReady或者onMounted生命周期中获取元素信息
   const stickyState = ref(false)
   const handlescroll = (e) => {

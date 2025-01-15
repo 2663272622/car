@@ -91,6 +91,18 @@
     },
   ])
 
+   onShareAppMessage({
+      title: '放心挪',
+      path: '/pages/tab/home/index',
+      promise:new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            title: '放心挪~'
+          })
+        }, 2000)
+      })
+    })
+
   const bHeight = computed(() => {
     return barHeight()
   })
@@ -113,7 +125,7 @@
     ++showNum.value;
 
 
-    // let url = `https://onlinewifi.car.ischool.shop?move=2432`
+    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
     let url = options.q
     scanInfo.value.id = handleUrl(url || '', 'move')
     scanInfo.value.id = scanInfo.value.id ? scanInfo.value.id : appStore.scanId
@@ -230,8 +242,11 @@ const handleInitHomeold = ()=>{
     try{
       const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
       if(isActive.banFlag){
-        hidHome()
+
         uni.$u.toast("这是一个失效的挪车码~");
+        setTimeout(()=>{
+          hidHome()
+        },1500)
         return;
       }
       if (!isActive.isActive) {
@@ -240,7 +255,10 @@ const handleInitHomeold = ()=>{
         return;
       }
     }catch(e){
-      return hidHome()
+        setTimeout(()=>{
+          hidHome()
+        },1500)
+      return
     }
     carMoveCodesAPI.getFormData(scanInfo.value.id)
       .then((data) => {
@@ -278,7 +296,7 @@ const handleInitHomeold = ()=>{
             ).then(res => {
               uni.$u.toast("发送成功，请耐心等待车主前来挪车");
               clickTime.value = new Date().getTime()
-              uni.hideLoading();
+              // uni.hideLoading();
             })
           }
         }
@@ -300,7 +318,7 @@ const handleInitHomeold = ()=>{
             ).then(res => {
               uni.$u.toast("发送成功,请耐心等待车主前来挪车");
               clickTime.value = new Date().getTime()
-              uni.hideLoading();
+              // uni.hideLoading();
             })
           }
         } else {

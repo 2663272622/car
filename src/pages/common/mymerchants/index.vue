@@ -1,5 +1,5 @@
 <template>
-  <view class="commonhead box-border">
+  <view class="commonhead box-border h-100vh">
 <!--        <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
           <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
           <view class="text-30rpx">我的店铺</view>
@@ -36,18 +36,18 @@
           <view class="absolute top-0 bottom-0 right-0 left-0 bg-#0000 z-9" @click="show2 = true"></view>
         </up-form-item>
         <!-- <view class="h-100rpx bg-#F1F1F1"></view> -->
-        <up-form-item label="地址:" borderBottom prop="storeArea" leftIcon="map">
-          <up-input border="none" disabled disabledColor="#0000" v-model="merchantsInfo.storeArea" placeholder="请点击右侧选择地址"></up-input>
+        <up-form-item label="地址:" borderBottom prop="storeAddress" leftIcon="map">
+          <up-input border="none" disabled disabledColor="#0000" v-model="merchantsInfo.storeAddress" placeholder="请点击右侧选择地址"></up-input>
           <template #right>
             <u-button type="small" class='my-16rpx' @click="handlePOI">选择位置</u-button>
           </template>
         </up-form-item>
-        <up-form-item label="详细地址:" borderBottom prop="storeAddress" leftIcon="map">
-          <up-input border="none"  v-model="merchantsInfo.storeAddress" placeholder="请输入详细地址"></up-input>
+        <up-form-item label="详细地址:" borderBottom prop="storeArea" leftIcon="map">
+          <up-input border="none"  v-model="merchantsInfo.storeArea" placeholder="请输入详细地址"></up-input>
         </up-form-item>
       </up-form>
       <view class="absolute bottom-0 shadow h-150rpx w-100vw bg-white">
-      <u-button type="primary" class='my-16rpx' @click="changeMerchants()" color="#D1F5FE" shape="circle"><text class="text-black">提交修改</text></u-button>
+      <u-button type="primary" class='my-16rpx' @click="changeMerchants" color="#D1F5FE" shape="circle"><text class="text-black">提交修改</text></u-button>
       </view>
     </template>
     <template v-else>
@@ -220,8 +220,8 @@
       success(res : any) {
         console.log(res)
 
-        merchantsInfo.value.storeArea = res.address
-        merchantsInfo.value.storeAddress = res.name
+        merchantsInfo.value.storeAddress = res.address
+        merchantsInfo.value.storeArea = res.name
         merchantsInfo.value.latitude = res.latitude
         merchantsInfo.value.longitude = res.longitude
       }
@@ -247,12 +247,20 @@
   const changeMerchants = () => {
     formRef.value.validate().then((valid : any) => {
       //请求前对数据的操作
-      merchantsInfo.value.userId = userStore.userId
-      merchantsInfo.value.active = true
+      // merchantsInfo.value.userId = userStore.userId
+      // merchantsInfo.value.active = true
 
-      merchantsInfo.value.openTime = merchantsInfo.value?.openTime?.split(":").map((item : string | number) => parseInt((item)))
-      merchantsInfo.value.closeTime = merchantsInfo.value?.closeTime?.split(":").map((item : string | number) => parseInt((item)))
+      // merchantsInfo.value.openTime =
+      // merchantsInfo.value.closeTime = merchantsInfo.value?.closeTime?.split(":").map((item : string | number) => parseInt((item)))
       if (valid) {
+
+        let params = {
+          ...merchantsInfo.value,
+          userId:userStore.userId,
+          active:true,
+          openTime:merchantsInfo.value?.openTime?.split(":").map((item : string | number) => parseInt((item))),
+          closeTime:merchantsInfo.value?.closeTime?.split(":").map((item : string | number) => parseInt((item)))
+        }
         let actualValue : any[] = []
         actualBusinessScope.value.forEach((data : any) => {
           let actualItem = business.value.find((item : any) => item.label == data)
@@ -260,10 +268,10 @@
             actualValue.push(actualItem.value as string)
           }
         })
-        merchantsInfo.value.businessScope = actualValue.toString()
+        params.businessScope = actualValue.toString()
         //发起请求
-        if (merchantsInfo.value.id) {
-          carMerchantsAPI.update(merchantsInfo.value.id, merchantsInfo.value).then(() => {
+        if (params.id) {
+          carMerchantsAPI.update(params.id, params).then(() => {
             uni.showModal({
               title: '修改成功',
               showCancel: false
@@ -276,7 +284,7 @@
           })
         } else {
           //新增商家
-          carMerchantsAPI.add(merchantsInfo.value).then(() => {
+          carMerchantsAPI.add(params).then(() => {
             uni.showModal({
               title: '新增成功',
               showCancel: false

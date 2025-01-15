@@ -151,8 +151,10 @@ function responseInterceptors(http: HttpRequestAbstract) {
       console.log("失败回调",response)
       if(response.statusCode == 401){
           uni.$u.toast('登录状态失效 重新登陆');
-          clearToken();
-          usePermission();
+          setTimeout(()=>{
+            clearToken();
+            usePermission();
+          },1500)
           return;
       }
       // 自定义参数
