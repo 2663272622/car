@@ -25,8 +25,35 @@
     <template v-else>
       <up-list v-if='carList.length > 0' class=" relative z-10">
         <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx bg-white">
-          <up-cell :title="`${item.carNumber}`" value="查看" @click='handleChange(item)'>
-          </up-cell>
+          <!-- <up-cell :title="`${item.carNumber}`" value="查看" @click='handleChange(item)'>
+          </up-cell> -->
+          <view @click='handleChange(item)'
+            class="mt-30rpx shadow-xl bg-white shadow p-30rpx rounded-20rpx border flex u-flex-between items-center">
+            <view v-if="item.carNumber.length===8"
+              class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center"
+              style="background-color:rgba(70,175,76,0.3);">
+              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/newenergy.png" shape="circle"
+                width="30" height="30" bg-color="#C7E7C9"></up-image>
+            </view>
+            <view v-else class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center"
+              style="background-color:rgba(171,80,68,0.3);">
+              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/gasoline.png" shape="circle"
+                width="45" height="45" bg-color="#E6CAC7"></up-image>
+            </view>
+            <view class="mr-60rpx">
+              <view class=" flex items-center justify-center mb-20rpx">
+                <text class="text-38rpx font-bold mr-10rpx">{{item.carNumber}}</text>
+                <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
+                <up-tag v-else text="已启用" type="success" shape="circle" plain size="mini"></up-tag>
+              </view>
+              <view>
+                <text class="text-#C5CCD5 text-30rpx">{{item.phoneNumber}}</text>
+              </view>
+            </view>
+            <view>
+              <up-icon name="arrow-right"></up-icon>
+            </view>
+          </view>
         </up-list-item>
       </up-list>
       <view v-else class="absolute" style="top: calc(40% - 50px);left:calc(50% - 50px)">

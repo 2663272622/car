@@ -8,7 +8,7 @@
    <u-navbar title="我的店铺" :autoBack="true" bg-color="#0000" :placeholder='true'> </u-navbar>
 
     <template v-if='display'>
-      <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules" class="m-30rpx relative z-10 shadow bg-white rounded-20rpx px-5rpx">
+      <up-form labelPosition="left" labelWidth='auto' :model="merchantsInfo" ref="formRef" :rules="rules" class="m-30rpx relative z-10 shadow bg-white rounded-20rpx px-15rpx">
         <up-form-item label="店铺图片" borderBottom ref="item1" prop="storeLogoUrl" leftIcon="photo">
           <up-upload :fileList="fileList5" @afterRead="afterRead" @delete="deletePic" name="5" multiple
             sizeType='compressed' :maxCount="9"></up-upload>
