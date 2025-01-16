@@ -9,9 +9,9 @@
       </view> -->
     <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#0000"></u-navbar>
     <template v-if='carInfo.id'>
-      <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative  z-10">
+     <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative  z-10">
         <up-form-item>
-          <u--textarea border="surround" v-model="carInfo.messageText" placeholder="请输入通知" height="130" clearable count
+          <u--textarea border="surround" v-model="carInfo.messageText" placeholder="请输入通知" height="130" clearable
             class="rounded-20rpx"></u--textarea>
         </up-form-item>
       </up-form>
@@ -23,7 +23,7 @@
       </view>
     </template>
     <template v-else>
-      <up-list v-if='carList.length > 0' class=" relative z-10">
+      <up-list v-if='carList' class=" relative z-10">
         <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx bg-white">
           <view @click='handleChange(item)'
             class="mt-30rpx shadow-xl bg-white shadow p-30rpx rounded-20rpx border flex u-flex-between items-center">
