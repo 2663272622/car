@@ -4,7 +4,8 @@ export async function getwLocation(success,fail) {
     await getSetting()
     uni.getLocation({
       type: "wgs84",
-      altitude:true,
+      isHighAccuracy:true,
+      highAccuracyExpireTime:5000,
       success,
       fail: (arr) => {
 

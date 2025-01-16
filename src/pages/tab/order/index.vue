@@ -164,6 +164,7 @@ import { usePermission } from "@/hooks";
       getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
+        console.log(res)
         getMerchants()
         resolve('')
       },()=>{

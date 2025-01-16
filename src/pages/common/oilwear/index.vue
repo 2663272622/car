@@ -27,13 +27,13 @@
      <text>油耗：{{ fuelConsumption }} L/100km</text>
       <view v-if='youjiakm && youjiakm > 0'>每公里：{{youjiakm}} 元</view>
     </view> -->
-    <view class="flex u-flex-around text-white rounded-40rpx">
-      <view class="bg-#2d8cf0">
+    <view class="flex u-flex-between text-white rounded-40rpx">
+      <view class="bg-#2d8cf0 w-330rpx">
         <view class="w-150rpx text-center">油耗：</view>
         <view class="w-150rpx text-center font-bold">{{ fuelConsumption }}</view>
         <text> L/100km</text>
       </view>
-      <view class="bg-#2d8cf0">
+      <view class="bg-#2d8cf0 w-330rpx">
         <view class="w-150rpx text-center">每公里：</view>
         <view class="w-150rpx text-center font-bold">{{youjiakm}}</view>
         <text>元</text>
