@@ -135,7 +135,7 @@
       title: '正在上传。。。'
     });
     let arr = file.map(item => {
-      return useUpload(item.url, 'uni/unishop/',userStore.userId)
+      return useUpload(item.url, 'uni/unishop/',merchantsInfo.value.id)
     })
     Promise.all(arr).then(res => {
       console.log('返回结果', res)
