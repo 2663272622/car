@@ -16,6 +16,9 @@
         type="primary"
         class='w-full'
       >手机号快速登录</button>
+      <view class="notLogin mt-20rpx text-#ccc" @click='notLogin'>
+          暂不登录
+      </view>
 
      <!-- <view class="hint">
         登录代表同意
@@ -60,6 +63,12 @@ const logout = ()=>{
     })
 }
 
+const notLogin = ()=>{
+
+  uni.switchTab({
+    url:`/pages/tab/order/index`
+  });
+}
 
 // 路由重定向
 const handleRedirect = ()=>{
