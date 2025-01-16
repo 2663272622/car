@@ -31,17 +31,17 @@
     </view> -->
     <view class="flex u-flex-between text-white text-40rpx mx-28rpx font-300">
       <view class="bg-#2d8cf0 w-330rpx m-15rpx rounded-20rpx">
-        <view class="mx-15rpx mt-15rpx">油耗:</view>
-        <view class="flex-wrap flex items-end">
-          <text class="font-bold text-50rpx m-15rpx">{{fuelConsumption}}&nbsp;</text>
-          <text class="m-15rpx">L/100km</text>
+        <view class="mx-25rpx mt-15rpx">油耗:</view>
+        <view class="flex-wrap flex items-end pl-50rpx py-25rpx">
+          <text class="font-bold text-50rpx">{{fuelConsumption}}&nbsp;</text>
+          <text class="pl-10px">L/100km</text>
         </view>
       </view>
       <view class="bg-#2d8cf0 w-330rpx m-15rpx rounded-20rpx">
-        <view class="m-15rpx">每公里:</view>
-        <view>
-          <text class="font-bold text-50rpx m-15rpx">{{youjiakm}}&nbsp;</text>
-          <text>元</text>
+        <view class="mx-25rpx mt-15rpx">每公里:</view>
+        <view class="flex-wrap flex items-end pl-50rpx py-25rpx">
+          <text class="font-bold text-50rpx">{{youjiakm}}&nbsp;</text>
+          <text class="pl-10rpx">元</text>
         </view>
       </view>
     </view>

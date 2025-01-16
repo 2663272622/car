@@ -39,7 +39,7 @@
     <template v-else>
       <up-list v-if='carList.length > 0'  class="relative  z-10 w-690rpx mx-30rpx">
         <up-list-item v-for="(item, index) in carList" :key="index">
-          <up-cell @click='handleChange(item)' class="bg-white shadow mx-5rpx rounded-20rpx">
+          <up-cell @click='handleChange(item)' class="bg-white shadow mx-5rpx rounded-20rpx border">
             <template #title class="flex">
               <text class="mr-20rpx flex items-center justify-center w-180rpx">{{item.carNumber}}</text>
               <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
