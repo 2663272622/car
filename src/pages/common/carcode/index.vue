@@ -41,10 +41,10 @@
         <up-list-item v-for="(item, index) in carList" :key="index">
           <view @click='handleChange(item)' class="mt-30rpx shadow-xl bg-white shadow p-30rpx rounded-20rpx border flex u-flex-between items-center">
             <view v-if="item.carNumber.length===8" class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center" style="background-color:rgba(70,175,76,0.3);">
-              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/newenergy.png" shape="circle" width="30" height="30" bg-color="#C7E7C9"></up-image>
+              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/newenergy.png"  width="30" height="30" bg-color="transprant"></up-image>
             </view>
             <view v-else class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center" style="background-color:rgba(171,80,68,0.3);">
-              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/gasoline.png" shape="circle" width="45" height="45" bg-color="#E6CAC7"></up-image>
+              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/gasoline.png"  width="45" height="45" bg-color="transprant"></up-image>
             </view>
             <view class="mr-60rpx">
               <view class=" flex items-center justify-center mb-20rpx">

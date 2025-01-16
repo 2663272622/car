@@ -7,7 +7,7 @@
     </view> -->
     <!--   <view class="navbar">
       </view> -->
-    <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#0000"> </u-navbar>
+    <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#0000"></u-navbar>
     <template v-if='carInfo.id'>
       <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative  z-10">
         <up-form-item>
@@ -25,11 +25,9 @@
     <template v-else>
       <up-list v-if='carList.length > 0' class=" relative z-10">
         <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx bg-white">
-          <!-- <up-cell :title="`${item.carNumber}`" value="查看" @click='handleChange(item)'>
-          </up-cell> -->
           <view @click='handleChange(item)'
             class="mt-30rpx shadow-xl bg-white shadow p-30rpx rounded-20rpx border flex u-flex-between items-center">
-            <view v-if="item.carNumber.length===8"
+<!--           <view v-if="item.carNumber.length===8"
               class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center"
               style="background-color:rgba(70,175,76,0.3);">
               <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/newenergy.png" shape="circle"
@@ -39,6 +37,13 @@
               style="background-color:rgba(171,80,68,0.3);">
               <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/gasoline.png" shape="circle"
                 width="45" height="45" bg-color="#E6CAC7"></up-image>
+            </view> -->
+           <view>
+              <view class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center"
+                style="background-color:#2893b54c;">
+                <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/edittz.png"
+                  width="35" height="35" bg-color="transprant"></up-image>
+              </view>
             </view>
             <view class="mr-60rpx">
               <view class=" flex items-center justify-center mb-20rpx">
