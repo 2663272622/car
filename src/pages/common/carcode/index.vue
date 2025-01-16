@@ -37,23 +37,32 @@
       </template>
     </template>
     <template v-else>
-      <up-list v-if='carList.length > 0'  class="relative  z-10 w-690rpx mx-30rpx">
+     <up-list v-if='carList.length > 0'  class="relative  z-10 w-690rpx mx-30rpx">
         <up-list-item v-for="(item, index) in carList" :key="index">
-          <up-cell @click='handleChange(item)' class="bg-white shadow mx-5rpx rounded-20rpx border">
-            <template #title class="flex">
-              <text class="mr-20rpx flex items-center justify-center w-180rpx">{{item.carNumber}}</text>
-              <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
-              <up-tag v-else text="已启用" type="success" shape="circle" plain size="mini"></up-tag>
-            </template>
-            <template #value>
-              <text class="ml-10rpx">查看</text>
-            </template>
-          </up-cell>
+          <view @click='handleChange(item)' class="mt-30rpx shadow-xl bg-white shadow p-30rpx rounded-20rpx border flex u-flex-between items-center">
+            <view class="w-120rpx h-120rpx rounded-50% z-10 flex items-center justify-center" style="background-color:rgb(171,80,68,0.3);">
+              <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/gasoline.png" shape="circle" width="45" height="45" bg-color="#E6CAC7"></up-image>
+            </view>
+            <view>
+              <view class=" flex items-center justify-center w-300rpx mb-20rpx">
+                <text class="text-38rpx font-bold mr-10rpx">{{item.carNumber}}</text>
+                <up-tag v-if="item.banFlag" text="已禁用" shape="circle" type="warning" plain size="mini"></up-tag>
+                <up-tag v-else text="已启用" type="success" shape="circle" plain size="mini"></up-tag>
+              </view>
+              <view>
+                <text class="text-#C5CCD5 text-30rpx">{{item.phoneNumber}}</text>
+              </view>
+            </view>
+            <view>
+              <up-icon name="arrow-right"></up-icon>
+            </view>
+          </view>
         </up-list-item>
       </up-list>
-      <div v-else>
-        暂无可用的挪车码
-      </div>
+      <view v-else class="absolute" style="top: calc(40% - 50px);left:calc(50% - 50px)">
+        <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/nodata.png" width="100" height="100" bg-color="#F1F7F7"></up-image>
+        <view class="text-center mt-5rpx">暂无挪车码</view>
+      </view>
     </template>
   </view>
 </template>

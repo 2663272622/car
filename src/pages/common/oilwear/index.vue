@@ -6,23 +6,22 @@
 
     <up-form labelPosition="left" ref="form1" labelWidth='auto' class="bg-white m-30rpx relative  z-10 rounded-20rpx">
       <up-form-item label="行驶距离(km):" borderBottom ref="item1" leftIcon="hourglass" class="ml-30rpx">
-        <up-input v-model="distance" border="none" placeholder="请输入行驶的总公里数(例600)"></up-input>
+        <up-input type="digit" v-model="distance" border="none" placeholder="请输入行驶的总公里数(例600)"></up-input>
       </up-form-item>
       <up-form-item label="加油量(L):" borderBottom ref="item1" leftIcon="car" class="ml-30rpx">
-        <up-input v-model="fuel" border="none" placeholder="请输入本次油箱加满公升数"></up-input>
+        <up-input type="digit"  v-model="fuel" border="none" placeholder="请输入本次油箱加满公升数"></up-input>
       </up-form-item>
       <up-form-item label="今日油价:" borderBottom ref="item1" leftIcon="rmb-circle" class="ml-30rpx">
-        <up-input v-model="youjia" border="none" placeholder="请输入当日油价(元/公升)"></up-input>
+        <up-input type="digit"  v-model="youjia" border="none" placeholder="请输入当日油价(元/公升)"></up-input>
       </up-form-item>
 
     </up-form>
 
     <!-- 计算按钮 -->
     <view class="absolute bottom-15rpx w-730rpx">
-      <u-button type="warning" class='my-16rpx mx-15rpx' shape="circle"
-        @click="handleReset">重置</u-button>
-      <u-button type="primary" class='my-16rpx mx-15rpx' @click="calculateFuelConsumption" color="#D1F5FE"
-        shape="circle"><text class="text-#000000">计算油耗</text></u-button>
+      <u-button type="warning" class='my-16rpx mx-15rpx' shape="circle" @click="handleReset">重置</u-button>
+<!--      <u-button type="primary" class='my-16rpx mx-15rpx' @click="calculateFuelConsumption" color="#D1F5FE"
+        shape="circle"><text class="text-#000000">计算油耗</text></u-button> -->
     </view>
     <!-- 计算结果 -->
     <!--   <view v-if="fuelConsumption !== null" class="result">
@@ -50,7 +49,8 @@
 
 <script setup>
   import {
-    ref
+    ref,
+    watchEffect
   } from 'vue';
 
 
@@ -64,37 +64,37 @@
   // const youjiakm = ref("")
   const youjiakm = ref(0)
 
-  // 计算油耗的函数
-  const calculateFuelConsumption = () => {
-    // 验证输入的合法性
-    if (!distance.value || !fuel.value || distance.value <= 0 || fuel.value <= 0) {
-      uni.showToast({
-        title: '请输入有效的距离和油量',
-        icon: 'none',
-      });
-      return;
-    }
+  // // 计算油耗的函数
+  // const calculateFuelConsumption = () => {
+  //   // 验证输入的合法性
+  //   if (!distance.value || !fuel.value || distance.value <= 0 || fuel.value <= 0) {
+  //     uni.showToast({
+  //       title: '请输入有效的距离和油量',
+  //       icon: 'none',
+  //     });
+  //     return;
+  //   }
 
-    // 计算油耗
+  //   // 计算油耗
+  //   fuelConsumption.value = ((parseFloat(fuel.value) / parseFloat(distance.value)) * 100).toFixed(2);
+  //   youjiakm.value = (parseFloat(fuelConsumption.value) * parseFloat(youjia.value) / 100).toFixed(3);
+  //   youjiakm.value = youjiakm.value === "NaN" ? '' : youjiakm.value
+  // };
+  //使用watch监听数据的变化及时更新
+  watchEffect(() => {
     fuelConsumption.value = ((parseFloat(fuel.value) / parseFloat(distance.value)) * 100).toFixed(2);
+    fuelConsumption.value = fuelConsumption.value === "NaN" ? 0 : fuelConsumption.value
     youjiakm.value = (parseFloat(fuelConsumption.value) * parseFloat(youjia.value) / 100).toFixed(3);
-    youjiakm.value = youjiakm.value === "NaN" ? '' : youjiakm.value
-  };
-   const handleReset=()=>{
-     uni.showModal({
-       title:'重置',
-       content:'点击确定重置计算数据',
-       success:(res)=>{
-         if(res.confirm){
-          distance.value=''
-          youjia.value=''
-          fuel.value=''
-          youjiakm.value=0
-          fuelConsumption.value=0
-         }
-       }
-     })
-   }
+    youjiakm.value = youjiakm.value === "NaN" ? 0 : youjiakm.value
+  })
+
+  const handleReset = () => {
+      distance.value = ''
+      youjia.value = ''
+      fuel.value = ''
+      youjiakm.value = 0
+      fuelConsumption.value = 0
+  }
 </script>
 
 <style scoped>

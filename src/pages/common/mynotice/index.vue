@@ -1,24 +1,25 @@
 <template>
   <view class="commonhead box-border h-100vh">
-<!--    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
+    <!--    <view class="navbar flex items-end justify-between pb-40px" :style="{height:Hheight()+'px'}">
       <view class="ml-10rpx" @click="goBack()"><u-icon name="arrow-left"></u-icon></view>
       <view class="text-30rpx">首页通知</view>
       <view></view>
     </view> -->
-<!--   <view class="navbar">
+    <!--   <view class="navbar">
       </view> -->
-      <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#0000"> </u-navbar>
+    <u-navbar title="首页通知" :autoBack="true" :placeholder='true' bg-color="#0000"> </u-navbar>
     <template v-if='carInfo.id'>
       <up-form labelPosition="left" labelWidth='auto' class="m-30rpx relative  z-10">
         <up-form-item>
-          <u--textarea border="surround" v-model="carInfo.messageText" placeholder="请输入通知" height="130"
-            clearable count class="rounded-20rpx"></u--textarea>
+          <u--textarea border="surround" v-model="carInfo.messageText" placeholder="请输入通知" height="130" clearable count
+            class="rounded-20rpx"></u--textarea>
         </up-form-item>
       </up-form>
       <view class="absolute bottom-0 shadow h-150rpx w-100vw bg-white">
-      <view class="pb-15rpx mx-15rpx">
-      <u-button class='my-16rpx' @click="handleNotice"  color="#D1F5FE" shape="circle"><text class="text-#000000">保存通知</text></u-button>
-      </view>
+        <view class="pb-15rpx mx-15rpx">
+          <u-button class='my-16rpx' @click="handleNotice" color="#D1F5FE" shape="circle"><text
+              class="text-#000000">保存通知</text></u-button>
+        </view>
       </view>
     </template>
     <template v-else>
@@ -28,15 +29,19 @@
           </up-cell>
         </up-list-item>
       </up-list>
-      <div v-else>
-        暂无绑定的车
-      </div>
+      <view v-else class="absolute" style="top: calc(40% - 50px);left:calc(50% - 50px)">
+        <up-image src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/nodata.png" width="100" height="100"
+          bg-color="#F1F7F7"></up-image>
+        <view class="text-center mt-5rpx">暂无绑定的车</view>
+      </view>
     </template>
   </view>
 </template>
 
 <script setup>
-  import { Hheight } from '@/utils';
+  import {
+    Hheight
+  } from '@/utils';
   import {
     ref
   } from "vue"
@@ -84,7 +89,7 @@
       carInfo.value = []
     })
   }
-  const goBack=()=>{
+  const goBack = () => {
     uni.navigateBack()
   }
 </script>

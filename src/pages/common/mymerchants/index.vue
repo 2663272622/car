@@ -54,7 +54,7 @@
       <view v-if='merchantsInfo.merchantName' class="relative  z-10">
           <view class="bg-white rd-20rpx mx-30rpx  flex whitespace-nowrap overflow-hidden"
             @click="handleChange(merchantsInfo)">
-            <view class="my-30rpx ml-20rpx mr-12rpx">
+            <view class="m-20rpx">
               <up-image :show-loading="true" :src="merchantsInfo.storeLogoUrl" width="160rpx" height="160rpx" bg-color="#0000" />
             </view>
             <view class="mt-30rpx pr-20rpx w-478rpx">
