@@ -117,16 +117,10 @@
   })
 
   onLoad(async (options:any) => {
-    // 判断登录 未登录情况下跳转去登录
+
+
     console.log("获取到的参数",options.scene)
-    loginStatus.value = await usePermission();
-    loginStatus.value = isLogin();
-    const ttt = await getToken();
-    if (!loginStatus.value) return;
-    ++showNum.value;
 
-
-    // let url = `https://onlinewifi.car.ischool.shop?move=2438`
     let url = ''
     if(options.scene){
       url = decodeURIComponent(options.scene).split('=')[1]
@@ -135,17 +129,39 @@
       url = options.q
       scanInfo.value.id = handleUrl(url || '', 'move')
     }
-
     scanInfo.value.id = scanInfo.value.id ? scanInfo.value.id : appStore.scanId
+    appStore.setScanId(scanInfo.value.id || '')
+
     console.log("扫码携带来的ID",scanInfo.value.id)
+
+    // 判断登录 未登录情况下跳转去登录
+    loginStatus.value = await usePermission();
+    loginStatus.value = isLogin();
+    const ttt = await getToken();
+    if (!loginStatus.value) return;
+
+
+    wx.requestSubscribeMessage({
+      tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
+      success(...res) {
+        // uni.$u.toast("已开启微信通知");
+      },
+      fail(e) {
+        // console.log(e)
+        // uni.$u.toast("已拒绝挪车消息推送~");
+      }
+    })
+
+    ++showNum.value;
+     // url = `https://onlinewifi.car.ischool.shop?move=2438`
     handleInitHome()
   })
+
 
 const handleInitHome = ()=>{
   // 判断ID
   if(scanInfo.value.id){
     console.log("将携带来的ID保存",scanInfo.value.id)
-    appStore.setScanId(scanInfo.value.id)
     getCarMoveCodes()
   }else{
     console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
@@ -153,7 +169,7 @@ const handleInitHome = ()=>{
   }
 }
 
-const handleInitHomeold = ()=>{
+const handleIni2tHomeold = ()=>{
 
   // 判断ID
   if(scanInfo.value.id){
@@ -196,23 +212,6 @@ const handleInitHomeold = ()=>{
     tabbarRef.value.changeTab(1)
     console.log("隐藏首页 并跳转附近")
   }
-  //弹出获取通知弹窗，用户点击获取
-  uni.showModal({
-    title: '请求获取通知',
-    content: '点击此按钮申请获取挪车码通知信息',
-    success: () => {
-      wx.requestSubscribeMessage({
-        tmplIds: ["--nrmwvHNV4R7Mj_QEYqRlWcT5ebXo5tR_9ijkQ4Ntc"],
-        success(...res) {
-          uni.$u.toast("已开启微信通知");
-        },
-        fail(e) {
-          console.log(e)
-          uni.$u.toast("已取消");
-        }
-      })
-    }
-  })
 
   const queryParams = {
     pageNum: 1,
