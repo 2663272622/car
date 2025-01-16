@@ -83,7 +83,7 @@
           </view>
       </view>
       <view v-else>
-        <up-cell class="bg-white relative top--30px z-10 shadow mx-15rpx rounded-20rpx" title="添加商家信息" @click='handleChange(merchantsInfo)'></up-cell>
+        <up-cell class="bg-white relative z-10 shadow mx-15rpx rounded-20rpx" title="添加商家信息" @click='handleChange(merchantsInfo)'></up-cell>
       </view>
     </template>
   </view>
