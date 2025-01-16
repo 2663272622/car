@@ -1,30 +1,43 @@
 <template>
-  <view class="oilcontainer bg-#fff box-border px-12rpx">
-    <u-navbar title="油耗计算器" :autoBack="true" :placeholder='true'>
+  <view class="commonhead box-border h-100vh">
+    <u-navbar title="油耗计算器" :autoBack="true" :placeholder='true' safeAreaInsetTop bg-color="#0000">
     </u-navbar>
 
 
-    <up-form labelPosition="left" ref="form1" labelWidth='auto'>
-      <up-form-item label="行驶距离(km):" borderBottom ref="item1">
+    <up-form labelPosition="left" ref="form1" labelWidth='auto' class="bg-white m-30rpx relative  z-10 rounded-20rpx">
+      <up-form-item label="行驶距离(km):" borderBottom ref="item1" leftIcon="hourglass" class="ml-30rpx">
         <up-input v-model="distance" border="none" placeholder="请输入行驶的总公里数(例600)"></up-input>
       </up-form-item>
-      <up-form-item label="加油量(L):" borderBottom ref="item1">
+      <up-form-item label="加油量(L):" borderBottom ref="item1" leftIcon="car" class="ml-30rpx">
         <up-input v-model="fuel" border="none" placeholder="请输入本次油箱加满公升数"></up-input>
       </up-form-item>
-      <up-form-item label="今日油价:" borderBottom ref="item1">
+      <up-form-item label="今日油价:" borderBottom ref="item1" leftIcon="rmb-circle" class="ml-30rpx">
         <up-input v-model="youjia" border="none" placeholder="请输入当日油价(元/公升)"></up-input>
       </up-form-item>
 
     </up-form>
 
     <!-- 计算按钮 -->
-    <u-button type="primary" class='my-16rpx' @click="calculateFuelConsumption">计算油耗</u-button>
-
+    <view class="absolute bottom-15rpx w-730rpx">
+      <u-button type="primary" class='my-16rpx mx-15rpx' @click="calculateFuelConsumption" color="#D1F5FE"
+        shape="circle"><text class="text-#000000">计算油耗</text></u-button>
+    </view>
     <!-- 计算结果 -->
-    <view v-if="fuelConsumption !== null" class="result">
-      <text>油耗：{{ fuelConsumption }} L/100km</text>
+    <!--   <view v-if="fuelConsumption !== null" class="result">
+     <text>油耗：{{ fuelConsumption }} L/100km</text>
       <view v-if='youjiakm && youjiakm > 0'>每公里：{{youjiakm}} 元</view>
-
+    </view> -->
+    <view class="flex u-flex-around text-white rounded-40rpx">
+      <view class="bg-#2d8cf0">
+        <view class="w-150rpx text-center">油耗：</view>
+        <view class="w-150rpx text-center font-bold">{{ fuelConsumption }}</view>
+        <text> L/100km</text>
+      </view>
+      <view class="bg-#2d8cf0">
+        <view class="w-150rpx text-center">每公里：</view>
+        <view class="w-150rpx text-center font-bold">{{youjiakm}}</view>
+        <text>元</text>
+      </view>
     </view>
   </view>
 </template>
@@ -39,9 +52,11 @@
   // 响应式数据
   const distance = ref(''); // 行驶距离
   const fuel = ref(''); // 油量
-  const fuelConsumption = ref(null); // 油耗
+  // const fuelConsumption = ref(null); // 油耗
+  const fuelConsumption = ref(0); // 油耗
   const youjia = ref("")
-  const youjiakm = ref("")
+  // const youjiakm = ref("")
+  const youjiakm = ref(0)
 
   // 计算油耗的函数
   const calculateFuelConsumption = () => {
@@ -62,9 +77,10 @@
 </script>
 
 <style scoped>
-  .result {
+/*  .result {
     margin-top: 20px;
+    margin-left: 30px;
     font-size: 18px;
     color: #2d8cf0;
-  }
+  } */
 </style>

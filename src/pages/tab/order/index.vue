@@ -63,7 +63,7 @@
               @click="navigator(item.id)">
               <view class="my-30rpx ml-20rpx mr-12rpx">
                 <up-image :show-loading="true" :src="item.storeLogoUrl" width="160rpx" height="160rpx"
-                  bg-color="#0000" />
+                  bg-color="#0000" shape="square" radius="10rpx"/>
               </view>
               <view class="mt-30rpx pr-20rpx w-478rpx">
                 <view class="text-28rpx font-semibold text-black text-opacity-90 leading-40rpx overflow-hidden">
