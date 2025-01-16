@@ -107,7 +107,7 @@
 
 <script setup lang="ts">
   import { ref, reactive } from "vue";
-  import { barHeight } from '@/utils';
+  import { barHeight, isLogin } from '@/utils';
   import carMerchantsAPI from "@/api/carMerchants";
   import NoticeAPI from "@/api/notice"
   import BusinessAPI from "@/api/business"
@@ -117,6 +117,7 @@
   import list from "@/uni_modules/uview-plus/components/u-list/list";
   import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } from '@/router';
 import { getwLocation } from "@/utils/location";
+import { usePermission } from "@/hooks";
 
   onShow(() => {
     uni.hideTabBar()
@@ -178,7 +179,8 @@ import { getwLocation } from "@/utils/location";
     return barHeight();
   });
   //页面跳转具体商家
-  function navigator(id : number) {
+ async function navigator(id : number) {
+
     uni.navigateTo({
       url: `/pages/common/merchants/index?id=${id}`
     })
