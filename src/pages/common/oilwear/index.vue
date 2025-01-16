@@ -19,6 +19,8 @@
 
     <!-- 计算按钮 -->
     <view class="absolute bottom-15rpx w-730rpx">
+      <u-button type="warning" class='my-16rpx mx-15rpx' shape="circle"
+        @click="handleReset">重置</u-button>
       <u-button type="primary" class='my-16rpx mx-15rpx' @click="calculateFuelConsumption" color="#D1F5FE"
         shape="circle"><text class="text-#000000">计算油耗</text></u-button>
     </view>
@@ -27,16 +29,20 @@
      <text>油耗：{{ fuelConsumption }} L/100km</text>
       <view v-if='youjiakm && youjiakm > 0'>每公里：{{youjiakm}} 元</view>
     </view> -->
-    <view class="flex u-flex-between text-white rounded-40rpx">
-      <view class="bg-#2d8cf0 w-330rpx">
-        <view class="w-150rpx text-center">油耗：</view>
-        <view class="w-150rpx text-center font-bold">{{ fuelConsumption }}</view>
-        <text> L/100km</text>
+    <view class="flex u-flex-between text-white text-40rpx mx-28rpx font-300">
+      <view class="bg-#2d8cf0 w-330rpx m-15rpx rounded-20rpx">
+        <view class="mx-15rpx mt-15rpx">油耗:</view>
+        <view class="flex-wrap flex items-end">
+          <text class="font-bold text-50rpx m-15rpx">{{fuelConsumption}}&nbsp;</text>
+          <text class="m-15rpx">L/100km</text>
+        </view>
       </view>
-      <view class="bg-#2d8cf0 w-330rpx">
-        <view class="w-150rpx text-center">每公里：</view>
-        <view class="w-150rpx text-center font-bold">{{youjiakm}}</view>
-        <text>元</text>
+      <view class="bg-#2d8cf0 w-330rpx m-15rpx rounded-20rpx">
+        <view class="m-15rpx">每公里:</view>
+        <view>
+          <text class="font-bold text-50rpx m-15rpx">{{youjiakm}}&nbsp;</text>
+          <text>元</text>
+        </view>
       </view>
     </view>
   </view>
@@ -74,10 +80,25 @@
     youjiakm.value = (parseFloat(fuelConsumption.value) * parseFloat(youjia.value) / 100).toFixed(3);
     youjiakm.value = youjiakm.value === "NaN" ? '' : youjiakm.value
   };
+   const handleReset=()=>{
+     uni.showModal({
+       title:'重置',
+       content:'点击确定重置计算数据',
+       success:(res)=>{
+         if(res.confirm){
+          distance.value=''
+          youjia.value=''
+          fuel.value=''
+          youjiakm.value=0
+          fuelConsumption.value=0
+         }
+       }
+     })
+   }
 </script>
 
 <style scoped>
-/*  .result {
+  /*  .result {
     margin-top: 20px;
     margin-left: 30px;
     font-size: 18px;
