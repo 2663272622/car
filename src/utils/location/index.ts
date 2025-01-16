@@ -3,10 +3,13 @@
 export async function getwLocation(success,fail) {
     await getSetting()
     uni.getLocation({
-      type: "wgs84",
+      type: "gcj02",
       isHighAccuracy:true,
       highAccuracyExpireTime:5000,
-      success,
+      success:(res)=>{
+        console.log("获取到的位置信息",res)
+        success(res)
+      },
       fail: (arr) => {
 
         console.log(arr)
