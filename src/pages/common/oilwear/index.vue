@@ -54,6 +54,17 @@
   } from 'vue';
 
 
+   onShareAppMessage({
+      title: '油耗计算器',
+      path: '/pages/common/oilwear/index',
+      promise:new Promise(resolve => {
+        setTimeout(() => {
+          resolve({
+            title: '油耗计算器'
+          })
+        }, 2000)
+      })
+    })
 
   // 响应式数据
   const distance = ref(''); // 行驶距离
