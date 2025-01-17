@@ -45,7 +45,7 @@
         <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/20.png"
           width="64rpx" height="64rpx" bg-color="#0000" class="ml-18rpx" />
         <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx"
-          @click='handleWechatMsg'>开启通知</text>
+          @click='handleWechatMsg'>开启微信通知</text>
         <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/21.png"
           width="64rpx" height="64rpx" bg-color="#0000" />
         <text class="text-24rpx text-opacity-90 text-black font-medium leading-32rpx text-center ml-14rpx mr-42rpx"
