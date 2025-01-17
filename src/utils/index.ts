@@ -7,7 +7,27 @@ export * from './upload';
 export * from './preview';
 export * from './time'
 
+import {
+  LOGIN_PATH,
+} from '@/router';
+import { currentRoute } from '@/router';
 
+export const toLogin = ()=>{
+  uni.showModal({
+    title:"提示",
+    content:"请先登录后再来操作吧~",
+    success:(res)=>{
+      if(res.confirm){
+        gotoLogin()
+      }
+    }
+  })
+}
+export const gotoLogin = ()=>{
+  uni.redirectTo({
+    url: `${LOGIN_PATH}?redirect=${encodeURIComponent(currentRoute())}`,
+  });
+}
 
 export const handleUrl = (encodedUrl:string,key:string) => {
   const decodedUrl = decodeURIComponent(encodedUrl);

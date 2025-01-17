@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-  import { barHeight, handleUrl,getTitleBarHeight } from "@/utils"
+  import { barHeight, handleUrl,getTitleBarHeight,toLogin } from "@/utils"
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
   import { getwLocation } from '@/utils/location';
@@ -137,8 +137,6 @@
     // 判断登录 未登录情况下跳转去登录
     loginStatus.value = await usePermission();
     loginStatus.value = isLogin();
-    const ttt = await getToken();
-    if (!loginStatus.value) return;
 
 
     wx.requestSubscribeMessage({
@@ -155,6 +153,8 @@
     ++showNum.value;
      // url = `https://onlinewifi.car.ischool.shop?move=2438`
     handleInitHome()
+
+
   })
 
 
@@ -284,6 +284,10 @@ const handleIni2tHomeold = ()=>{
   const clickTime = ref(0)
   //发送信息功能
   async function callNotice(index : number) {
+    if(!loginStatus.value){
+      toLogin()
+      return;
+    }
     const currentTime = new Date().getTime()
     switch (index) {
       case 0:

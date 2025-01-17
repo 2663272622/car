@@ -1,12 +1,12 @@
 <template>
   <view class="page-wrap">
-    <view class="mb-20rpx ml-30rpx flex" :style="{ paddingTop: Hheight()+'px'}">
-      <up-image :show-loading="true" width="120rpx" height="120rpx" :src="userStore.avatar" shape="circle"
+    <view class="mb-20rpx ml-30rpx flex" :style="{ paddingTop: Hheight()+'px'}" @click='handleSetUser'>
+      <up-image :show-loading="true" width="120rpx" height="120rpx" :src="userStore.avatar ? userStore.avatar : avatarbaseUrl" shape="circle"
         bg-color="#0000" class="mr-24rpx" />
       <view class="flex flex-col">
         <view>
           <text class="text-40rpx font-semibold text-opacity-90">
-            {{ userStore.userName }}
+            {{ userStore.userName ? userStore.userName : '微信用户' }}
           </text>
         </view>
         <view class="mt-14rpx h-40rpx w-176rpx text-center text-28rpx text-black text-opacity-60 leading-40rpx">
@@ -73,6 +73,8 @@
   import { Hheight } from '@/utils';
   import { getToken, isLogin } from '@/utils/auth';
   import carMerchantsAPI from "@/api/carMerchants";
+import { currentRoute } from '@/router';
+  import { barHeight, handleUrl,getTitleBarHeight,toLogin } from "@/utils"
   // const { setClipboardData, getClipboardData } = useClipboard();
   const userStore = useUserStore();
   const loginStatus = ref(false);
@@ -85,8 +87,20 @@
     console.log('asdasd', loginStatus.value);
     loginStatus.value = isLogin();
     const ttt = await getToken();
-    userStore.info()
+    loginStatus.value && userStore.info()
   });
+
+  const handleSetUser = ()=>{
+    if(!loginStatus.value){
+      toLogin()
+      return;
+    }
+    uni.navigateTo({
+      url: `/pages/common/userChange/userChange?redirect=${currentRoute()}`,
+    });
+  }
+
+const avatarbaseUrl = ref('https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0')
 
   const query : any = ref()
   onLoad((query : any) => {
@@ -113,6 +127,10 @@
 
   // 跳转查看油价
   const handleToGasoline = () => {
+    if(!loginStatus.value){
+      gotoLogin()
+      return;
+    }
     uni.navigateTo({ url: `/pages/common/asoline/index` })
   }
   // 跳转查看油价计算机
@@ -143,6 +161,10 @@
   }
   //跳转查看我的通知
   const handleMyNotice = () => {
+    if(!loginStatus.value){
+      gotoLogin()
+      return;
+    }
     uni.navigateTo({ url: `/pages/common/mynotice/index` })
   }
 

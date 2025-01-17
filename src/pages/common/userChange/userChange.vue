@@ -1,6 +1,6 @@
 <template>
 	<view  class="user-change">
-    <up-navbar title="个人中心" leftIcon='' :placeholder='true' :autoBack="true" ></up-navbar>
+    <up-navbar title="个人中心" :placeholder='true' :autoBack="true" ></up-navbar>
     <view class="w-full px-24rpx py-180rpx box-border">
 
       <up-form
@@ -48,21 +48,27 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
 import { useUpload } from "@/utils"
 import { useUserStore } from '@/store';
 
-// let redirect = HOME_PATH;
-let redirect = '';
-onLoad((res)=>{
-  redirect = res.redirect
-})
-
-const userStore = useUserStore()
-
-const avatarUrl = ref('https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0')
-const nickName = ref("")
-
 const formData = ref({
   avatar:"",
   userName:""
 })
+const userStore = useUserStore()
+// let redirect = HOME_PATH;
+let redirect = '';
+onLoad((res)=>{
+  redirect = res.redirect
+  // if(userStore){
+    formData.value = {
+        avatar:userStore.avatar,
+        userName:userStore.userName,
+    }
+  // }
+})
+
+
+const avatarUrl = ref('https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0')
+const nickName = ref("")
+
 
 const onChooseAvatar =async(e) =>{
 

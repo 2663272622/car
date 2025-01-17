@@ -12,8 +12,7 @@
       "style": {
         "navigationBarTitleText": "",
         "navigationStyle": "custom"
-      },
-      "needLogin": true
+      }
     },
     {
       "path": "pages/tab/list/index",
@@ -34,8 +33,7 @@
       "style": {
         "navigationStyle": "custom",
         "navigationBarTitleText": ""
-      },
-      "needLogin": true
+      }
     }
   ],
   "subPackages": [{
