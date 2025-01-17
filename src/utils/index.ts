@@ -15,7 +15,7 @@ import { currentRoute } from '@/router';
 export const toLogin = ()=>{
   uni.showModal({
     title:"提示",
-    content:"请先登录后再来操作吧~",
+    content:"请先登录后再操作吧~",
     success:(res)=>{
       if(res.confirm){
         gotoLogin()

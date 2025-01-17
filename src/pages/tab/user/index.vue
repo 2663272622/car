@@ -74,7 +74,7 @@
   import { getToken, isLogin } from '@/utils/auth';
   import carMerchantsAPI from "@/api/carMerchants";
 import { currentRoute } from '@/router';
-  import { barHeight, handleUrl,getTitleBarHeight,toLogin } from "@/utils"
+  import { barHeight, handleUrl,getTitleBarHeight,toLogin,gotoLogin } from "@/utils"
   // const { setClipboardData, getClipboardData } = useClipboard();
   const userStore = useUserStore();
   const loginStatus = ref(false);
@@ -128,21 +128,33 @@ const avatarbaseUrl = ref('https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia
   // 跳转查看油价
   const handleToGasoline = () => {
     if(!loginStatus.value){
-      gotoLogin()
+      toLogin()
       return;
     }
     uni.navigateTo({ url: `/pages/common/asoline/index` })
   }
   // 跳转查看油价计算机
   const handleToOilwear = () => {
+    if(!loginStatus.value){
+      toLogin()
+      return;
+    }
     uni.navigateTo({ url: `/pages/common/oilwear/index` })
   }
   // 跳转查看我的挪车吗
   const handleCarCode = () => {
+    if(!loginStatus.value){
+      toLogin()
+      return;
+    }
     uni.navigateTo({ url: `/pages/common/carcode/index` })
   }
   //跳转查看我的店铺
   const handleMyMerchants = async() => {
+    if(!loginStatus.value){
+      toLogin()
+      return;
+    }
     if(userStore.identityType*1 === 1){
       return false;
       // await userStore.info()
@@ -161,10 +173,11 @@ const avatarbaseUrl = ref('https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia
   }
   //跳转查看我的通知
   const handleMyNotice = () => {
-    if(!loginStatus.value){
-      gotoLogin()
-      return;
-    }
+
+      if(!loginStatus.value){
+        toLogin()
+        return;
+      }
     uni.navigateTo({ url: `/pages/common/mynotice/index` })
   }
 
