@@ -92,7 +92,7 @@ import { currentRoute } from '@/router';
 
   const handleSetUser = ()=>{
     if(!loginStatus.value){
-      toLogin()
+      gotoLogin()
       return;
     }
     uni.navigateTo({
@@ -139,7 +139,7 @@ const avatarbaseUrl = ref('https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia
       toLogin()
       return;
     }
-    uni.navigateTo({ url: `/pages/common/oilwear/index` })
+    uni.navigateTo({ url: x `/pages/common/oilwear/index` })
   }
   // 跳转查看我的挪车吗
   const handleCarCode = () => {
