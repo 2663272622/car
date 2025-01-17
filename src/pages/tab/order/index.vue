@@ -92,10 +92,10 @@
               </view>
             </view>
           </view>
-          <view class="pb-160rpx" v-if="merchants.length>'0'">
+          <view class="pb-130rpx" v-if="merchants.length>'0'">
             <up-loadmore :status="noData?'nomore':'loading'" nomore-text="已经到底啦~" />
           </view>
-          <view class="pb-160rpx bg-white" v-else>
+          <view class="pb-130rpx bg-white" v-else>
             <up-loadmore class="!mt-0 pt-120rpx" :status="noData?'nomore':'loading'" nomore-text="附近暂无商家信息~" />
           </view>
         </view>
