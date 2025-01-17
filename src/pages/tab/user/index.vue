@@ -1,16 +1,21 @@
 <template>
   <view class="page-wrap">
-    <view class="mb-20rpx ml-30rpx flex" :style="{ paddingTop: Hheight()+'px'}" @click='handleSetUser'>
+    <view class="mb-20rpx ml-30rpx flex relative" :style="{ paddingTop: Hheight()+'px'}" @click='handleSetUser' >
       <up-image :show-loading="true" width="120rpx" height="120rpx" :src="userStore.avatar ? userStore.avatar : avatarbaseUrl" shape="circle"
         bg-color="#0000" class="mr-24rpx" />
       <view class="flex flex-col">
-        <view>
+        <view class="relative">
           <text class="text-40rpx font-semibold text-opacity-90">
             {{ userStore.userName ? userStore.userName : '微信用户' }}
+            <!-- <text  >修改</text> -->
           </text>
+          <view  class="absolute top-0 right-0 top-25%">
+            <u-icon name="arrow-right" bold></u-icon>
+          </view>
         </view>
         <view class="mt-14rpx h-40rpx w-176rpx text-center text-28rpx text-black text-opacity-60 leading-40rpx">
           {{userStore.phoneNumber.slice(0,4)}}****{{userStore.phoneNumber.slice(-4)}}
+
         </view>
       </view>
     </view>
@@ -87,7 +92,15 @@ import { currentRoute } from '@/router';
     console.log('asdasd', loginStatus.value);
     loginStatus.value = isLogin();
     const ttt = await getToken();
-    loginStatus.value && userStore.info()
+    if(loginStatus.value) {
+      await userStore.info()
+      if(!userStore.avatar){
+        handleSetUser()
+      }
+    }
+
+
+
   });
 
   const handleSetUser = ()=>{

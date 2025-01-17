@@ -1,8 +1,7 @@
 <template>
 	<view  class="user-change">
-    <up-navbar title="个人中心" :placeholder='true' :autoBack="true" ></up-navbar>
+    <up-navbar title="个人中心" :placeholder='true' :leftIcon='lefeicon' :autoBack="true" ></up-navbar>
     <view class="w-full px-24rpx py-180rpx box-border">
-
       <up-form
           labelPosition="left"
           ref="form1"
@@ -53,6 +52,7 @@ const formData = ref({
   userName:""
 })
 const userStore = useUserStore()
+const lefeicon = ref('')
 // let redirect = HOME_PATH;
 let redirect = '';
 onLoad((res)=>{
@@ -62,6 +62,10 @@ onLoad((res)=>{
         avatar:userStore.avatar,
         userName:userStore.userName,
     }
+    if(userStore.avatar){
+      lefeicon.value = 'arrow-left'
+    }
+
   // }
 })
 
@@ -80,7 +84,7 @@ const onChooseAvatar =async(e) =>{
 }
 
 const handleSave = async()=>{
-    if(formData.value.avatar == '' ){
+    if(!formData.value.avatar){
       uni.$u.toast("请先上传头像~");
       return;
     }
