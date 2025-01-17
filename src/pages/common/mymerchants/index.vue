@@ -55,7 +55,7 @@
           <view class="bg-white rd-20rpx mx-30rpx  flex whitespace-nowrap overflow-hidden"
             @click="handleChange(merchantsInfo)">
             <view class="m-20rpx">
-              <up-image :show-loading="true" :src="merchantsInfo.storeLogoUrl" width="160rpx" height="160rpx" bg-color="#0000" />
+              <up-image :show-loading="true" :src="cimage" width="160rpx" height="160rpx" bg-color="#0000" />
             </view>
             <view class="mt-30rpx pr-20rpx w-478rpx">
               <view class="text-28rpx font-semibold text-black text-opacity-90 leading-40rpx overflow-hidden">
@@ -63,7 +63,7 @@
               </view>
               <view class="flex justify-between mt-6rpx">
                 <view class="flex items-center">
-                  <up-rate v-model="merchantsInfo.score" readonly allowHalf="true" active-color="#F25730"
+                  <up-rate v-model="merchantsInfo.score" readonly :allowHalf='true' active-color="#F25730"
                     gutter="2rpx"></up-rate>
                   <text class="font-semibold text-26rpx text-#F25730 leading-40rpx ml-6rpx">{{merchantsInfo.score}}</text>
                 </view>
@@ -165,6 +165,7 @@
     if (data.storeLogoUrl) {
       fileList5.value = data.storeLogoUrl.split(',').map(url => { return { url } })
     }
+    console.log('5',fileList5.value)
   }
 
   // 查询业务类型
@@ -182,15 +183,16 @@
       })
   }
   getBusiness()
-
+  const cimage:any=ref()
   //获取商家信息
   const getBusinessList = () => {
     carMerchantsAPI.get(userStore.openId).then(cdata => {
-      cdata.list.map((item : any) => {
-        return item.storeLogoUrl = item.storeLogoUrl ? item.storeLogoUrl.split(',')[0] : ''
-      })
+      // cdata.list.map((item : any) => {
+      //   return item.storeLogoUrl = item.storeLogoUrl ? item.storeLogoUrl.split(',') : ''
+      // })
       merchantsInfo.value = cdata.list[0]
-      console.log(merchantsInfo.value)
+      cimage.value=merchantsInfo.value.storeLogoUrl?merchantsInfo.value.storeLogoUrl.split(',')[0]:''
+      console.log('123',merchantsInfo.value)
       navigation()
       // console.log(navigationData.value)
 
