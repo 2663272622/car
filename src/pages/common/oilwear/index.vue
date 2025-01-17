@@ -1,6 +1,6 @@
 <template>
   <view class="commonhead box-border h-100vh">
-    <u-navbar title="油耗计算器" :autoBack="true" :placeholder='true' safeAreaInsetTop bg-color="#0000">
+    <u-navbar title="油耗计算器" :autoBack="false" @leftClick='handleLeft' :placeholder='true' safeAreaInsetTop bg-color="#0000">
     </u-navbar>
 
 
@@ -52,20 +52,18 @@
     ref,
     watchEffect
   } from 'vue';
+  import { useClipboard, usePermission } from '@/hooks';
+  import { isLogin, getToken } from '@/utils/auth';
 
 
-   // onShareAppMessage({
-   //    title: '油耗计算器',
-   //    path: '/pages/common/oilwear/index',
-   //    promise:new Promise(resolve => {
-   //      setTimeout(() => {
-   //        resolve({
-   //          title: '油耗计算器'
-   //        })
-   //      }, 2000)
-   //    })
-   //  })
+onLoad(async()=>{
 
+  // 判断登录 未登录情况下跳转去登录
+  await usePermission();
+  isLogin();
+  await getToken();
+
+})
 
    onShareAppMessage(()=>{
        return {
@@ -82,6 +80,12 @@
   const youjia = ref("")
   // const youjiakm = ref("")
   const youjiakm = ref(0)
+
+  const handleLeft = ()=>{
+    uni.switchTab({
+      url:"/pages/tab/user/index"
+    });
+  }
 
   // // 计算油耗的函数
   // const calculateFuelConsumption = () => {

@@ -56,7 +56,9 @@
       },
       {
         "path": "oilwear/index",
+        "needLogin": true,
         "style": {
+          "needLogin": true,
           "navigationStyle": "custom",
           "navigationBarTitleText": "油耗计算"
         }

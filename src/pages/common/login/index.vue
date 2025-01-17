@@ -48,8 +48,10 @@ const tel = ref<string>('18502811111');
 const code = ref<string>('1234');
 const tips = ref<string>();
 const uCodeRef = ref<InstanceType<typeof uCode> | null>(null);
-let redirect = HOME_PATH;
-
+let redirect = '';
+onLoad((res)=>{
+  redirect = res.redirect
+})
 const userStore = useUserStore()
 // 退出登录
 const logout = ()=>{
@@ -84,6 +86,7 @@ const handleRedirect = ()=>{
       }
     });
   }else{
+    console.log('去设置用户信息',`/pages/common/userChange/userChange?redirect=${redirect}`)
     uni.redirectTo({
       url: `/pages/common/userChange/userChange?redirect=${redirect}`,
     });

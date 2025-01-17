@@ -31,7 +31,7 @@ export function hasPerm(path = '') {
   const hasPermission = whiteList.includes(removeQueryString(path)) || isLogin();
   if (!hasPermission) {
     // 将用户的目标路径传递过去，这样可以实现用户登录之后，直接跳转到目标页面
-
+console.log("未定路 重定向到登录", `${LOGIN_PATH}?redirect=${encodeURIComponent(path)}`)
     uni.redirectTo({
       url: `${LOGIN_PATH}?redirect=${encodeURIComponent(path)}`,
     });

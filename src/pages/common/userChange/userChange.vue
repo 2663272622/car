@@ -48,7 +48,11 @@ import { currentRoute, HOME_PATH, isTabBarPath, LOGIN_PATH, removeQueryString } 
 import { useUpload } from "@/utils"
 import { useUserStore } from '@/store';
 
-let redirect = HOME_PATH;
+// let redirect = HOME_PATH;
+let redirect = '';
+onLoad((res)=>{
+  redirect = res.redirect
+})
 
 const userStore = useUserStore()
 
@@ -70,13 +74,21 @@ const onChooseAvatar =async(e) =>{
 }
 
 const handleSave = async()=>{
+    if(formData.value.avatar == '' ){
+      uni.$u.toast("请先上传头像~");
+      return;
+    }
+    if(formData.value.userName== ''){
+      uni.$u.toast("请先填写昵称~");
+      return;
+    }
     await userStore.changeUser({
        identityType:1,
       ...formData.value
     })
-    console.log("修改完成")
     console.log(formData.value)
     let rurl = isTabBarPath(redirect)
+    console.log("修改完成操作重定向",rurl,redirect)
     if(rurl){
       uni.switchTab({url:redirect})
     }else{
