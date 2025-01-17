@@ -79,7 +79,7 @@ defineExpose({
 
 <style lang="scss" scoped>
   .custom-tabbar{
-    height:160rpx;
+    height:130rpx;
     width: 100%;
     bottom:0rpx;
     left: 0;
