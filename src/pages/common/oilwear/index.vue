@@ -54,16 +54,24 @@
   } from 'vue';
 
 
-   onShareAppMessage({
-      title: '油耗计算器',
-      path: '/pages/common/oilwear/index',
-      promise:new Promise(resolve => {
-        setTimeout(() => {
-          resolve({
-            title: '油耗计算器'
-          })
-        }, 2000)
-      })
+   // onShareAppMessage({
+   //    title: '油耗计算器',
+   //    path: '/pages/common/oilwear/index',
+   //    promise:new Promise(resolve => {
+   //      setTimeout(() => {
+   //        resolve({
+   //          title: '油耗计算器'
+   //        })
+   //      }, 2000)
+   //    })
+   //  })
+
+
+   onShareAppMessage(()=>{
+       return {
+         title: '油耗计算器',
+          path: '/pages/common/oilwear/index',
+       }
     })
 
   // 响应式数据
