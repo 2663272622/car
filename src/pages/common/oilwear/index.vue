@@ -55,13 +55,17 @@
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
 
+  import { barHeight, handleUrl,getTitleBarHeight,toLogin,gotoLogin } from "@/utils"
 
 onLoad(async()=>{
 
   // 判断登录 未登录情况下跳转去登录
-  await usePermission();
-  isLogin();
-  await getToken();
+  let loginStatus = await usePermission();
+  loginStatus = isLogin();
+  // if(!loginStatus){
+  //   toLogin()
+  //   return;
+  // }
 
 })
 
