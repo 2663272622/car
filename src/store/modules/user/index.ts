@@ -6,7 +6,7 @@ import { defineStore } from 'pinia';
 const useUserStore = defineStore('user', {
   state: () => ({
     userId: '',
-    userName: '未登录',
+    userName: '点击登录',
     avatar: '',
     token: '',
     integral: 0, // 积分

@@ -305,7 +305,9 @@ const changeSwiper=(index:any)=>{
   })
   const merchants : any = ref([])
   const image = ref()
+  const loadNum = ref(0)
   const getMerchants = async (value ?: number) => {
+    let num = loadNum.value;
     noData.value = false;
     let data
     if (value) {
@@ -321,6 +323,10 @@ const changeSwiper=(index:any)=>{
       } else {
         data = await carMerchantsAPI.getPage({ ...merchants_params.value })
       }
+    }
+    if(num < loadNum.value){
+      console.log("重复加载不处理")
+      return;
     }
     //改变图片的url地址
     data.list.map((item : any) => {
@@ -342,6 +348,7 @@ const changeSwiper=(index:any)=>{
     merchants.value = [...merchants.value, ...data.list];
     if (merchants_params.value.pageSize > data.list.length) noData.value = true;
 
+    loadNum.value = num;
   }
 
   //触底加载

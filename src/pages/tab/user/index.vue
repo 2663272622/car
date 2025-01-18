@@ -9,7 +9,7 @@
             {{ userStore.userName ? userStore.userName : '微信用户' }}
             <!-- <text  >修改</text> -->
           </text>
-          <view  class="absolute top-0 right-0 top-25%">
+          <view  class="absolute top-0 right--32rpx top-25%">
             <u-icon name="arrow-right" bold></u-icon>
           </view>
         </view>
@@ -29,7 +29,7 @@
         <text  class="text-30rpx leading-32rpx font-semibold text-white ml-30rpx" >{{userStore.identityType*1 === 1 ? '申请入驻' :'我的店铺'}}</text>
       </view>
     </view>
-    <view class="flex mt-30rpx bg-white h-158rpx mx-30rpx rd-20rpx">
+    <view class="flex my-30rpx bg-white h-158rpx mx-30rpx rd-20rpx">
       <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx ml-20rpx mr-18rpx" @click='handleToOilwear'>
         <view class="flex ml-48rpx items-center mt-10rpx">
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/19.png"
@@ -38,7 +38,7 @@
         </view>
       </view>
       <view class="flex w-315rpx h-98rpx my-30rpx bg-#EFF7FF rd-10rpx mr-20rpx" @click="handleToGasoline">
-        <view class="flex mt-10rpx items-center ml-52rpx">
+        <view class="flex my-10rpx items-center ml-52rpx">
           <up-image :show-loading="true" src="https://img-ischool.oss-cn-beijing.aliyuncs.com/car/base/23.png"
             width="62rpx" height="70rpx" bg-color="#0000" />
           <text class="text-opacity-90 text-black text-26rpx leading-32rpx ml-16rpx font-medium">今日油价</text>

@@ -27,6 +27,7 @@
               type="nickname" class="my-48rpx"
               v-model="formData.userName"
               placeholder="点击获取昵称"
+              :maxlength='10'
           ></up-input>
         </up-form-item>
       </up-form>
@@ -92,6 +93,10 @@ const handleSave = async()=>{
       uni.$u.toast("请先填写昵称~");
       return;
     }
+    // if(formData.value.userName.length > 10){
+    //   uni.$u.toast("昵称最多填写10个字~");
+    //   return;
+    // }
     await userStore.changeUser({
        identityType:1,
       ...formData.value

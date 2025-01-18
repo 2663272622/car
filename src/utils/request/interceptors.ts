@@ -115,7 +115,6 @@ function responseInterceptors(http: HttpRequestAbstract) {
    */
   http.interceptors.response.use(
     async (response: HttpResponse) => {
-
       /* 对响应成功做点什么 可使用async await 做异步操作 */
       const data = response.data;
       // 配置参数
@@ -149,6 +148,10 @@ function responseInterceptors(http: HttpRequestAbstract) {
     },
     (response: HttpError) => {
       console.log("失败回调",response)
+      if(response.errMsg == "request:fail abort"){
+        return
+      }
+
       if(response.statusCode == 401){
           uni.$u.toast('登录状态失效 重新登陆');
           setTimeout(()=>{

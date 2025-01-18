@@ -1,4 +1,5 @@
 export interface AppState {
   systemInfo: UniApp.GetSystemInfoResult;
-  scanId?:string
+  scanId?:string,
+  apitask?:any
 }

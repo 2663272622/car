@@ -3,6 +3,7 @@ import type { HttpRequestConfig, HttpResponse } from 'uview-plus/libs/luch-reque
 import type { IResponse } from './types';
 import Request from 'uview-plus/libs/luch-request/index';
 import { requestInterceptors, responseInterceptors } from './interceptors';
+import { useAppStore } from '@/store';
 
 const http = new Request();
 
@@ -12,9 +13,9 @@ export function setupRequest() {
     /* defaultConfig 为默认全局配置 */
     defaultConfig.baseURL = import.meta.env.VITE_API_BASE_URL;
     // #ifdef H5
-    if (import.meta.env.VITE_APP_PROXY === 'true') {
-      defaultConfig.baseURL = import.meta.env.VITE_API_PREFIX;
-    }
+      if (import.meta.env.VITE_APP_PROXY === 'true') {
+        defaultConfig.baseURL = import.meta.env.VITE_API_PREFIX;
+      }
     // #endif
     return defaultConfig;
   });
@@ -34,8 +35,20 @@ export function request<T = any>(config: HttpRequestConfig): Promise<T> {
   });
 }
 
+let repetition = {}
 export function get<T = any>(url: string, config?: HttpRequestConfig): Promise<T> {
-  return request({ ...config, url, method: 'GET' });
+  return request({ ...config, url, method: 'GET' ,
+      getTask: (task, options) => {
+        if([
+          "/api/v1/carMerchants/wxPage"
+        ].includes(options.url)){
+          if(repetition[options.url]){
+            repetition[options.url].abort()
+          }
+          repetition[options.url] = task
+        }
+      },
+    });
 }
 
 export function post<T = any>(url: string, config?: HttpRequestConfig): Promise<T> {
