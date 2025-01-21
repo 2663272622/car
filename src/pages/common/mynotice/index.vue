@@ -23,7 +23,7 @@
       </view>
     </template>
     <template v-else>
-      <up-list v-if='carList' class=" relative z-10">
+      <up-list v-if="carList.length>'0'" class=" relative z-10">
         <up-list-item v-for="(item, index) in carList" :key="index" class="shadow mx-15rpx rounded-20rpx bg-white">
           <view @click='handleChange(item)'
             class="mt-30rpx shadow-xl bg-white shadow p-30rpx rounded-20rpx border flex u-flex-between items-center">
