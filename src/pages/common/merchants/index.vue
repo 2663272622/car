@@ -73,7 +73,7 @@
   import BusinessAPI from "@/api/business";
   import { handlePic } from "@/utils"
   import { onLoad } from "@dcloudio/uni-app";
-import { getwLocation } from "@/utils/location";
+  import { getwLocation } from "@/utils/location";
   const merchants : any = ref({})
   const img = ref()
   let phone = ''
@@ -109,6 +109,10 @@ import { getwLocation } from "@/utils/location";
       })
   }
   const getFormData = async () => {
+    uni.showLoading({
+    	title: '加载中'
+    });
+
     let data
     if (Mylatitude.value) {
       data = await carMerchantsAPI.getFormData(id.value, { longitude: Mylongitude.value, latitude: Mylatitude.value })
@@ -134,6 +138,9 @@ import { getwLocation } from "@/utils/location";
     score.value=Math.floor(data.score * 10) / 10;
     console.log(img.value)
     phone = data.contactPhone
+
+     uni.hideLoading()
+
   }
   //修改时间格式
   function formatTimeFromArray(timeArray : any) {
@@ -171,6 +178,7 @@ import { getwLocation } from "@/utils/location";
   const Mylongitude = ref()
   function getLocation() {
     return new Promise((resolve,reject)=>{
+
       getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude

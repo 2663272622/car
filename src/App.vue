@@ -15,11 +15,11 @@ onHide(() => {
   console.log('App Hide');
 });
 
-uni.loadFontFace({
-  family: 'YSZYBBT',
-  global:true,
-  source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/YSZYBBT.ttf")'
-})
+// uni.loadFontFace({
+//   family: 'YSZYBBT',
+//   global:true,
+//   source: 'url("https://img-ischool.oss-cn-beijing.aliyuncs.com/base/YSZYBBT.ttf")'
+// })
 
 uni.loadFontFace({
   family: 'ZiZhiQuXiMaiTi',

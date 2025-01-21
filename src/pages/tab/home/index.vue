@@ -209,7 +209,7 @@ const handleIni2tHomeold = ()=>{
   const tabbarRef = ref()
   const hidHome = ()=>{
     appStore.setScanId('')
-    tabbarRef.value.changeTab(1)
+    tabbarRef?.value?.changeTab(1)
     console.log("隐藏首页 并跳转附近")
   }
 
@@ -398,7 +398,7 @@ const handleIni2tHomeold = ()=>{
 
       .home-carhint {
         @apply mb-16rpx mt-124rpx;
-        font-family: ZiZhiQuXiMaiTi, ZiZhiQuXiMaiTi;
+        font-family: ZiZhiQuXiMaiTi;
         font-weight: 400;
         font-size: 26rpx;
         color: rgba(0, 0, 0, 0.9);
@@ -435,7 +435,7 @@ const handleIni2tHomeold = ()=>{
       border: 2rpx solid #FFFFFF;
 
       .home-car-htitle {
-        font-family: ZiZhiQuXiMaiTi, ZiZhiQuXiMaiTi;
+        font-family: ZiZhiQuXiMaiTi;
         font-weight: 400;
         font-size: 40rpx;
         color: #000000;

@@ -92,12 +92,14 @@
               </view>
             </view>
           </view>
-          <view class="pb-130rpx" v-if="merchants.length>'0'">
-            <up-loadmore :status="noData?'nomore':'loading'" nomore-text="已经到底啦~" />
-          </view>
-          <view class="pb-130rpx bg-white" v-else>
-            <up-loadmore class="!mt-0 pt-120rpx" :status="noData?'nomore':'loading'" nomore-text="附近暂无商家信息~" />
-          </view>
+          <template v-if="noData">
+            <view class="pb-130rpx bg-white" v-if='merchants.length == 0'>
+              <up-loadmore class="!mt-0 pt-120rpx" :status="noData?'nomore':'loading'" nomore-text="附近暂无商家信息~" />
+            </view>
+            <view class="pb-130rpx" v-else>
+              <up-loadmore :status="noData?'nomore':'loading'" nomore-text="已经到底啦~" />
+            </view>
+          </template>
         </view>
       </view>
       <Tabbar pathName='order'></Tabbar>
@@ -122,17 +124,19 @@ import { usePermission } from "@/hooks";
   onShow(() => {
     uni.hideTabBar()
   })
-   onShareAppMessage({
-      title: '放心挪',
-      path: '/pages/tab/order/index',
-      promise:new Promise(resolve => {
-        setTimeout(() => {
-          resolve({
-            title: '放心挪~'
-          })
-        }, 2000)
-      })
+
+ onShareAppMessage({
+    title: '放心挪',
+    path: '/pages/tab/order/index',
+    promise:new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          title: '放心挪~'
+        })
+      }, 2000)
     })
+  })
+
   // 在onReady或者onMounted生命周期中获取元素信息
   const stickyState = ref(false)
   const handlescroll = (e) => {
@@ -159,21 +163,10 @@ import { usePermission } from "@/hooks";
       })
     })
   }
-  function getLocation1() {
-    return new Promise((resolve,reject)=>{
-      getwLocation((res) => {
-        Mylatitude.value = res.latitude
-        Mylongitude.value = res.longitude
-        console.log(res)
-        getMerchants()
-        resolve('')
-      },()=>{
-        reject()
-      })
-    })
-  }
 
-  getLocation1()
+  getLocation().then(()=>{
+    getMerchants()
+  })
 
   //获取高度
   const bHeight = computed(() => {
@@ -258,10 +251,9 @@ const changeSwiper=(index:any)=>{
     }
   };
   //选择附近-可复选
-  const selectDistance = () => {
-    merchants.value = []
+  const selectDistance =async () => {
     merchants_params.value.pageNum = 1
-    getLocation()
+    await getLocation()
     if (Mylatitude.value) {
       merchants_params.value.isDistance = !merchants_params.value.isDistance
       if (selectedValue.value === -1) {
@@ -289,9 +281,9 @@ const changeSwiper=(index:any)=>{
         }
       break;
       case "b":
-        console.log('1234')
+        // console.log('1234')
         // ref2.value.$el.click()
-        break;
+      break;
     }
   }
   //建立一个布尔值，判断是否进行下拉刷新
@@ -299,62 +291,67 @@ const changeSwiper=(index:any)=>{
   //查询商家
   const merchants_params = ref({
     pageNum: 1,
-    pageSize: 6,
+    pageSize: 10,
     active: true,
     isDistance: false,
   })
   const merchants : any = ref([])
-  const image = ref()
-  const loadNum = ref(0)
-  const getMerchants = async (value ?: number) => {
-    let num = loadNum.value;
-    noData.value = false;
-    let data
-    if (value) {
-      if (Mylatitude.value) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params.value, businessScope: value, latitude: Mylatitude.value, longitude: Mylongitude.value })
-      }
-      else {
-        data = await carMerchantsAPI.getPage({ ...merchants_params.value, businessScope: value })
-      }
-    } else {
-      if (Mylatitude.value) {
-        data = await carMerchantsAPI.getPage({ ...merchants_params.value, latitude: Mylatitude.value, longitude: Mylongitude.value })
-      } else {
-        data = await carMerchantsAPI.getPage({ ...merchants_params.value })
-      }
+  const merchantTotal = ref(0)
+  const merchantLoading = ref(false)
+  const image = ref()// 疑似无用
+  // const loadNum = ref(0)
+  const getMerchants = async (businessScope ?: number) => {
+    // let num = loadNum.value;
+    merchantLoading.value = true
+    // 加载第一页时候清空原数据
+    if(merchants_params.value.pageNum === 1){
+      noData.value = false;
+      merchantTotal.value = 0
+      merchants.value = []
     }
-    if(num < loadNum.value){
-      console.log("重复加载不处理")
-      return;
-    }
+
+    // 处理查询参数
+    let params = { ...merchants_params.value }
+    if (Mylatitude.value) {  params = { ...params, latitude: Mylatitude.value, longitude: Mylongitude.value } }
+    if (businessScope) { params = { ...params, businessScope } }
+
+    let data = await carMerchantsAPI.getPage(params)
+    // debugger
+    // if(num < loadNum.value){
+    //   console.log("重复加载不处理")
+    //   return;
+    // }
     //改变图片的url地址
-    data.list.map((item : any) => {
+    data.list.forEach((item : any) => {
       if (item.storeLogoUrl) {
         if (item.storeLogoUrl.includes('http:')) {
-          return item.storeLogoUrl = item.storeLogoUrl.split(',')[0]
-        }
-        else {
-          return item.storeLogoUrl = item.storeLogoUrl ? handlePic(item.storeLogoUrl)[0].url : ''
+            item.storeLogoUrl = item.storeLogoUrl.split(',')[0]
+        }else {
+            item.storeLogoUrl = item.storeLogoUrl ? handlePic(item.storeLogoUrl)[0].url : ''
         }
       }
+      //改变分数的保留位数
+      if (item.score) { item.score = Math.floor(item.score * 10) / 10  }
     })
-    //改变分数的保留位数
-    data.list.map((item : any) => {
-      if (item.score) {
-        return item.score = Math.floor(item.score * 10) / 10;
-      }
-    })
-    merchants.value = [...merchants.value, ...data.list];
-    if (merchants_params.value.pageSize > data.list.length) noData.value = true;
 
-    loadNum.value = num;
+    merchantTotal.value = data.total
+    merchants.value.push(...data.list)
+
+    merchantLoading.value = false
+    // 数据加载完成
+    if (merchants.value.length >= data.total) noData.value = true;
+    // if (merchants_params.value.pageSize > data.list.length) noData.value = true;
+
+
+    console.log(data,merchants_params.value)
+    // loadNum.value = num;
   }
 
   //触底加载
   const ToBottom = () => {
-    if (noData.value) return;
-    merchants_params.value.pageNum++;
+    console.log("触底了~~~~~~~~~~~~~~~~")
+    if (noData.value || merchantLoading.value)return;
+    ++merchants_params.value.pageNum;
     getMerchants();
   }
 
