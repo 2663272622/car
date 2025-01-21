@@ -86,6 +86,8 @@
   // 使用onLoad生命周期函数接收传输值id或者是type
   onLoad((e : any) => {
     id.value = e.id;
+
+    getLocation(e.latitude || null,e.longitude || null)
   })
 
   // 查询业务类型
@@ -109,9 +111,6 @@
       })
   }
   const getFormData = async () => {
-    uni.showLoading({
-    	title: '加载中'
-    });
 
     let data
     if (Mylatitude.value) {
@@ -176,28 +175,38 @@
   // 获取当前经纬度
   const Mylatitude = ref()
   const Mylongitude = ref()
-  function getLocation() {
-    return new Promise((resolve,reject)=>{
+  function getLocation(latitude,longitude) {
 
+      uni.showLoading({
+      	title: '加载中...'
+      });
+    return new Promise((resolve,reject)=>{
+      if(latitude && longitude){
+        Mylatitude.value = latitude
+        Mylongitude.value = longitude
+        console.log("使用传参来的",latitude,longitude)
+        loadData()
+        return resolve('')
+      }
       getwLocation((res) => {
         Mylatitude.value = res.latitude
         Mylongitude.value = res.longitude
-        getBusiness()
-        nextTick(() => {
-          getFormData()
-          navigationAdd(1)
-        })
+        loadData()
         resolve('')
       },()=>{
         reject()
-        nextTick(() => {
-          getFormData()
-          navigationAdd(1)
-        })
+        loadData()
       })
     })
   }
-  getLocation()
+
+  const loadData = ()=>{
+    nextTick(() => {
+      getFormData()
+      navigationAdd(1)
+    })
+    getBusiness()
+  }
   // 传入经纬度 调用导航
   const toNav = (res : any) => {
     navigationAdd(2)

@@ -177,7 +177,7 @@ import { usePermission } from "@/hooks";
  async function navigator(id : number) {
 
     uni.navigateTo({
-      url: `/pages/common/merchants/index?id=${id}`
+      url: `/pages/common/merchants/index?id=${id}&latitude=${Mylatitude.value}&longitude=${Mylongitude.value}`
     })
   }
 
