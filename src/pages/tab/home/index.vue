@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-  import { barHeight, handleUrl,getTitleBarHeight,toLogin } from "@/utils"
+  import { barHeight, handleUrl,getTitleBarHeight,toLogin,hidTabbar } from "@/utils"
   import { useClipboard, usePermission } from '@/hooks';
   import { isLogin, getToken } from '@/utils/auth';
   import { getwLocation } from '@/utils/location';
@@ -113,7 +113,8 @@
       scanInfo.value.id = appStore.scanId
       handleInitHome()
     }
-    uni.hideTabBar()
+    // uni.hideTabBar()
+    hidTabbar()
   })
 
   onLoad(async (options:any) => {

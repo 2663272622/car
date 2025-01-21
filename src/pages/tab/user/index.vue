@@ -79,15 +79,14 @@
   import { getToken, isLogin } from '@/utils/auth';
   import carMerchantsAPI from "@/api/carMerchants";
 import { currentRoute } from '@/router';
-  import { barHeight, handleUrl,getTitleBarHeight,toLogin,gotoLogin } from "@/utils"
+  import { barHeight, handleUrl,getTitleBarHeight,toLogin,gotoLogin,hidTabbar } from "@/utils"
   // const { setClipboardData, getClipboardData } = useClipboard();
   const userStore = useUserStore();
   const loginStatus = ref(false);
 
   onShow(async () => {
-    try{
-      uni.hideTabBar()
-    }catch(e){}
+      // uni.hideTabBar()
+    hidTabbar()
     loginStatus.value = await usePermission();
     console.log('asdasd', loginStatus.value);
     loginStatus.value = isLogin();

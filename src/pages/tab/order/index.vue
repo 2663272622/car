@@ -113,7 +113,7 @@
   import carMerchantsAPI from "@/api/carMerchants";
   import NoticeAPI from "@/api/notice"
   import BusinessAPI from "@/api/business"
-  import { handlePic } from "@/utils";
+  import { handlePic,hidTabbar } from "@/utils";
   import storage from "@/utils/storage";
   import { onReachBottom, onPullDownRefresh, onUnload } from "@dcloudio/uni-app";
   import list from "@/uni_modules/uview-plus/components/u-list/list";
@@ -122,7 +122,8 @@ import { getwLocation } from "@/utils/location";
 import { usePermission } from "@/hooks";
 
   onShow(() => {
-    uni.hideTabBar()
+    // uni.hideTabBar()
+    hidTabbar()
   })
 
  onShareAppMessage({

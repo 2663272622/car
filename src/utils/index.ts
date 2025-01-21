@@ -7,10 +7,7 @@ export * from './upload';
 export * from './preview';
 export * from './time'
 
-import {
-  LOGIN_PATH,
-} from '@/router';
-import { currentRoute } from '@/router';
+import { LOGIN_PATH, currentRoute,isTabBarPath } from '@/router';
 
 export const toLogin = ()=>{
   uni.showModal({
@@ -23,6 +20,19 @@ export const toLogin = ()=>{
     }
   })
 }
+
+export const hidTabbar = ()=>{
+    let rurl = isTabBarPath(currentRoute())
+    if(rurl){
+      try{
+        uni.hideTabBar()
+      }catch(e){
+        conosle.oog("内藏失败",e)
+      }
+    }
+}
+
+
 export const gotoLogin = ()=>{
   uni.redirectTo({
     url: `${LOGIN_PATH}?redirect=${encodeURIComponent(currentRoute())}`,

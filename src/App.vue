@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { mpUpdate } from '@/utils/index';
+import { hidTabbar } from '@/utils';
 
 onLaunch(() => {
   console.log('App Launch');
@@ -8,7 +9,8 @@ onLaunch(() => {
   // #endif
 });
 onShow(() => {
-  uni.hideTabBar()
+  // uni.hideTabBar()
+  hidTabbar()
   console.log('App Show');
 });
 onHide(() => {
