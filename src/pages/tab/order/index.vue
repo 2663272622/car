@@ -161,7 +161,7 @@ import { usePermission } from "@/hooks";
         resolve('')
       },()=>{
         reject()
-      })
+      },'order')
     })
   }
 

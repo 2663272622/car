@@ -109,18 +109,22 @@
 
   const showNum = ref(0)
   onShow(()=>{
+    // uni.hideTabBar()
+    hidTabbar()
     if(showNum.value > 0){
       scanInfo.value.id = appStore.scanId
       handleInitHome()
     }
-    // uni.hideTabBar()
-    hidTabbar()
   })
 
   onLoad(async (options:any) => {
 
+      uni.showLoading({
+        title: '正在加载...'
+      });
 
     console.log("获取到的参数",options.scene)
+    ++showNum.value;
     await nextTick();
     let url = ''
     if(options.scene){
@@ -151,7 +155,6 @@
       }
     })
 
-    ++showNum.value;
      // url = `https://onlinewifi.car.ischool.shop?move=2438`
     handleInitHome()
 
@@ -170,48 +173,20 @@ const handleInitHome = ()=>{
   }
 }
 
-const handleIni2tHomeold = ()=>{
-
-  // 判断ID
-  if(scanInfo.value.id){
-    console.log("将携带来的ID保存",scanInfo.value.id)
-    uni.setStorage({
-    	key: 'scan_id',
-    	data: scanInfo.value.id,
-    	success: function (res) {
-        console.log("将携带来的ID保存",res)
-        appStore.setScanId(scanInfo.value.id)
-        getCarMoveCodes()
-    	}
-    });
-  }else{
-    uni.getStorage({
-      key:"scan_id",
-      success(res){
-        if(res.data != ''){
-          console.log("未携带ID 本地有缓存的ID",res)
-          appStore.setScanId(res.data)
-          scanInfo.value.id = res.data
-          getCarMoveCodes()
-        }else{
-          console.log("1未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
-          hidHome()
-        }
-      },
-      fail(eee) {
-        hidHome()
-        console.log("2未携带ID 本地也没有缓存 跳转到附近 并隐藏首页")
-      }
-    })
-
-  }
-}
 
   const tabbarRef = ref()
   const hidHome = ()=>{
     appStore.setScanId('')
-    tabbarRef?.value?.changeTab(1)
-    console.log("隐藏首页 并跳转附近")
+    setTimeout(async()=>{
+      await nextTick()
+      try{
+        tabbarRef.value.changeTab(1)
+        console.log("隐藏首页 并跳转附近")
+        uni.hideLoading()
+      }catch(e){
+        setTimeout(()=>hidHome(),50)
+      }
+    })
   }
 
   const queryParams = {
@@ -245,16 +220,15 @@ const handleIni2tHomeold = ()=>{
   // getCarMo veCodes()
 
   async function getCarMoveCodes() {
-    if (!scanInfo.value.id) return console.log("不是通过扫码进入");
+    // if (!scanInfo.value.id) return console.log("不是通过扫码进入");
 
     try{
       const isActive = await carMoveCodesAPI.activeState(scanInfo.value.id)
       if(isActive.banFlag){
 
+        uni.hideLoading()
         uni.$u.toast("这是一个失效的挪车码~");
-        setTimeout(()=>{
-          hidHome()
-        },1500)
+        hidHome()
         return;
       }
       if (!isActive.isActive) {
@@ -263,13 +237,13 @@ const handleIni2tHomeold = ()=>{
         return;
       }
     }catch(e){
-        setTimeout(()=>{
-          hidHome()
-        },1500)
+      hidHome()
       return
     }
     carMoveCodesAPI.getFormData(scanInfo.value.id)
       .then((data) => {
+
+        uni.hideLoading()
         handleQuery()
         carInfo.value = data.carNumber
         scanInfo.value = data
@@ -308,7 +282,7 @@ const handleIni2tHomeold = ()=>{
             ).then(res => {
               uni.$u.toast("发送成功，请耐心等待车主前来挪车");
               clickTime.value = new Date().getTime()
-              // uni.hideLoading();
+
             })
           }
         }
@@ -330,7 +304,7 @@ const handleIni2tHomeold = ()=>{
             ).then(res => {
               uni.$u.toast("发送成功,请耐心等待车主前来挪车");
               clickTime.value = new Date().getTime()
-              // uni.hideLoading();
+              uni.hideLoading();
             })
           }
         } else {
@@ -354,7 +328,7 @@ const handleIni2tHomeold = ()=>{
         resolve('')
       },()=>{
         reject()
-      })
+      },'home')
     })
   }
 

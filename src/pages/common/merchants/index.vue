@@ -196,7 +196,7 @@
       },()=>{
         reject()
         loadData()
-      })
+      },'orderinfo')
     })
   }
 

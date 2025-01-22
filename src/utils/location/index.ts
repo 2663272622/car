@@ -1,9 +1,11 @@
 
 // 获取位置
-export async function getwLocation(success,fail) {
+
+import { currentRoute  } from '@/router';
+export async function getwLocation(success,fail,txt) {
 
     uni.showLoading({
-      title: '加载中...'
+      title: '正在获取~'
     });
     await getSetting()
     uni.getLocation({
