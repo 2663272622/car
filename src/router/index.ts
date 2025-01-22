@@ -51,6 +51,9 @@ export const routes = parseRoutes(pagesJson);
 export function currentRoute() {
   // getCurrentPages() 至少有1个元素，所以不再额外判断
   const pages = getCurrentPages();
+  if(pages.length === 0){
+    return false
+  }
   const currentPage = pages[pages.length - 1] as any;
   return currentPage?.$page?.fullPath || currentPage.route;
 }

@@ -21,15 +21,21 @@ export const toLogin = ()=>{
   })
 }
 
-export const hidTabbar = ()=>{
-    let rurl = isTabBarPath(currentRoute())
-    if(rurl){
-      try{
-        uni.hideTabBar()
-      }catch(e){
-        conosle.oog("内藏失败",e)
+export const hidTabbar = async()=>{
+  await nextTick()
+  if(!currentRoute()){
+    return setTimeout(()=>{hidTabbar()},50)
+  }
+    // setTimeout(()=>{
+      let rurl = isTabBarPath(currentRoute())
+      if(rurl){
+        try{
+          uni.hideTabBar()
+        }catch(e){
+          conosle.oog("内藏失败",e)
+        }
       }
-    }
+    // },500)
 }
 
 

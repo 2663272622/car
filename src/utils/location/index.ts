@@ -1,17 +1,25 @@
 
 // 获取位置
 export async function getwLocation(success,fail) {
+
+    uni.showLoading({
+      title: '加载中...'
+    });
     await getSetting()
     uni.getLocation({
       type: "gcj02",
       isHighAccuracy:true,
       highAccuracyExpireTime:5000,
       success:(res)=>{
+        uni.hideLoading()
+        console.log("获取位置响应：成功",res)
         console.log("获取到的位置信息",res)
         success(res)
       },
       fail: (arr) => {
 
+        console.log("获取位置响应：失败",arr)
+        uni.hideLoading()
         console.log(arr)
         if(fail){
           fail()
@@ -58,7 +66,7 @@ export const getSetting = ()=>{
                       } else {
                         // 没有允许定位权限
                         wx.showToast({
-                          title: '您拒绝了定位权限，将无法使用XX功能',
+                          title: '您拒绝了定位权限，将无法使用功能',
                           icon: 'none'
                         });
                       }

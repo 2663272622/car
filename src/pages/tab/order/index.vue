@@ -254,9 +254,11 @@ const changeSwiper=(index:any)=>{
   //选择附近-可复选
   const selectDistance =async () => {
     merchants_params.value.pageNum = 1
-    await getLocation()
-    if (Mylatitude.value) {
-      merchants_params.value.isDistance = !merchants_params.value.isDistance
+    merchants_params.value.isDistance = !merchants_params.value.isDistance
+    if (!Mylatitude.value) {
+      await getLocation()
+    }
+    // if (Mylatitude.value) {
       if (selectedValue.value === -1) {
         merchants.value=[]
         getMerchants()
@@ -264,7 +266,7 @@ const changeSwiper=(index:any)=>{
         merchants.value=[]
         getMerchants(selectedValue.value)
       }
-    }
+    // }
   }
 
   //  轮播图点击

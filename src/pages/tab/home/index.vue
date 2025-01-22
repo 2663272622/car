@@ -121,7 +121,7 @@
 
 
     console.log("获取到的参数",options.scene)
-
+    await nextTick();
     let url = ''
     if(options.scene){
       url = decodeURIComponent(options.scene).split('=')[1]
